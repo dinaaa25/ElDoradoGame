@@ -17,6 +17,8 @@ sigridci:
     when: always
   rules:
     - if: $CI_MERGE_REQUEST_ID
+  tags:
+    - SET2024
 
 sigridpublish:
   stage: report
@@ -32,3 +34,5 @@ sigridpublish:
     when: always
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - SET2024
