@@ -6,7 +6,7 @@ sigridci:
   image:
     name: softwareimprovementgroup/sigridci
   script:
-    - sigridci.py --customer <example_customer_name> --system <example_system_name> --source .
+    - sigridci.py --customer Utst --system team03eldorado --source .
   allow_failure: true
   artifacts:
     paths:
@@ -23,7 +23,7 @@ sigridpublish:
   image:
     name: softwareimprovementgroup/sigridci
   script:
-    - sigridci.py --customer <example_customer_name> --system <example_system_name> --source . --publish
+    - sigridci.py --customer Utst --system team03eldorado --source . --publish
   allow_failure: true
   artifacts:
     paths:
