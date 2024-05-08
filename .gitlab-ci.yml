@@ -1,0 +1,38 @@
+stages:
+  - report
+
+sigridci:
+  stage: report
+  image:
+    name: softwareimprovementgroup/sigridci
+  script:
+    - sigridci.py --customer Utst --system team03eldorado --source .
+  allow_failure: true
+  artifacts:
+    paths:
+      - "sigrid-ci-output/*"
+    reports:
+      junit: "sigrid-ci-output/sigridci-junit-format-report.xml"
+    expire_in: 1 week
+    when: always
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+  tags:
+    - SET2024
+
+sigridpublish:
+  stage: report
+  image:
+    name: softwareimprovementgroup/sigridci
+  script:
+    - sigridci.py --customer Utst --system team03eldorado --source . --publish
+  allow_failure: true
+  artifacts:
+    paths:
+      - "sigrid-ci-output/*"
+    expire_in: 1 week
+    when: always
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - SET2024
