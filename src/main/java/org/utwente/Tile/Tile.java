@@ -26,6 +26,10 @@ public class Tile {
         return tileType;
     }
 
+    public int getPower() {
+        return power;
+    }
+
     public boolean hasCaveCoins() {
         return !caveCoins.isEmpty();
     }
