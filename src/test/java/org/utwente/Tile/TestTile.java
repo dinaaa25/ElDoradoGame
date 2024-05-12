@@ -33,4 +33,16 @@ class TestTile {
         Optional<CaveCoin> coin = tile.retreiveCoin();
         assertEquals(coin, Optional.empty());
     }
+
+    @Test
+    void testGetCaveCoinCount() {
+        Tile tile = new Tile(2, 3, TileType.Cave, 3, new ArrayList<>(List.of(new CaveCoin(1, CaveCoinType.Draw), new CaveCoin(2, CaveCoinType.Paddle))));
+        assertEquals(2, tile.getCaveCoinCount());
+        tile.retreiveCoin();
+        assertEquals(1, tile.getCaveCoinCount());
+        tile.retreiveCoin();
+        assertEquals(0, tile.getCaveCoinCount());
+        tile.retreiveCoin();
+        assertEquals(0, tile.getCaveCoinCount());
+    }
 }

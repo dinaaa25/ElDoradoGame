@@ -38,4 +38,8 @@ public class Tile {
         caveCoins.remove(0);
         return Optional.of(coin);
     }
+
+    public int getCaveCoinCount() {
+        return caveCoins.size();
+    }
 }
