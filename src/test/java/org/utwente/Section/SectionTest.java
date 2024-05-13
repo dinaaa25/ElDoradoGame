@@ -8,6 +8,7 @@ import org.utwente.Tile.TileType;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SectionTest {
     List<Section> sections;
@@ -78,7 +79,27 @@ public class SectionTest {
                     List<Tile> startTilesB = sectionTilesB.stream().filter(tile -> tile.getTileType() == TileType.Start).toList();
                     assertEquals(4, startTilesB.size(), "Section B should have 4 Start tiles");
                     break;
+                case ElDorado:
+                    List<Tile> sectionTilesElDorado = section.getTiles();
+                    assertEquals(4, sectionTilesElDorado.size(), "Section ElDorado should have 4 tiles");
+                    List<Tile> paddleTilesElDorado = sectionTilesElDorado.stream()
+                            .filter(tile -> tile.getTileType() == TileType.Paddle)
+                            .toList();
+                    assertEquals(3, paddleTilesElDorado.size(), "Section ElDorado should have 3 Paddle tiles");
+                    List<Tile> elDoradoTilesElDorado = sectionTilesElDorado.stream().filter(tile -> tile.getTileType() == TileType.ElDorado).toList();
+                    assertEquals(1, elDoradoTilesElDorado.size(), "Section ElDorado should have 1 ElDorado tile");
+                    break;
+
             }
+        }
+    }
+
+    @Test
+    void testAllSectionsSpecified() {
+        for (SectionType sectionType : SectionType.values()) {
+            boolean containsType = sections.stream()
+                    .anyMatch(section -> section.getSectionType() == sectionType);
+            assertTrue(containsType, "List of all sections must contain SectionType: " + sectionType);
         }
     }
 }
