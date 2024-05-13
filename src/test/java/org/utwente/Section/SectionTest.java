@@ -2,9 +2,6 @@ package org.utwente.Section;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.utwente.CaveCoin.CaveCoin;
-import org.utwente.CaveCoin.CaveCoinLoader;
-import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 
@@ -25,9 +22,9 @@ public class SectionTest {
     void testTileDistributionOfSections() {
         for(Section section : sections) {
             switch(section.getSectionType()) {
-                case SectionType.A:
+                case A:
                     List<Tile> sectionTiles = section.getTiles();
-                    assertEquals(36, sectionTiles.size(), "Section A should have 36 tiles");
+                    assertEquals(37, sectionTiles.size(), "Section A should have 36 tiles");
                     List<Tile> macheteTiles = sectionTiles.stream()
                             .filter(tile -> tile.getTileType() == TileType.Machete)
                             .toList();
@@ -39,7 +36,7 @@ public class SectionTest {
                     List<Tile> paddleTilesPower1 = paddleTiles.stream().filter(tile -> tile.getPower() == 1).toList();
                     assertEquals(3, paddleTilesPower1.size(), "Section A should have 3 Paddle Power 1 tiles");
                     List<Tile> coinTiles = sectionTiles.stream().filter(tile -> tile.getTileType() == TileType.Coin).toList();
-                    assertEquals(4, coinTiles.size(), "Section A should have 4 Coins tiles");
+                    assertEquals(5, coinTiles.size(), "Section A should have 5 Coins tiles");
                     List<Tile> basecampTiles = sectionTiles.stream().filter(tile -> tile.getTileType() == TileType.Basecamp).toList();
                     assertEquals(1, basecampTiles.size(), "Section A should have 1 Basecamp tiles");
                     List<Tile> discardTiles = sectionTiles.stream().filter(tile -> tile.getTileType() == TileType.Discard).toList();
@@ -53,7 +50,7 @@ public class SectionTest {
                     List<Tile> startTiles = sectionTiles.stream().filter(tile -> tile.getTileType() == TileType.Start).toList();
                     assertEquals(4, startTiles.size(), "Section A should have 4 Start tiles");
                     break;
-                case SectionType.B:
+                case B:
 
                     break;
             }
