@@ -1,12 +1,14 @@
 package org.utwente.Section;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,10 +23,10 @@ public class SectionTest2 {
                     TileType.Paddle, Map.of(1, 3),
                     TileType.Coin, Map.of(1, 5),
                     TileType.Basecamp, Map.of(1, 1),
-                    TileType.Discard, Map.of(1, 0),
+                    TileType.Discard, Map.of(),
                     TileType.Mountain, Map.of(0, 1),
                     TileType.Cave, Map.of(0, 1),
-                    TileType.ElDorado, Map.of(1, 0),
+                    TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of(0, 4)
             )),
             entry(SectionType.B, Map.of(
@@ -243,71 +245,70 @@ public class SectionTest2 {
         sections = SectionLoader.loadSections();
     }
 
-    @Test
-    void testTotalTileCount() {
-        for (Section section : sections) {
-            SectionType sectionType = section.getSectionType();
-
-            if (!expectedTileCounts.containsKey(sectionType)) {
-                continue;
-            }
-
-            List<Tile> sectionTiles = section.getTiles();
-            Map<TileType, Map<Integer, Integer>> expectedCounts = expectedTileCounts.get(sectionType);
-
-            int expectedTotalTiles = expectedCounts.values().stream()
-                    .flatMap(map -> map.values().stream())
-                    .mapToInt(Integer::intValue)
-                    .sum();
-            assertEquals(expectedTotalTiles, sectionTiles.size(), "Section " + sectionType + " should have " + expectedTotalTiles + " tiles");
-        }
+    private static Stream<SectionType> sectionTypes() {
+        return expectedTileCounts.keySet().stream();
     }
 
-    @Test
-    void testTileDistributionOfSections() {
-        for (Section section : sections) {
-            SectionType sectionType = section.getSectionType();
+    @ParameterizedTest
+    @EnumSource(SectionType.class)
+    void testTotalTileCount(SectionType sectionType) {
+        Section section = sections.stream()
+                .filter(s -> s.getSectionType() == sectionType)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Section " + sectionType + " not found"));
 
-            if (!expectedTileCounts.containsKey(sectionType)) {
-                continue;
+        List<Tile> sectionTiles = section.getTiles();
+        Map<TileType, Map<Integer, Integer>> expectedCounts = expectedTileCounts.get(sectionType);
+
+        int expectedTotalTiles = expectedCounts.values().stream()
+                .flatMap(map -> map.values().stream())
+                .mapToInt(Integer::intValue)
+                .sum();
+        assertEquals(expectedTotalTiles, sectionTiles.size(), "Section " + sectionType + " should have " + expectedTotalTiles + " tiles");
+    }
+
+    @ParameterizedTest
+    @EnumSource(SectionType.class)
+    void testTileDistributionOfSections(SectionType sectionType) {
+        Section section = sections.stream()
+                .filter(s -> s.getSectionType() == sectionType)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Section " + sectionType + " not found"));
+
+        List<Tile> sectionTiles = section.getTiles();
+        Map<TileType, Map<Integer, Integer>> expectedCounts = expectedTileCounts.get(sectionType);
+
+        for (TileType tileType : TileType.values()) {
+            Map<Integer, Integer> powerCounts = expectedCounts.getOrDefault(tileType, Map.of());
+
+            // Specified power levels
+            for (Map.Entry<Integer, Integer> entry : powerCounts.entrySet()) {
+                int power = entry.getKey();
+                int expectedCount = entry.getValue();
+                long actualCount = sectionTiles.stream()
+                        .filter(tile -> tile.getTileType() == tileType && tile.getPower() == power)
+                        .count();
+                assertEquals(expectedCount, actualCount, "Section " + sectionType + " should have " + expectedCount + " " + tileType + " tiles with power " + power);
             }
 
-            List<Tile> sectionTiles = section.getTiles();
-            Map<TileType, Map<Integer, Integer>> expectedCounts = expectedTileCounts.get(sectionType);
-
-            for (TileType tileType : TileType.values()) {
-                Map<Integer, Integer> powerCounts = expectedCounts.getOrDefault(tileType, Map.of());
-
-                // Specified power levels
-                for (Map.Entry<Integer, Integer> entry : powerCounts.entrySet()) {
-                    int power = entry.getKey();
-                    int expectedCount = entry.getValue();
+            // Unspecified power levels (0 to 4), if not specified the tiles should not exist at all.
+            for (int power = 0; power <= 4; power++) {
+                if (!powerCounts.containsKey(power)) {
+                    int finalPower = power;
                     long actualCount = sectionTiles.stream()
-                            .filter(tile -> tile.getTileType() == tileType && tile.getPower() == power)
+                            .filter(tile -> tile.getTileType() == tileType && tile.getPower() == finalPower)
                             .count();
-                    assertEquals(expectedCount, actualCount, "Section " + sectionType + " should have " + expectedCount + " " + tileType + " tiles with power " + power);
-                }
-
-                // Unspecified power levels (0 to 3)
-                for (int power = 0; power <= 4; power++) {
-                    if (!powerCounts.containsKey(power)) {
-                        int finalPower = power;
-                        long actualCount = sectionTiles.stream()
-                                .filter(tile -> tile.getTileType() == tileType && tile.getPower() == finalPower)
-                                .count();
-                        assertEquals(0, actualCount, "Section " + sectionType + " should have 0 " + tileType + " tiles with power " + power);
-                    }
+                    assertEquals(0, actualCount, "Section " + sectionType + " should have 0 " + tileType + " tiles with power " + power);
                 }
             }
         }
     }
 
-    @Test
-    void testAllSectionsSpecified() {
-        for (SectionType sectionType : SectionType.values()) {
-            boolean containsType = sections.stream()
-                    .anyMatch(section -> section.getSectionType() == sectionType);
-            assertTrue(containsType, "List of all sections must contain SectionType: " + sectionType);
-        }
+    @ParameterizedTest
+    @EnumSource(SectionType.class)
+    void testAllSectionsSpecified(SectionType sectionType) {
+        boolean containsType = sections.stream()
+                .anyMatch(section -> section.getSectionType() == sectionType);
+        assertTrue(containsType, "List of all sections must contain SectionType: " + sectionType);
     }
 }
