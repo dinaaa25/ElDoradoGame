@@ -67,8 +67,8 @@ public class SectionTest2 {
                     TileType.Discard, Map.of(1, 7, 3, 1),
                     TileType.Mountain, Map.of(0, 4),
                     TileType.Cave, Map.of(0, 1),
-                    TileType.ElDorado, Map.of(0, 0),
-                    TileType.Start, Map.of(0, 0)
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
             ),
             SectionType.F, Map.of(
                     TileType.Machete, Map.of(1, 8, 2, 3, 3, 1),
@@ -78,8 +78,8 @@ public class SectionTest2 {
                     TileType.Discard, Map.of(1, 7, 2, 1),
                     TileType.Mountain, Map.of(0, 3),
                     TileType.Cave, Map.of(0, 1),
-                    TileType.ElDorado, Map.of(0, 0),
-                    TileType.Start, Map.of(0, 0)
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
             ),
             SectionType.G, Map.of(
                     TileType.Machete, Map.of(1, 14, 2, 3),
@@ -89,8 +89,19 @@ public class SectionTest2 {
                     TileType.Discard, Map.of(1, 2),
                     TileType.Mountain, Map.of(0, 3),
                     TileType.Cave, Map.of(0, 1),
-                    TileType.ElDorado, Map.of(0, 0),
-                    TileType.Start, Map.of(0, 0)
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
+            ),
+            SectionType.H, Map.of(
+                    TileType.Machete, Map.of(1, 7, 2, 5),
+                    TileType.Paddle, Map.of(1, 5, 2, 5),
+                    TileType.Coin, Map.of(1, 7, 2, 6, 3, 1),
+                    TileType.Basecamp, Map.of(),
+                    TileType.Discard, Map.of(),
+                    TileType.Mountain, Map.of(),
+                    TileType.Cave, Map.of(0, 1),
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
             ),
             SectionType.ElDorado, Map.of(
                     TileType.Machete, Map.of(),
