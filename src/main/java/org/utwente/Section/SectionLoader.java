@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class SectionLoader {
     public static List<Section> loadSections() {
-        File directory = new File("./src/main/java/org/utwente/Section/");
+        File directory = new File("./src/main/java/org/utwente/Section/Sections/");
         Pattern pattern = Pattern.compile("Section([A-Za-z]+)\\.json");
         FilenameFilter filter = (dir, name) -> name.matches("Section[A-Za-z]+\\.json");
 
