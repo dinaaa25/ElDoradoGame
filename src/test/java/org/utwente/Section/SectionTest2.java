@@ -126,6 +126,17 @@ public class SectionTest2 {
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
             )),
+            entry(SectionType.K, Map.of(
+                    TileType.Machete, Map.of(1, 17, 2, 12, 3, 4),
+                    TileType.Paddle, Map.of(3, 1),
+                    TileType.Coin, Map.of(4, 1),
+                    TileType.Basecamp, Map.of(1, 2),
+                    TileType.Discard, Map.of(),
+                    TileType.Mountain, Map.of(),
+                    TileType.Cave, Map.of(),
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
+            )),
             entry(SectionType.M, Map.of(
                     TileType.Machete, Map.of(1, 18),
                     TileType.Paddle, Map.of(1, 3, 4, 1),
