@@ -8,14 +8,15 @@ import org.utwente.Tile.TileType;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SectionTest2 {
     List<Section> sections;
 
-    private static final Map<SectionType, Map<TileType, Map<Integer, Integer>>> expectedTileCounts = Map.of(
-            SectionType.A, Map.of(
+    private static final Map<SectionType, Map<TileType, Map<Integer, Integer>>> expectedTileCounts = Map.ofEntries(
+            entry(SectionType.A, Map.of(
                     TileType.Machete, Map.of(1, 22),
                     TileType.Paddle, Map.of(1, 3),
                     TileType.Coin, Map.of(1, 5),
@@ -25,8 +26,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(1, 0),
                     TileType.Start, Map.of(0, 4)
-            ),
-            SectionType.B, Map.of(
+            )),
+            entry(SectionType.B, Map.of(
                     TileType.Machete, Map.of(1, 23),
                     TileType.Paddle, Map.of(1, 4),
                     TileType.Coin, Map.of(1, 4),
@@ -36,8 +37,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of(0, 4)
-            ),
-            SectionType.C, Map.of(
+            )),
+            entry(SectionType.C, Map.of(
                     TileType.Machete, Map.of(1, 6),
                     TileType.Paddle, Map.of(1, 12),
                     TileType.Coin, Map.of(1, 9),
@@ -47,8 +48,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.D, Map.of(
+            )),
+            entry(SectionType.D, Map.of(
                     TileType.Machete, Map.of(1, 15, 2, 4),
                     TileType.Paddle, Map.of(1, 8, 2, 2, 3, 1),
                     TileType.Coin, Map.of(1, 1, 3, 2),
@@ -58,8 +59,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.E, Map.of(
+            )),
+            entry(SectionType.E, Map.of(
                     TileType.Machete, Map.of(1, 10, 2, 4, 3, 1),
                     TileType.Paddle, Map.of(1, 3, 2, 1),
                     TileType.Coin, Map.of(1, 4),
@@ -69,8 +70,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.F, Map.of(
+            )),
+            entry(SectionType.F, Map.of(
                     TileType.Machete, Map.of(1, 8, 2, 3, 3, 1),
                     TileType.Paddle, Map.of(1, 4, 2, 2),
                     TileType.Coin, Map.of(1, 2, 2, 1),
@@ -80,8 +81,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.G, Map.of(
+            )),
+            entry(SectionType.G, Map.of(
                     TileType.Machete, Map.of(1, 14, 2, 3),
                     TileType.Paddle, Map.of(),
                     TileType.Coin, Map.of(1, 6, 2, 5, 3, 1, 4, 1),
@@ -91,8 +92,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.H, Map.of(
+            )),
+            entry(SectionType.H, Map.of(
                     TileType.Machete, Map.of(1, 7, 2, 5),
                     TileType.Paddle, Map.of(1, 5, 2, 5),
                     TileType.Coin, Map.of(1, 7, 2, 6, 3, 1),
@@ -102,8 +103,8 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.I, Map.of(
+            )),
+            entry(SectionType.I, Map.of(
                     TileType.Machete, Map.of(1, 14, 2, 3),
                     TileType.Paddle, Map.of(1, 3, 2, 3),
                     TileType.Coin, Map.of(1, 3, 2, 3),
@@ -113,8 +114,19 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
-            ),
-            SectionType.ElDorado, Map.of(
+            )),
+            entry(SectionType.J, Map.of(
+                    TileType.Machete, Map.of(1, 12, 2, 3),
+                    TileType.Paddle, Map.of(1, 4, 2, 2),
+                    TileType.Coin, Map.of(1, 5, 2, 2),
+                    TileType.Basecamp, Map.of(1, 1),
+                    TileType.Discard, Map.of(1, 4, 2, 1),
+                    TileType.Mountain, Map.of(0, 2),
+                    TileType.Cave, Map.of(0, 1),
+                    TileType.ElDorado, Map.of(),
+                    TileType.Start, Map.of()
+            )),
+            entry(SectionType.ElDorado, Map.of(
                     TileType.Machete, Map.of(),
                     TileType.Paddle, Map.of(1, 3),
                     TileType.Coin, Map.of(),
@@ -124,7 +136,7 @@ public class SectionTest2 {
                     TileType.Cave, Map.of(),
                     TileType.ElDorado, Map.of(1, 1),
                     TileType.Start, Map.of()
-            )
+            ))
     );
 
     @BeforeEach
