@@ -20,5 +20,5 @@ public enum SectionType {
     Q,
     R,
     ElDorado,
-    ElDorado2,
+    ElDoradoTwo,
 }

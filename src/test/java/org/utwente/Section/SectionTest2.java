@@ -225,7 +225,7 @@ public class SectionTest2 {
                     TileType.ElDorado, Map.of(1, 1),
                     TileType.Start, Map.of()
             )),
-            entry(SectionType.ElDorado2, Map.of(
+            entry(SectionType.ElDoradoTwo, Map.of(
                     TileType.Machete, Map.of(1, 3),
                     TileType.Paddle, Map.of(),
                     TileType.Coin, Map.of(),
@@ -259,7 +259,6 @@ public class SectionTest2 {
                     .flatMap(map -> map.values().stream())
                     .mapToInt(Integer::intValue)
                     .sum();
-
             assertEquals(expectedTotalTiles, sectionTiles.size(), "Section " + sectionType + " should have " + expectedTotalTiles + " tiles");
         }
     }
