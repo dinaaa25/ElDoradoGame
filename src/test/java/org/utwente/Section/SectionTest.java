@@ -118,7 +118,7 @@ public class SectionTest {
                     assertEquals(19, macheteTilesD.size(), "Section D should have 19 Machete tiles");
                     List<Tile> macheteTilesPower1D = macheteTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
                     assertEquals(15, macheteTilesPower1D.size(), "Section D should have 15 Machete Power 1 tiles");
-                    List<Tile> macheteTilesPower2D = macheteTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    List<Tile> macheteTilesPower2D = macheteTilesD.stream().filter(tile -> tile.getPower() == 2).toList();
                     assertEquals(4, macheteTilesPower2D.size(), "Section D should have 4 Machete Power 2 tiles");
                     List<Tile> paddleTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Paddle).toList();
                     assertEquals(11, paddleTilesD.size(), "Section D should have 12 Paddle tiles");
@@ -130,13 +130,13 @@ public class SectionTest {
                     assertEquals(1, paddleTilesPower3D.size(), "Section D should have 1 Paddle Power 3 tiles");
                     List<Tile> coinTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Coin).toList();
                     assertEquals(3, coinTilesD.size(), "Section D should have 3 Coins tiles");
-                    List<Tile> coinTilesPower1D = sectionTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    List<Tile> coinTilesPower1D = coinTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
                     assertEquals(1, coinTilesPower1D.size(), "Section D should have 1 Coins Power 1 tiles");
-                    List<Tile> coinTilesPower2D = sectionTilesD.stream().filter(tile -> tile.getPower() == 2).toList();
+                    List<Tile> coinTilesPower2D = coinTilesD.stream().filter(tile -> tile.getPower() == 2).toList();
                     assertEquals(0, coinTilesPower2D.size(), "Section D should have 0 Coins Power 2 tiles");
-                    List<Tile> coinTilesPower3D = sectionTilesD.stream().filter(tile -> tile.getPower() == 3).toList();
-                    assertEquals(1, coinTilesPower3D.size(), "Section D should have 2 Coins Power 3 tiles");
-                    List<Tile> basecampTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Basecamp).toList();
+                    List<Tile> coinTilesPower3D = coinTilesD.stream().filter(tile -> tile.getPower() == 3).toList();
+                    assertEquals(2, coinTilesPower3D.size(), "Section D should have 2 Coins Power 3 tiles");
+                    List<Tile> basecampTilesD = coinTilesD.stream().filter(tile -> tile.getTileType() == TileType.Basecamp).toList();
                     assertEquals(0, basecampTilesD.size(), "Section D should have 0 Basecamp tiles");
                     List<Tile> discardTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Discard).toList();
                     assertEquals(0, discardTilesD.size(), "Section D should have 0 Discard tiles");
