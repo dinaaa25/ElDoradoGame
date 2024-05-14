@@ -81,6 +81,17 @@ public class SectionTest2 {
                     TileType.ElDorado, Map.of(0, 0),
                     TileType.Start, Map.of(0, 0)
             ),
+            SectionType.G, Map.of(
+                    TileType.Machete, Map.of(1, 14, 2, 3),
+                    TileType.Paddle, Map.of(),
+                    TileType.Coin, Map.of(1, 6, 2, 5, 3, 1, 4, 1),
+                    TileType.Basecamp, Map.of(1, 1),
+                    TileType.Discard, Map.of(1, 2),
+                    TileType.Mountain, Map.of(0, 3),
+                    TileType.Cave, Map.of(0, 1),
+                    TileType.ElDorado, Map.of(0, 0),
+                    TileType.Start, Map.of(0, 0)
+            ),
             SectionType.ElDorado, Map.of(
                     TileType.Machete, Map.of(),
                     TileType.Paddle, Map.of(1, 3),
@@ -149,7 +160,7 @@ public class SectionTest2 {
                 }
 
                 // Check for unspecified power levels (0 to 3)
-                for (int power = 0; power <= 3; power++) {
+                for (int power = 0; power <= 4; power++) {
                     if (!powerCounts.containsKey(power)) {
                         int finalPower = power;
                         long actualCount = sectionTiles.stream()
