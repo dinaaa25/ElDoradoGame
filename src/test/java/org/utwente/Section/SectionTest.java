@@ -30,8 +30,8 @@ public class SectionTest {
                             .filter(tile -> tile.getTileType() == TileType.Machete)
                             .toList();
                     assertEquals(22, macheteTilesA.size(), "Section A should have 22 Machete tiles");
-                    List<Tile> macheteCoinsPower1A = macheteTilesA.stream().filter(tile -> tile.getPower() == 1).toList();
-                    assertEquals(22, macheteCoinsPower1A.size(), "Section A should have 22 Machete Power 1 tiles");
+                    List<Tile> macheteTilesPower1A = macheteTilesA.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(22, macheteTilesPower1A.size(), "Section A should have 22 Machete Power 1 tiles");
                     List<Tile> paddleTilesA = sectionTilesA.stream().filter(tile -> tile.getTileType() == TileType.Paddle).toList();
                     assertEquals(3, paddleTilesA.size(), "Section A should have 3 Paddle tiles");
                     List<Tile> paddleTilesPower1A = paddleTilesA.stream().filter(tile -> tile.getPower() == 1).toList();
@@ -58,8 +58,8 @@ public class SectionTest {
                             .filter(tile -> tile.getTileType() == TileType.Machete)
                             .toList();
                     assertEquals(23, macheteTilesB.size(), "Section B should have 23 Machete tiles");
-                    List<Tile> macheteCoinsPower1B = macheteTilesB.stream().filter(tile -> tile.getPower() == 1).toList();
-                    assertEquals(23, macheteCoinsPower1B.size(), "Section B should have 23 Machete Power 1 tiles");
+                    List<Tile> macheteTilesPower1B = macheteTilesB.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(23, macheteTilesPower1B.size(), "Section B should have 23 Machete Power 1 tiles");
                     List<Tile> paddleTilesB = sectionTilesB.stream().filter(tile -> tile.getTileType() == TileType.Paddle).toList();
                     assertEquals(4, paddleTilesB.size(), "Section B should have 4 Paddle tiles");
                     List<Tile> paddleTilesPower1B = paddleTilesB.stream().filter(tile -> tile.getPower() == 1).toList();
@@ -86,8 +86,8 @@ public class SectionTest {
                             .filter(tile -> tile.getTileType() == TileType.Machete)
                             .toList();
                     assertEquals(6, macheteTilesC.size(), "Section C should have 6 Machete tiles");
-                    List<Tile> macheteCoinsPower1C = macheteTilesC.stream().filter(tile -> tile.getPower() == 1).toList();
-                    assertEquals(6, macheteCoinsPower1C.size(), "Section C should have 6 Machete Power 1 tiles");
+                    List<Tile> macheteTilesPower1C = macheteTilesC.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(6, macheteTilesPower1C.size(), "Section C should have 6 Machete Power 1 tiles");
                     List<Tile> paddleTilesC = sectionTilesC.stream().filter(tile -> tile.getTileType() == TileType.Paddle).toList();
                     assertEquals(12, paddleTilesC.size(), "Section C should have 12 Paddle tiles");
                     List<Tile> paddleTilesPower1C = paddleTilesC.stream().filter(tile -> tile.getPower() == 1).toList();
@@ -108,6 +108,48 @@ public class SectionTest {
                     assertEquals(0, elDoradoTilesC.size(), "Section C should have 0 ElDorado tiles");
                     List<Tile> startTilesC = sectionTilesC.stream().filter(tile -> tile.getTileType() == TileType.Start).toList();
                     assertEquals(0, startTilesC.size(), "Section C should have 0 Start tiles");
+                    break;
+                case D:
+                    List<Tile> sectionTilesD = section.getTiles();
+                    assertEquals(37, sectionTilesD.size(), "Section D should have 37 tiles");
+                    List<Tile> macheteTilesD = sectionTilesD.stream()
+                            .filter(tile -> tile.getTileType() == TileType.Machete)
+                            .toList();
+                    assertEquals(19, macheteTilesD.size(), "Section D should have 19 Machete tiles");
+                    List<Tile> macheteTilesPower1D = macheteTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(15, macheteTilesPower1D.size(), "Section D should have 15 Machete Power 1 tiles");
+                    List<Tile> macheteTilesPower2D = macheteTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(4, macheteTilesPower2D.size(), "Section D should have 4 Machete Power 1 tiles");
+                    List<Tile> paddleTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Paddle).toList();
+                    assertEquals(11, paddleTilesD.size(), "Section D should have 12 Paddle tiles");
+                    List<Tile> paddleTilesPower1D = paddleTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(8, paddleTilesPower1D.size(), "Section D should have 8 Paddle Power 1 tiles");
+                    List<Tile> paddleTilesPower2D = paddleTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(2, paddleTilesPower2D.size(), "Section D should have 2 Paddle Power 2 tiles");
+                    List<Tile> paddleTilesPower3D = paddleTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(1, paddleTilesPower3D.size(), "Section D should have 1 Paddle Power 3 tiles");
+                    List<Tile> coinTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Coin).toList();
+                    assertEquals(3, coinTilesD.size(), "Section D should have 3 Coins tiles");
+                    List<Tile> coinTilesPower1D = sectionTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(1, coinTilesPower1D.size(), "Section D should have 1 Coins Power 1 tiles");
+                    List<Tile> coinTilesPower2D = sectionTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(0, coinTilesPower2D.size(), "Section D should have 0 Coins Power 2 tiles");
+                    List<Tile> coinTilesPower3D = sectionTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(1, coinTilesPower3D.size(), "Section D should have 2 Coins Power 3 tiles");
+                    List<Tile> basecampTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Basecamp).toList();
+                    assertEquals(0, basecampTilesD.size(), "Section D should have 0 Basecamp tiles");
+                    List<Tile> discardTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Discard).toList();
+                    assertEquals(0, discardTilesD.size(), "Section D should have 0 Discard tiles");
+                    List<Tile> discardTilesPower1D = discardTilesD.stream().filter(tile -> tile.getPower() == 1).toList();
+                    assertEquals(0, discardTilesPower1D.size(), "Section D should have 0 Discard Power 1 tiles");
+                    List<Tile> mountainTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Mountain).toList();
+                    assertEquals(3, mountainTilesD.size(), "Section D should have 3 Mountain tiles");
+                    List<Tile> caveTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Cave).toList();
+                    assertEquals(1, caveTilesD.size(), "Section D should have 1 Cave tiles");
+                    List<Tile> elDoradoTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.ElDorado).toList();
+                    assertEquals(0, elDoradoTilesD.size(), "Section D should have 0 ElDorado tiles");
+                    List<Tile> startTilesD = sectionTilesD.stream().filter(tile -> tile.getTileType() == TileType.Start).toList();
+                    assertEquals(0, startTilesD.size(), "Section D should have 0 Start tiles");
                     break;
                 case ElDorado:
                     List<Tile> sectionTilesElDorado = section.getTiles();
