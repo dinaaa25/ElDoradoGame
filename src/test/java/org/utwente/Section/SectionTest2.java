@@ -153,7 +153,7 @@ public class SectionTest2 {
                     TileType.Paddle, Map.of(1, 3, 4, 1),
                     TileType.Coin, Map.of(2, 1, 4, 1),
                     TileType.Basecamp, Map.of(1, 1),
-                    TileType.Discard, Map.of(),
+                    TileType.Discard, Map.of(2, 3),
                     TileType.Mountain, Map.of(0, 8),
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
