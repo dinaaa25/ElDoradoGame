@@ -73,7 +73,7 @@ public class SectionTest2 {
             )),
             entry(SectionType.F, Map.of(
                     TileType.Machete, Map.of(1, 8, 2, 3, 3, 1),
-                    TileType.Paddle, Map.of(1, 4, 2, 2),
+                    TileType.Paddle, Map.of(1, 4, 2, 3, 3, 1),
                     TileType.Coin, Map.of(1, 2, 2, 1),
                     TileType.Basecamp, Map.of(1, 1, 2, 1),
                     TileType.Discard, Map.of(1, 7, 2, 1),
