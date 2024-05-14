@@ -58,6 +58,14 @@ public class Tile {
         return caveCoins.size();
     }
 
+    public boolean isStartingTile() {
+        return this.tileType == TileType.Start;
+    }
+
+    public boolean isEndTile() {
+        return this.tileType == TileType.ElDorado;
+    }
+
     @Override
     public String toString() {
         return "Tile{" +

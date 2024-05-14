@@ -1,6 +1,7 @@
 package org.utwente.Section;
 
 import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileType;
 
 import java.util.List;
 
@@ -27,5 +28,13 @@ public class Section {
 
     public List<Tile> getTiles() {
         return tiles;
+    }
+
+    public boolean isStartingSection() {
+        return tiles.stream().anyMatch(Tile::isStartingTile);
+    }
+
+    public boolean isEndingSection() {
+        return tiles.stream().anyMatch(Tile::isEndTile);
     }
 }
