@@ -116,12 +116,12 @@ public class SectionTest2 {
                     TileType.Start, Map.of()
             )),
             entry(SectionType.J, Map.of(
-                    TileType.Machete, Map.of(1, 12, 2, 3),
-                    TileType.Paddle, Map.of(1, 4, 2, 2),
-                    TileType.Coin, Map.of(1, 5, 2, 2),
+                    TileType.Machete, Map.of(1, 4, 2, 2),
+                    TileType.Paddle, Map.of(1, 7, 2, 2),
+                    TileType.Coin, Map.of(1, 7, 2, 3),
                     TileType.Basecamp, Map.of(1, 1),
-                    TileType.Discard, Map.of(1, 4, 2, 1),
-                    TileType.Mountain, Map.of(0, 2),
+                    TileType.Discard, Map.of(1, 4, 2, 5),
+                    TileType.Mountain, Map.of(0, 1),
                     TileType.Cave, Map.of(0, 1),
                     TileType.ElDorado, Map.of(),
                     TileType.Start, Map.of()
