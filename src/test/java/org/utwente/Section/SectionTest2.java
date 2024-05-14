@@ -173,7 +173,7 @@ public class SectionTest2 {
             entry(SectionType.O, Map.of(
                     TileType.Machete, Map.of(1, 1, 2, 2),
                     TileType.Paddle, Map.of(1, 1, 4, 1),
-                    TileType.Coin, Map.of(1, 3, 1, 2),
+                    TileType.Coin, Map.of(1, 3, 2, 1),
                     TileType.Basecamp, Map.of(),
                     TileType.Discard, Map.of(1, 3, 2, 1),
                     TileType.Mountain, Map.of(0, 3),
@@ -248,7 +248,6 @@ public class SectionTest2 {
         for (Section section : sections) {
             SectionType sectionType = section.getSectionType();
 
-            // Check if the section type is specified in the expectedTileCounts map
             if (!expectedTileCounts.containsKey(sectionType)) {
                 continue;
             }
@@ -256,7 +255,6 @@ public class SectionTest2 {
             List<Tile> sectionTiles = section.getTiles();
             Map<TileType, Map<Integer, Integer>> expectedCounts = expectedTileCounts.get(sectionType);
 
-            // Calculate the expected total number of tiles for the section
             int expectedTotalTiles = expectedCounts.values().stream()
                     .flatMap(map -> map.values().stream())
                     .mapToInt(Integer::intValue)
@@ -271,7 +269,6 @@ public class SectionTest2 {
         for (Section section : sections) {
             SectionType sectionType = section.getSectionType();
 
-            // Check if the section type is specified in the expectedTileCounts map
             if (!expectedTileCounts.containsKey(sectionType)) {
                 continue;
             }
@@ -282,7 +279,7 @@ public class SectionTest2 {
             for (TileType tileType : TileType.values()) {
                 Map<Integer, Integer> powerCounts = expectedCounts.getOrDefault(tileType, Map.of());
 
-                // Check for specified power levels
+                // Specified power levels
                 for (Map.Entry<Integer, Integer> entry : powerCounts.entrySet()) {
                     int power = entry.getKey();
                     int expectedCount = entry.getValue();
@@ -292,7 +289,7 @@ public class SectionTest2 {
                     assertEquals(expectedCount, actualCount, "Section " + sectionType + " should have " + expectedCount + " " + tileType + " tiles with power " + power);
                 }
 
-                // Check for unspecified power levels (0 to 3)
+                // Unspecified power levels (0 to 3)
                 for (int power = 0; power <= 4; power++) {
                     if (!powerCounts.containsKey(power)) {
                         int finalPower = power;
