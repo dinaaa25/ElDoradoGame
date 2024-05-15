@@ -1,7 +1,6 @@
 package org.utwente.Section;
 
 import org.utwente.Tile.Tile;
-import org.utwente.Tile.TileType;
 
 import java.util.List;
 
