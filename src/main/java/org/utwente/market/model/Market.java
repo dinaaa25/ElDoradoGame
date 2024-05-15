@@ -44,7 +44,7 @@ public class Market {
 
     public static Market fromConfiguration() {
         Market market = new Market();
-        String path = "/Users/mark/Projects/master-cs/eldorado/src/main/resources/market.json";
+        String path = "src/main/resources/market.json";
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
