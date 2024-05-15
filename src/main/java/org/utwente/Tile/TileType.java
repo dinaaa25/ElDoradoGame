@@ -8,5 +8,6 @@ public enum TileType {
     Discard,
     Mountain,
     Cave,
-    ElDorado
+    ElDorado,
+    Start
 }
