@@ -28,4 +28,12 @@ public class Section {
     public List<Tile> getTiles() {
         return tiles;
     }
+
+    public boolean isStartingSection() {
+        return tiles.stream().anyMatch(Tile::isStartingTile);
+    }
+
+    public boolean isEndingSection() {
+        return tiles.stream().anyMatch(Tile::isEndTile);
+    }
 }

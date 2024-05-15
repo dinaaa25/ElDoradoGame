@@ -2,6 +2,8 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.utwente.CaveCoin.CaveCoin;
 
 import java.util.ArrayList;
@@ -56,6 +58,14 @@ public class Tile {
 
     public int getCaveCoinCount() {
         return caveCoins.size();
+    }
+
+    public boolean isStartingTile() {
+        return this.tileType == TileType.Start;
+    }
+
+    public boolean isEndTile() {
+        return this.tileType == TileType.ElDorado;
     }
 
     @Override

@@ -1,0 +1,10 @@
+package org.utwente.Board;
+
+public enum Path {
+    HillsOfGold,
+    HomeStretch,
+    WindingPaths,
+    Serpentine,
+    Swamplands,
+    WitchCauldron
+}
