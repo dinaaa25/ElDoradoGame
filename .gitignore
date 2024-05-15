@@ -43,4 +43,6 @@ bin/
 .DS_Store
 
 ##gitlab-ci-local runner 
+ .gitlab-ci-local/*
+ .gitlab-ci-local
  .gitlab-ci-local/

@@ -1,21 +1,48 @@
 stages:
+  - build
   - test
   - report
 
-test:
-  stage: test
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+build:
+  stage: build
   image: docker:26.1.2-dind
   services:
     - name: docker:dind
       alias: docker
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - apk add --no-cache openjdk17 gradle curl # Install JDK 17
     - chmod +x ./gradlew
     - docker info
   script:
-    - ./gradlew clean test
+    - ./gradlew clean assemble # wont run tests
+    - ./gradlew shadowJar # creates a 'fat' jar with dependencies
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
+  rules:
+    - when: always
+  tags:
+    - SET2024
+    - privileged
+
+test:
+  stage: test
+  image: docker:26.1.2-dind
+  dependencies:
+    - build
+  services:
+    - name: docker:dind
+      alias: docker
+  before_script:
+    - apk add --no-cache openjdk17 gradle # gitlab creates clean environment per stage, need to install jdk again here
+    - chmod +x ./gradlew
+    - docker info
+  script:
+    - ./gradlew clean test # run tests
   artifacts:
     when: always
     paths:

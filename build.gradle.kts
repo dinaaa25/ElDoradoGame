@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.utwente"
@@ -23,4 +25,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("org.utwente.Main")
+}
+
+tasks.shadowJar {
+    archiveFileName.set("ElDorado-1.0-SNAPSHOT-all.jar")
+    manifest {
+        attributes["Main-Class"] = "org.utwente.Main"
+    }
 }
