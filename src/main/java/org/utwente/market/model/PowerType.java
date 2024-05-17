@@ -5,5 +5,9 @@ public enum PowerType {
     Paddle,
     Coin,
     Wild,
-    Effect,
+    Effect;
+
+    private PowerType() {
+
+    }
 }

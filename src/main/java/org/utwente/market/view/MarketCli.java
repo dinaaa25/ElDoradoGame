@@ -2,14 +2,12 @@ package org.utwente.market.view;
 
 import java.util.Scanner;
 
-import org.utwente.market.controller.InitialEvent;
 import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.util.Ansi;
-import org.utwente.util.Event;
 import org.utwente.util.EventHandler;
 
 public class MarketCli implements MarketView {

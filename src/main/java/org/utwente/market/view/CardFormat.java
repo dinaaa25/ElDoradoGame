@@ -43,9 +43,9 @@ public class CardFormat {
 
   public static String formatCard(CardType card) {
     String preformat = String.format(cardBase, "%s%-" + (cardWidth - 3) + "S%s", "%s%2s", "%2s%s", "%2s");
-    String color = powerToColor(card.getPowerType());
-    return String.format(preformat, color, card.getName(), Ansi.RESET, color, card.getPower(), card.getPower(),
-        Ansi.RESET, card.getPurchaseValue());
+    String color = powerToColor(card.powerType);
+    return String.format(preformat, color, card.name(), Ansi.RESET, color, card.power, card.power,
+        Ansi.RESET, card.purchaseValue);
   }
 
   public static String formatDeck(CardType[] cards) {
