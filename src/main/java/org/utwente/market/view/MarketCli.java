@@ -1,6 +1,7 @@
 package org.utwente.market.view;
 
 import java.util.Scanner;
+import java.io.*;
 
 import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
@@ -10,7 +11,13 @@ import org.utwente.market.model.Order;
 import org.utwente.util.Ansi;
 import org.utwente.util.EventHandler;
 
+import lombok.Setter;
+import lombok.Getter;
+
+@Getter
+@Setter
 public class MarketCli implements MarketView {
+  private PrintStream stream;
   private EventHandler<MarketOrderEvent> eventHandler;
   private EventHandler<InputEvent> inputEventHandler;
   private Scanner scanner = new Scanner(System.in);
@@ -18,6 +25,14 @@ public class MarketCli implements MarketView {
   private Order order;
   private Market market;
   private boolean exit = false;
+
+  public MarketCli(PrintStream stream) {
+    this.stream = stream;
+  }
+
+  public MarketCli() {
+    this(System.out);
+  }
 
   public void run() {
     while (!exit) {
@@ -41,8 +56,8 @@ public class MarketCli implements MarketView {
   @Override
   public void displayMarket() {
     String marketRepresentation = CardFormat.formatDeck(market.getCurrentCards().keySet().toArray(CardType[]::new));
-    System.out.printf("\n%s%70s%30s%s\n\n", Ansi.BLUE_BACKGROUND, "welcome to el dorado market!", " ", Ansi.RESET);
-    System.out.println(marketRepresentation);
+    stream.printf("\n%s%70s%30s%s\n\n", Ansi.BLUE_BACKGROUND, "welcome to el dorado market!", " ", Ansi.RESET);
+    stream.println(marketRepresentation);
   }
 
   @Override

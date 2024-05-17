@@ -53,6 +53,18 @@ public class MarketTest {
   }
 
   @Test
+  public void testBuyAndReplaceInCurrent() {
+    Order order = new Order(CardType.Kartograph, 4);
+    assertFalse(market.canBuy(order));
+    for (int i = 0; i < 5; i++) {
+      market.buy(new Order(CardType.Tausendsassa, 10));
+    }
+    market.buy(order);
+    assertFalse(market.reserveIsOpen());
+    assertTrue(market.canBuy(order));
+  }
+
+  @Test
   public void testCanBuyCard() {
     Order order = new Order(CardType.Tausendsassa, 4);
     Card card = market.buy(order);

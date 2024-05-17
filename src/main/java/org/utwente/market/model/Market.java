@@ -41,21 +41,37 @@ public class Market {
 
     public Card buy(Order order) {
         if (order != null && canBuy(order)) {
-            removeCardIfExists(order.getCardToken());
+            removeCardFromMarket(order.getCardToken());
             return new Card(order.getCardToken());
         }
 
         return null;
     }
 
-    private void removeCardIfExists(CardType key) {
-        Integer res = this.currentCards.get(key);
-        this.currentCards.replace(key, --res);
+    public boolean cardInReserve(CardType type) {
+        return this.reserveCards.containsKey(type);
+    }
 
-        // remove card type that is empty.
-        if (res <= 0) {
-            this.currentCards.remove(key);
+    public boolean cardInCurrent(CardType type) {
+        return this.currentCards.containsKey(type);
+    }
+
+    private void removeCardFromMarket(CardType key) {
+        if (cardInReserve(key)) {
+            // move card to current cards.
+            Integer res = this.reserveCards.get(key);
+            this.currentCards.put(key, --res);
+            this.reserveCards.remove(key);
+        } else if (cardInCurrent(key)) {
+            Integer res = this.currentCards.get(key);
+            // card is given to the player
+            this.currentCards.replace(key, --res);
+            // remove card type that is empty.
+            if (res <= 0) {
+                this.currentCards.remove(key);
+            }
         }
+
     }
 
     public int getRemainingCardAmount() {
