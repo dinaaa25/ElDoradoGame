@@ -6,10 +6,11 @@ import lombok.*;
 @Setter
 public class Card implements Resource {
     private CardType cardType;
-    private int consumedPower = 0;
+    private int consumedPower;
 
     public Card(CardType cardType) {
         this.cardType = cardType;
+        this.consumedPower = 0;
     }
 
     /**
@@ -18,6 +19,10 @@ public class Card implements Resource {
      * @return power of the card as a number.
      */
     public int remainingPower() {
-        return 0;
+        return cardType.power - consumedPower;
+    }
+
+    public void removePower(int power) {
+        this.consumedPower += power;
     }
 }

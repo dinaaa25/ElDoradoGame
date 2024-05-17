@@ -1,10 +1,8 @@
 package org.utwente.market.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class CardTypeSpec {
   private int quantity;
   private CardType type;
@@ -15,7 +13,6 @@ public class CardTypeSpec {
   }
 
   public CardTypeSpec(CardType type) {
-    this.quantity = 5;
-    this.type = type;
+    this(5, type);
   }
 }

@@ -2,16 +2,16 @@ package org.utwente.market.model;
 
 public class Order {
 
-    private String cardToken;
+    private CardType cardType;
     private int money;
 
-    public Order(String cardToken, int money) {
-        this.cardToken = cardToken;
+    public Order(CardType cardType, int money) {
+        this.cardType = cardType;
         this.money = money;
     }
 
-    public String getCardToken() {
-        return this.cardToken;
+    public CardType getCardToken() {
+        return this.cardType;
     }
 
     public int getMoney() {
