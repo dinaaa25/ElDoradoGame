@@ -2,6 +2,7 @@ package org.utwente.market.view;
 
 import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
+import org.utwente.market.model.Card;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.util.EventHandler;
@@ -9,7 +10,7 @@ import org.utwente.util.EventHandler;
 public interface MarketView {
   Order getOrder();
 
-  void displayPurchaseResult();
+  void displayPurchaseResult(Card card);
 
   void displayMarket();
 

@@ -5,6 +5,7 @@ import java.io.*;
 
 import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
+import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
@@ -48,22 +49,24 @@ public class MarketCli implements MarketView {
   }
 
   @Override
-  public void displayPurchaseResult() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'displayPurchaseResult'");
+  public void displayPurchaseResult(Card card) {
+    String cardDisplay = CardFormat.formatCard(card.getCardType());
+    System.out.println(cardDisplay);
   }
 
   @Override
   public void displayMarket() {
-    String marketRepresentation = CardFormat.formatDeck(market.getCurrentCards().keySet().toArray(CardType[]::new));
+    String marketCurrentCards = CardFormat.formatDeck(market.getCurrentCards().keySet().toArray(CardType[]::new));
+    String marketReserveCards = CardFormat.formatDeck(market.getReserveCards().keySet().toArray(CardType[]::new));
     stream.printf("\n%s%70s%30s%s\n\n", Ansi.BLUE_BACKGROUND, "welcome to el dorado market!", " ", Ansi.RESET);
-    stream.println(marketRepresentation);
+    stream.println(marketCurrentCards);
+    stream.println("----------------");
+    stream.println(marketReserveCards);
   }
 
   @Override
   public void displayError(String errorMessage) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'displayError'");
+    stream.printf("%s%s%s\n", Ansi.RED, errorMessage, Ansi.RESET);
   }
 
   @Override
