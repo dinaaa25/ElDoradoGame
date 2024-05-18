@@ -1,0 +1,10 @@
+{
+  "available": [
+    {"name": "kundschafter", "power": 2, "powerType": "machete", "price": 1, "quantity": 5},
+    {"name": "entdecker", "power": 3, "powerType": "machete", "price": 3, "quantity": 5},
+    {"name": "fotografin", "power": 2, "powerType": "coin", "price": 2, "quantity": 5},
+    {"name": "tausendsassa", "power": 1, "powerType": "wild", "price": 2, "quantity": 5},
+    {"name": "schatzruhe", "power": 4, "powerType": "coin", "price": 3, "quantity": 5}
+  ],
+  "reserve": [{"name": "kundschafter", "power": 2, "powerType": "machete", "price": 1, "quantity": 5}]
+}

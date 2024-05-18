@@ -21,6 +21,14 @@ dependencies {
     // probably not needed when running pure java but allows for integration tests esp when using external services
     implementation(platform("org.testcontainers:testcontainers-bom:1.19.8"))
     testImplementation("org.testcontainers:junit-jupiter")
+    // lombok
+    // generates getters and setters to avoid writing boilerplate code.
+    compileOnly("org.projectlombok:lombok:1.18.32")
+	annotationProcessor("org.projectlombok:lombok:1.18.32")
+	testCompileOnly("org.projectlombok:lombok:1.18.32")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+    // mockito
+    testImplementation("org.mockito:mockito-all:1.10.19")
 }
 
 tasks.test {
