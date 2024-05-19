@@ -54,13 +54,23 @@ public class MarketCli implements MarketView {
     System.out.println(cardDisplay);
   }
 
+  private void printStraightLine() {
+    StringBuilder n = new StringBuilder();
+    for (int i = 0; i < 100; i++)
+      n.append("─");
+    stream.println(n.toString());
+  }
+
   @Override
   public void displayMarket() {
     String marketCurrentCards = CardFormat.formatDeck(market.getCurrentCards().keySet().toArray(CardType[]::new));
     String marketReserveCards = CardFormat.formatDeck(market.getReserveCards().keySet().toArray(CardType[]::new));
     stream.printf("\n%s%70s%30s%s\n\n", Ansi.BLUE_BACKGROUND, "welcome to el dorado market!", " ", Ansi.RESET);
+    printStraightLine();
+    stream.println("Market Available Cards:");
     stream.println(marketCurrentCards);
-    stream.println("----------------");
+    printStraightLine();
+    stream.println("Market Reserve Cards:");
     stream.println(marketReserveCards);
   }
 
