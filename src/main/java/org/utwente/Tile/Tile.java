@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.player.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Tile {
     private final int x;
@@ -17,6 +15,7 @@ public class Tile {
     private final TileType tileType;
     private final int power;
     private final List<CaveCoin> caveCoins;
+    private List<Player> players;
 
     public Tile(int x, int y, TileType tileType, int power, ArrayList<CaveCoin> caveCoins) {
         this.x = x;
@@ -78,4 +77,21 @@ public class Tile {
                 ", caveCoins=" + caveCoins +
                 '}';
     }
+
+    public boolean isStartTile() {
+        return true;
+    }
+
+    public void placePlayer(Player player) {
+    }
+
+    public boolean isEmpty() {
+        return true;
+    }
+
+    public List<Player> getPlayers() {
+        return this.players;
+    }
+
+
 }

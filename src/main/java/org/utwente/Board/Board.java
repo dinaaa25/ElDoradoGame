@@ -5,6 +5,7 @@ import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class Board {
                 .filter(tile -> tile.getTileType() == TileType.ElDorado)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void placePlayer(Tile lastTile, Player player) {
     }
 
     public static class BoardBuilder {
