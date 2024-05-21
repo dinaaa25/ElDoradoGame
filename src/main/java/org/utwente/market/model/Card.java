@@ -27,7 +27,10 @@ public class Card implements Resource {
         return cardType.power - consumedPower;
     }
 
-    public void removePower(int power) {
+    public void removePower(int power) throws CardPowerException {
+        if (power > remainingPower()) {
+            throw new CardPowerException();
+        }
         this.consumedPower += power;
     }
 
