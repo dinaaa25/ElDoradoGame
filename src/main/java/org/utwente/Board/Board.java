@@ -5,6 +5,7 @@ import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,18 @@ public class Board {
     public Board(List<Section> sections, Path path) {
         this.sections = sections;
         this.path = path;
+    }
+
+    public List<Tile> getStartingTiles() {
+        List<Tile> startingTiles = new ArrayList<>();
+        List<Tile> allBoardTiles = sections.stream().flatMap(section -> section.getTiles().stream().filter(tile -> tile.isStartingTile())).toList();
+        return allBoardTiles;
+    }
+
+    public List<Tile> getLastWaitingTiles() {
+        List<Tile> lastWaitingTiles = new ArrayList<>();
+        List<Tile> allBoardTiles = sections.stream().flatMap(section -> section.getTiles().stream().filter(tile -> tile.isLastWaitingTile())).toList();
+        return allBoardTiles;
     }
 
     public List<Section> getSections() {
@@ -38,18 +51,24 @@ public class Board {
                 .orElse(null);
     }
 
+    public void placePlayer(Tile lastTile, Player player) {
+        lastTile.placePlayer(player);
+    }
+
     public static class BoardBuilder {
         private final List<Section> sections;
         private Path path;
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
+            this.availableSections = SectionLoader.loadSections();
         }
 
-        private static final List<Section> availableSections = SectionLoader.loadSections();
+        private List<Section> availableSections;
 
         private static Section getSectionBySectionType(SectionType sectionType) {
-            Optional<Section> sectionToAdd = availableSections.stream()
+            List<Section> sectionList = SectionLoader.loadSections();
+            Optional<Section> sectionToAdd = sectionList.stream()
                     .filter(section -> section.getSectionType() == sectionType)
                     .findFirst();
             return sectionToAdd.orElseThrow(IllegalArgumentException::new);

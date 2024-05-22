@@ -25,13 +25,13 @@ class TileTest {
 
     @Test
     void testEmptyCoins() {
-        Tile tile = new Tile(2, 3, TileType.Coin, 3, null);
+        Tile tile = new Tile(2, 3, TileType.Coin, 3, null, false);
         assertFalse(tile.hasCaveCoins());
     }
 
     @Test
     void testGetCaveCoin() {
-        Tile tile = new Tile(2, 3, TileType.Cave, 3, new ArrayList<>(List.of(new CaveCoin(1, CaveCoinType.Draw), new CaveCoin(2, CaveCoinType.Paddle))));
+        Tile tile = new Tile(2, 3, TileType.Cave, 3, new ArrayList<>(List.of(new CaveCoin(1, CaveCoinType.Draw), new CaveCoin(2, CaveCoinType.Paddle))), false);
         tile.retrieveCoin();
         assertTrue(tile.hasCaveCoins());
         tile.retrieveCoin();
@@ -40,14 +40,14 @@ class TileTest {
 
     @Test
     void testGetEmptyCaveCoinsOptional() {
-        Tile tile = new Tile(2, 3, TileType.Cave, 3, null);
+        Tile tile = new Tile(2, 3, TileType.Cave, 3, null, false);
         Optional<CaveCoin> coin = tile.retrieveCoin();
         assertEquals(coin, Optional.empty());
     }
 
     @Test
     void testGetCaveCoinCount() {
-        Tile tile = new Tile(2, 3, TileType.Cave, 3, new ArrayList<>(List.of(new CaveCoin(1, CaveCoinType.Draw), new CaveCoin(2, CaveCoinType.Paddle))));
+        Tile tile = new Tile(2, 3, TileType.Cave, 3, new ArrayList<>(List.of(new CaveCoin(1, CaveCoinType.Draw), new CaveCoin(2, CaveCoinType.Paddle))), false);
         assertEquals(2, tile.getCaveCoinCount());
         tile.retrieveCoin();
         assertEquals(1, tile.getCaveCoinCount());
