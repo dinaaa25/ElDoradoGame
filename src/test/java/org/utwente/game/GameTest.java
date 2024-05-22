@@ -8,11 +8,9 @@ import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
 import org.utwente.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
@@ -37,14 +35,14 @@ public class GameTest {
 
     @Test
     public void testIsFinishedAtStart(){
-        assertEquals(game.isFinished(), false);
+        assertFalse(game.isFinished());
     }
 
     @Test
     public void testPlayerAtEnd() {
         // put the first player at the end
-        Tile lastTile = board.getElDoradoTile();
-        board.placePlayer(lastTile, dina);
+        List<Tile> lastTiles = board.getLastWaitingTiles();
+        board.placePlayer(lastTiles.get(0), dina);
 
         // wait one round for 3 players
         for(int index = 0; index < 4; index++) {
@@ -52,16 +50,16 @@ public class GameTest {
         }
 
         // assert winner
-        assertEquals(game.isFinished(), true);
-        assertEquals(game.getFinalWinner().getName(), "Dina");
+        assertTrue(game.isFinished());
+        assertEquals("Dina", game.getFinalWinner().getName());
     }
 
     @Test
     public void testTwoPlayersAtEnd() {
         // put two players at the end
-        Tile lastTile = board.getElDoradoTile();
-        board.placePlayer(lastTile, dina);
-        board.placePlayer(lastTile, mark);
+        List<Tile> lastTiles = board.getLastWaitingTiles();
+        board.placePlayer(lastTiles.get(0), dina);
+        board.placePlayer(lastTiles.get(1), mark);
 
         // wait one round for 3 players
         for(int index = 0; index < 4; index++) {
@@ -69,17 +67,25 @@ public class GameTest {
         }
 
         // first one reaches win
-        assertEquals(game.isFinished(), true);
-        assertEquals(game.getFinalWinner().getName(), "Dina");
+        assertTrue(game.isFinished());
+        assertEquals("Dina", game.getFinalWinner().getName());
+    }
+
+    @Test
+    public void testIsInWaitingState() {
+        assertFalse(game.isInWaitingState());
+        List<Tile> lastTiles = board.getLastWaitingTiles();
+        board.placePlayer(lastTiles.get(0), dina);
+        assertTrue(game.isInWaitingState());
     }
 
     @Test
     public void testThreePlayersAtEnd() {
         // put two players at the end
-        Tile lastTile = board.getElDoradoTile();
-        board.placePlayer(lastTile, dina);
-        board.placePlayer(lastTile, mark);
-        board.placePlayer(lastTile, stijn);
+        List<Tile> tiles = board.getLastWaitingTiles();
+        board.placePlayer(tiles.get(0), dina);
+        board.placePlayer(tiles.get(0), mark);
+        board.placePlayer(tiles.get(1), stijn);
 
         // wait one round for 3 players
         for(int index = 0; index < 4; index++) {
@@ -87,18 +93,18 @@ public class GameTest {
         }
 
         // first one reaches win
-        assertEquals(game.isFinished(), true);
-        assertEquals(game.getFinalWinner().getName(), "Dina");
+        assertTrue(game.isFinished());
+        assertEquals("Dina", game.getFinalWinner().getName());
     }
 
     @Test
     public void testFourPlayersAtEnd() {
         // put two players at the end
-        Tile lastTile = board.getElDoradoTile();
-        board.placePlayer(lastTile, dina);
-        board.placePlayer(lastTile, mark);
-        board.placePlayer(lastTile, stijn);
-        board.placePlayer(lastTile, finn);
+        List<Tile> lastTiles = board.getLastWaitingTiles();
+        board.placePlayer(lastTiles.get(0), dina);
+        board.placePlayer(lastTiles.get(0), mark);
+        board.placePlayer(lastTiles.get(1), stijn);
+        board.placePlayer(lastTiles.get(2), finn);
 
         // wait one round for 3 players
         for(int index = 0; index < 4; index++) {
@@ -107,39 +113,39 @@ public class GameTest {
 
         // first one reaches win
         assertEquals(game.isFinished(), true);
-        assertEquals(game.getFinalWinner().getName(), "Dina");
+        assertEquals("Dina", game.getFinalWinner().getName());
     }
 
     @Test
     public void testTwoPlayersAtEndWithBlockades() {
         // put two players at the end
-        Tile lastTile = board.getElDoradoTile();
+        List<Tile> lastTiles = board.getLastWaitingTiles();
         Blockade blockade = new Blockade();
         dina.addBlockade(blockade);
-        board.placePlayer(lastTile, dina);
+        board.placePlayer(lastTiles.get(0), dina);
         game.nextPlayer();
-        board.placePlayer(lastTile, mark);
+        board.placePlayer(lastTiles.get(1), mark);
 
         // wait one round for 3 players
         for(int index = 0; index < 3; index++) {
             game.nextPlayer();
         }
 
-        // first one reaches win
-        assertEquals(game.isFinished(), true);
-        assertEquals(game.getFinalWinner().getName(), "Dina");
+        // first one reaches win.
+        assertTrue(game.isFinished());
+        assertEquals("Dina", game.getFinalWinner().getName());
     }
 
 
     @Test
     public void testNextAndCurrentPlayer() {
-        assertEquals(game.getCurrentPlayer().getName(), "Dina");
+        assertEquals("Dina", game.getCurrentPlayer().getName());
         game.nextPlayer();
-        assertEquals(game.getCurrentPlayer().getName(), "Mark");
+        assertEquals("Mark", game.getCurrentPlayer().getName());
         game.nextPlayer();
-        assertEquals(game.getCurrentPlayer().getName(), "Stijn");
+        assertEquals("Stijn", game.getCurrentPlayer().getName());
         game.nextPlayer();
-        assertEquals(game.getCurrentPlayer().getName(), "Finn");
+        assertEquals("Finn", game.getCurrentPlayer().getName());
     }
 
 
@@ -154,7 +160,7 @@ public class GameTest {
         assertEquals(startTiles.size(), 4);
         for(Tile tile : startTiles) {
             assertNotNull(tile);
-            assertEquals(tile.isStartTile(), true);
+            assertEquals(tile.isStartingTile(), true);
         }
     }
 

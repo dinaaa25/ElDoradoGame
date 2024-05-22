@@ -6,8 +6,8 @@ import org.utwente.player.Player;
 
 public abstract class Action{
 
-    private Player player;
-    private Resource resource;
+    protected Player player;
+    protected Resource resource;
 
     public Action(Player player, Resource resource) {
         this.player = player;
@@ -16,7 +16,7 @@ public abstract class Action{
 
     abstract void execute();
 
-    abstract void validate();
+    abstract boolean validate();
 
 
 }

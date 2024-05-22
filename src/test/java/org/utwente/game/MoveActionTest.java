@@ -11,6 +11,7 @@ import org.utwente.market.model.Resource;
 import org.utwente.player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,60 +22,91 @@ public class MoveActionTest {
     Player dina;
     Player mark;
 
-
     @BeforeEach
     public void setUp() {
-        tileTo = new Tile(0, 0, TileType.Machete, 1, new ArrayList<>());
-        tileFrom = new Tile(0, 0, TileType.Paddle, 1, new ArrayList<>());
+        tileTo = new Tile(0, 1, TileType.Machete, 2, new ArrayList<>(), false);
+        tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
         dina = new Player("Dina");
         mark = new Player("Mark");
+        tileFrom.placePlayer(dina);
     }
 
     @Test
     public void testMovePlayerToTile() {
-        tileFrom.placePlayer(dina);
         Resource card = new Card(CardType.Entdecker);
         Action move = new MoveAction(dina, card, tileFrom, tileTo);
 
-        assertEquals(tileFrom.isEmpty(), true);
-        assertNotNull(tileTo.getPlayers());
+        assertEquals(tileFrom.isEmpty(), false);
+        assertEquals(tileTo.isEmpty(), true);
+
+        move.execute();
+
+        assertEquals(1, tileTo.getPlayers().size());
         assertTrue(tileTo.getPlayers().stream().map(player -> player.getName()).toList().contains("Dina"));
     }
 
+    // TODO: refactor if switched to polar coordinates
     @Test
     public void testIsTileToNeighbour() {
-
+        Resource card = new Card(CardType.Entdecker);
+        MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
+        assertEquals(move.isTileToNeighbour(), true);
     }
 
     @Test
     public void testIsPlayerOnTile() {
-        tileFrom.placePlayer(dina);
         Resource card = new Card(CardType.Entdecker);
         Action move = new MoveAction(dina, card, tileFrom, tileTo);
+        tileTo.placePlayer(mark);
 
-        assertEquals(tileFrom.isEmpty(), true);
+        assertFalse(tileFrom.isEmpty());
+        assertFalse(tileTo.isEmpty());
+
+        move.execute();
+
         assertNotNull(tileTo.getPlayers());
         assertTrue(tileTo.getPlayers().stream().map(player -> player.getName()).toList().contains("Dina"));
     }
 
     @Test
-    public void testGetTileType() {
-
+    public void testResourceHasEnoughPowerTrue() {
+        Resource card = new Card(CardType.Entdecker);
+        MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
+        assertTrue(move.resourceHasEnoughPower());
     }
 
     @Test
-    public void testIsTileToFilled() {
-
+    public void testResourceHasEnoughPowerFalse() {
+        Resource card = new Card(CardType.Tausendsassa);
+        MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
+        assertFalse(move.resourceHasEnoughPower());
     }
 
     @Test
-    public void testResourceHasEnoughPower() {
+    public void testIsCardMatchingTileTrue() {
+        List<CardType> macheteCards = List.of(CardType.Kundeshafter, CardType.Forscher,
+                CardType.Entdecker, CardType.Pionier, CardType.MachtigeMachete);
 
+        for(CardType macheteCard : macheteCards) {
+            Resource card = new Card(macheteCard);
+            MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
+            assertTrue(move.isCardMatchingTile());
+        }
     }
 
     @Test
-    public void testIsCardMatchingTile() {
+    public void testIsCardMatchingTileFalse() {
+        List<CardType> macheteCards = List.of(CardType.Kapitan, CardType.Matrose,
+                CardType.Reisende, CardType.Fotografin, CardType.Schatzruhe,
+                CardType.Millionarin, CardType.Journalistin, CardType.Journalistin,
+                CardType.Kartograph, CardType.Kompass, CardType.Wissenschaftlerin,
+                CardType.Ureinwohner, CardType.Fernsprechgerat, CardType.Reisetagebuch);
 
+        for(CardType macheteCard : macheteCards) {
+            Resource card = new Card(macheteCard);
+            MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
+            assertFalse(move.isCardMatchingTile());
+        }
     }
 
 }

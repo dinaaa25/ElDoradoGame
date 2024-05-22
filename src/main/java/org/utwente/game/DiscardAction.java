@@ -15,8 +15,8 @@ public class DiscardAction extends Action {
     }
 
     @Override
-    void validate() {
-
+    boolean validate() {
+        return true;
     }
 }
 

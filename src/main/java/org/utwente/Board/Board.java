@@ -23,6 +23,18 @@ public class Board {
         this.path = path;
     }
 
+    public List<Tile> getStartingTiles() {
+        List<Tile> startingTiles = new ArrayList<>();
+        List<Tile> allBoardTiles = sections.stream().flatMap(section -> section.getTiles().stream().filter(tile -> tile.isStartingTile())).toList();
+        return allBoardTiles;
+    }
+
+    public List<Tile> getLastWaitingTiles() {
+        List<Tile> lastWaitingTiles = new ArrayList<>();
+        List<Tile> allBoardTiles = sections.stream().flatMap(section -> section.getTiles().stream().filter(tile -> tile.isLastWaitingTile())).toList();
+        return allBoardTiles;
+    }
+
     public List<Section> getSections() {
         return sections;
     }
@@ -40,6 +52,7 @@ public class Board {
     }
 
     public void placePlayer(Tile lastTile, Player player) {
+        lastTile.placePlayer(player);
     }
 
     public static class BoardBuilder {
@@ -48,12 +61,14 @@ public class Board {
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
+            this.availableSections = SectionLoader.loadSections();
         }
 
-        private static final List<Section> availableSections = SectionLoader.loadSections();
+        private List<Section> availableSections;
 
         private static Section getSectionBySectionType(SectionType sectionType) {
-            Optional<Section> sectionToAdd = availableSections.stream()
+            List<Section> sectionList = SectionLoader.loadSections();
+            Optional<Section> sectionToAdd = sectionList.stream()
                     .filter(section -> section.getSectionType() == sectionType)
                     .findFirst();
             return sectionToAdd.orElseThrow(IllegalArgumentException::new);

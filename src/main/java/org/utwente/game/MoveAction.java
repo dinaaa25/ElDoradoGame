@@ -27,37 +27,37 @@ public class MoveAction extends Action {
 
     @Override
     void execute() {
-
+        tileTo.placePlayer(this.player);
+        tileFrom.removePlayer(this.player);
     }
 
     @Override
-    void validate() {
-
+    boolean validate() {
+        return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
     }
 
-    private boolean isTileToNeighbour(Tile tile) {
-        return true;
+    public boolean isTileToNeighbour() {
+        return tileTo.isNeighbor(tileFrom);
     }
 
     // check TileType of TileTo is of type Mountain
-    private TileType getTileType(Tile tile) {
+    public TileType getTileType(Tile tile) {
         return TileType.Mountain;
     }
 
     // check if another player is on TileTo
-    private boolean isPlayerOnTile(Tile tile) {
-        return true;
+    public boolean isNoPlayerOnToTile() {
+        return tileTo.isEmpty();
     }
 
-    private boolean resourceHasEnoughPower() {
-        // compare if card has power 3 and tile has power 3
-        return true;
+    public boolean resourceHasEnoughPower() {
+        return tileTo.getPower() <= resource.getPower();
     }
 
 
-    private boolean isCardMatchingTile(){
+    public boolean isCardMatchingTile(){
         // compare not just power but also now whether this card type can be applied to the tile you want to move to
-        return true;
+        return tileTo.getTileType().getPowerTypeList().contains(resource.getType());
     }
 
 

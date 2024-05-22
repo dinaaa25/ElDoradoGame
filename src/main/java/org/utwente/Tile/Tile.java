@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
 
+import java.sql.Array;
 import java.util.*;
 
 public class Tile {
@@ -15,23 +16,24 @@ public class Tile {
     private final TileType tileType;
     private final int power;
     private final List<CaveCoin> caveCoins;
-    private List<Player> players;
+    private Set<Player> players;
+    private boolean isLastWaitingTile;
 
-    public Tile(int x, int y, TileType tileType, int power, ArrayList<CaveCoin> caveCoins) {
+    public Tile(int x, int y, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
         this.x = x;
         this.y = y;
         this.tileType = tileType;
         this.power = power;
         this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
+        this.players = new HashSet<>();
+        this.isLastWaitingTile = isLastWaitingTile;
     }
 
     @JsonCreator
-    public Tile(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power) {
-        this.x = x;
-        this.y = y;
-        this.tileType = tileType;
-        this.power = power;
-        this.caveCoins = Collections.emptyList();
+    public Tile(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
+                @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
+
+        this(x, y, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
     public TileType getTileType() {
@@ -63,6 +65,10 @@ public class Tile {
         return this.tileType == TileType.Start;
     }
 
+    public boolean isLastWaitingTile() {
+        return this.isLastWaitingTile;
+    }
+
     public boolean isEndTile() {
         return this.tileType == TileType.ElDorado;
     }
@@ -78,20 +84,24 @@ public class Tile {
                 '}';
     }
 
-    public boolean isStartTile() {
-        return true;
-    }
-
     public void placePlayer(Player player) {
+        this.players.add(player);
     }
 
     public boolean isEmpty() {
-        return true;
+        return this.players.isEmpty();
     }
 
-    public List<Player> getPlayers() {
+    public Set<Player> getPlayers() {
         return this.players;
     }
 
+    public void removePlayer(Player player) {
+        this.players.remove(player);
+    }
 
+
+    public boolean isNeighbor(Tile tile) {
+        return true;
+    }
 }

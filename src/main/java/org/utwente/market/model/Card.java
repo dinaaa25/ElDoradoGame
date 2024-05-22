@@ -8,9 +8,14 @@ public class Card implements Resource {
     private CardType cardType;
     private int consumedPower;
 
+
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
+    }
+
+    public PowerType getType() {
+        return this.cardType.powerType;
     }
 
     /**
@@ -24,5 +29,13 @@ public class Card implements Resource {
 
     public void removePower(int power) {
         this.consumedPower += power;
+    }
+
+    public int getPower() {
+        return remainingPower();
+    }
+
+    public CardType getCardType() {
+        return this.cardType;
     }
 }
