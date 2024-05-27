@@ -36,7 +36,7 @@ public class Market {
     }
 
     public boolean reserveIsOpen() {
-        return this.CURRENT_FULL_SIZE > this.currentCards.size();
+        return Market.CURRENT_FULL_SIZE > this.currentCards.size();
     }
 
     public Card buy(Order order) {
