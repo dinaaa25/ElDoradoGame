@@ -2,27 +2,24 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
 
-import java.sql.Array;
 import java.util.*;
 
 public class Tile {
-    private final int x;
-    private final int y;
+    private final int q;
+    private final int r;
     private final TileType tileType;
     private final int power;
     private final List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
 
-    public Tile(int x, int y, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
-        this.x = x;
-        this.y = y;
+    public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
+        this.q = q;
+        this.r = r;
         this.tileType = tileType;
         this.power = power;
         this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
@@ -31,18 +28,18 @@ public class Tile {
     }
 
     @JsonCreator
-    public Tile(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
+    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
                 @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
 
-        this(x, y, tileType, power, new ArrayList<>(), isLastWaitingTile);
+        this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
-    public int getX() {
-        return x;
+    public int getQ() {
+        return q;
     }
 
-    public int getY() {
-        return y;
+    public int getR() {
+        return r;
     }
 
     public TileType getTileType() {
@@ -85,8 +82,8 @@ public class Tile {
     @Override
     public String toString() {
         return "Tile{" +
-                "x=" + x +
-                ", y=" + y +
+                "x=" + q +
+                ", y=" + r +
                 ", tileType=" + tileType +
                 ", power=" + power +
                 ", caveCoins=" + caveCoins +
@@ -116,9 +113,9 @@ public class Tile {
         }
 
         for (DirectionType.Direction direction : DirectionType.POINTY_TOP.getDirections()) {
-            int neighborQ = this.x + direction.getDq();
-            int neighborR = this.y + direction.getDr();
-            if (neighborQ == tile.getX() && neighborR == tile.getY()) {
+            int neighborQ = this.q + direction.getDq();
+            int neighborR = this.r + direction.getDr();
+            if (neighborQ == tile.getQ() && neighborR == tile.getR()) {
                 return true;
             }
         }
