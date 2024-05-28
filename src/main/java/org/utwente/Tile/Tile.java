@@ -9,8 +9,8 @@ import org.utwente.player.Player;
 import java.util.*;
 
 public class Tile {
-    private final int q;
-    private final int r;
+    private int q;
+    private int r;
     private final TileType tileType;
     private final int power;
     private final List<CaveCoin> caveCoins;
@@ -36,6 +36,14 @@ public class Tile {
 
     public int getQ() {
         return q;
+    }
+
+    public void setQ(int q) {
+        this.q = q;
+    }
+
+    public void setR(int r) {
+        this.r = r;
     }
 
     public int getR() {
