@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
 
@@ -34,6 +35,14 @@ public class Tile {
                 @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
 
         this(x, y, tileType, power, new ArrayList<>(), isLastWaitingTile);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public TileType getTileType() {
@@ -102,6 +111,17 @@ public class Tile {
 
 
     public boolean isNeighbor(Tile tile) {
-        return true;
+        if (tile == null) {
+            return false;
+        }
+
+        for (DirectionType.Direction direction : DirectionType.POINTY_TOP.getDirections()) {
+            int neighborQ = this.x + direction.getDq();
+            int neighborR = this.y + direction.getDr();
+            if (neighborQ == tile.getX() && neighborR == tile.getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

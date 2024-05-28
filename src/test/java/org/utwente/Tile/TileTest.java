@@ -56,4 +56,18 @@ class TileTest {
         tile.retrieveCoin();
         assertEquals(0, tile.getCaveCoinCount());
     }
+
+    @Test
+    void testNeighbourTiles() {
+        Tile tileTo = new Tile(0, 1, TileType.Machete, 2, new ArrayList<>(), false);
+        Tile tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
+        assertTrue(tileFrom.isNeighbor(tileTo), tileFrom.toString() + " should be neighbour of " + tileTo.toString());
+    }
+
+    @Test
+    void testNonNeighbourTiles() {
+        Tile tileTo = new Tile(0, -2, TileType.Machete, 2, new ArrayList<>(), false);
+        Tile tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
+        assertFalse(tileFrom.isNeighbor(tileTo), tileFrom.toString() + " should not be neighbour of " + tileTo.toString());
+    }
 }
