@@ -143,7 +143,7 @@
       <recent name="org.utwente.Board" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'ElDorado.test'">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.utwente.Main" />
       <module name="ElDorado.main" />
@@ -297,7 +297,7 @@
       <workItem from="1715786352210" duration="3899000" />
       <workItem from="1715849235465" duration="884000" />
       <workItem from="1716246215785" duration="2501000" />
-      <workItem from="1716904121968" duration="5390000" />
+      <workItem from="1716904121968" duration="7605000" />
     </task>
     <task id="LOCAL-00007" summary="Add ElDorado Section tests &amp; test to check if all sections are present">
       <option name="closed" value="true" />
