@@ -3,19 +3,23 @@ package org.utwente.Board;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
+import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import javax.imageio.ImageIO;
+
+import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
+import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
 
 public class HexGridPanel extends JPanel {
     private static final int HEX_SIZE = 40;
@@ -194,34 +198,6 @@ public class HexGridPanel extends JPanel {
         }
     }
 
-    private void drawPlayerIcon(Graphics2D g2d, int x, int y, String playerName) {
-        int headRadius = 5;
-        int bodyWidth = 10;
-        int bodyHeight = 15;
-        int capWidth = 10;
-        int capHeight = 5;
-
-        // Draw head
-        g2d.setColor(Color.PINK);
-        g2d.fillOval(x - headRadius, y - headRadius, 2 * headRadius, 2 * headRadius);
-
-        // Draw body
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(x - bodyWidth / 2, y, bodyWidth, bodyHeight);
-
-        // Draw cap
-        g2d.setColor(Color.DARK_GRAY);
-        g2d.fillRect(x - capWidth / 2, y - headRadius - capHeight, capWidth, capHeight);
-
-        // Draw player name below the icon
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.BOLD, 10));
-        FontMetrics metrics = g2d.getFontMetrics();
-        int textX = x - metrics.stringWidth(playerName) / 2;
-        int textY = y + bodyHeight + metrics.getHeight();
-        g2d.drawString(playerName, textX, textY);
-    }
-
     private Point[] calculateVertices(Point startPixel, Point endPixel) {
         Point[] vertices = new Point[2];
         vertices[0] = startPixel;
@@ -257,16 +233,18 @@ public class HexGridPanel extends JPanel {
     }
 
     public void buildPredefinedBoard(Path path) {
-        switch (path) {
-            case HillsOfGold:
-                List<SectionType> sectionTypeList = Board.BoardBuilder.paths.get(Path.HillsOfGold);
-                for (SectionType sectionType : sectionTypeList) {
-                    attachBoardSection(sectionType, DirectionType.FlatTopDirection.NORTH, 0);
-                }
+        flatTop = true;
+        List<SectionWithRotationPositionSectionDirection> sectionWithRotationPositionSectionDirectionList = Board.BoardBuilder.paths.get(path);
+        flatTop = sectionWithRotationPositionSectionDirectionList.stream()
+                .findFirst()
+                .map(section -> section.getSectionDirection() instanceof SectionDirectionType.FlatTopSectionDirection)
+                .orElse(false);
+        for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
+            attachBoardSection(sectionWithRotationPositionSectionDirection.getSectionType(), sectionWithRotationPositionSectionDirection.getSectionDirection(), sectionWithRotationPositionSectionDirection.getPlacement(), sectionWithRotationPositionSectionDirection.getRotation());
         }
     }
 
-    public void attachBoardSection(SectionType sectionType, DirectionType.FlatTopDirection direction, int placement) {
+    public void attachBoardSection(SectionType sectionType, SectionDirectionType.SectionDirection sectionDirection, int placement, int rotation) {
         List<Section> sections = SectionLoader.loadSections();
         Optional<Section> optionalSection = sections.stream()
                 .filter(s -> s.getSectionType() == sectionType)
@@ -276,6 +254,9 @@ public class HexGridPanel extends JPanel {
         }
         if (tileSections.isEmpty() || tileSections.get(0).isEmpty()) {
             List<Tile> newSection = new ArrayList<>(optionalSection.get().getTiles());
+            for (Tile tile : newSection) {
+                tile.rotate(rotation);
+            }
             tileSections.add(newSection);
         } else {
             List<Tile> newTiles = new ArrayList<>();
@@ -287,36 +268,54 @@ public class HexGridPanel extends JPanel {
 
             int translationQ;
             int translationR;
-            switch (direction) {
-                case NORTHEAST:
+
+            if (sectionType == SectionType.O) {
+                System.out.println("New system detected");
+                if (sectionDirection.equals(PT_NORTHEAST)) {
+                    if (rotation == 0) {
+                        translationQ = maxQ;
+                        translationR = minR - 2;
+                    } else if (rotation == 1) {
+                        translationQ = maxQ + 2;
+                        translationR = minR + 1;
+                    } else {
+                        translationQ = maxQ;
+                        translationR = minR;
+                    }
+                } else if (sectionDirection.equals(PT_NORTH)) {
+                    translationQ = maxQ;
+                    translationR = minR - 2;
+                } else {
+                    translationQ = maxQ - minQ;
+                    translationR = maxR - minR;
+                }
+            } else {
+                System.out.println("normal else");
+                if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
                     translationQ = maxQ + 1 + 3;
                     translationR = minR - 1 + placement;
-                    break;
-                case SOUTHEAST:
+                } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
                     translationQ = maxQ + placement;
                     translationR = maxR + 1 - placement;
-                    break;
-                case SOUTH:
+                } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
                     translationQ = minQ - placement;
                     translationR = maxR + 3 + 1;
-                    break;
-                case SOUTHWEST:
+                } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
                     translationQ = minQ - 3 - 1;
                     translationR = maxR + 1 - placement;
-                    break;
-                case NORTHWEST:
+                } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
                     translationQ = minQ - placement;
                     translationR = minR - 1 + placement;
-                    break;
-                case NORTH:
-                    translationQ = minQ + placement;
-                    translationR = maxR + placement;
-                    break;
-                default:
+                } else if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
                     translationQ = maxQ + placement;
                     translationR = minR - 3 - 1;
+                } else {
+                    translationQ = maxQ;
+                    translationR = minR;
+                }
             }
             for (Tile tile : optionalSection.get().getTiles()) {
+                tile.rotate(rotation);
                 tile.setQ(tile.getQ() + translationQ);
                 tile.setR(tile.getR() + translationR);
                 newTiles.add(tile);
@@ -340,11 +339,7 @@ public class HexGridPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(panel.calculatePreferredSize());
         panel.buildPredefinedBoard(Path.HillsOfGold);
-//        panel.attachBoardSection(SectionType.A, DirectionType.FlatTopDirection.NORTHEAST, 0);
-//        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.NORTHEAST, 0);
-//        panel.attachBoardSection(SectionType.D, DirectionType.FlatTopDirection.SOUTHEAST, 0);
-//        panel.attachBoardSection(SectionType.E, DirectionType.FlatTopDirection.SOUTH, 0);
-//        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.SOUTH, 1);
+//        panel.attachBoardSection(SectionType.A, DirectionType.FlatTopDirection.NORTHWEST, 0, 0);
         tileSections.stream()
                 .flatMap(List::stream)
                 .filter(t -> t.getTileType() == TileType.Start)
@@ -379,7 +374,7 @@ public class HexGridPanel extends JPanel {
                     .orElse(null);
 
             if (tileTo == null) {
-                throw new IllegalArgumentException("Moving in that direction is not valid");
+                throw new IllegalArgumentException("Moving in that sectionDirection is not valid");
             }
 
             tileTo.placePlayer(player1);

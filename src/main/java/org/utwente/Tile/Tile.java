@@ -58,6 +58,17 @@ public class Tile {
         return power;
     }
 
+    public void rotate(int turns) {
+        turns = ((turns % 6) + 6) % 6;
+
+        for (int i = 0; i < turns; i++) {
+            int tempQ = this.q;
+            int tempR = this.r;
+            this.q = -tempR;
+            this.r = tempQ + tempR;
+        }
+    }
+
     public boolean hasCaveCoins() {
         return !caveCoins.isEmpty();
     }

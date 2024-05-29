@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
+import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 
 import java.util.List;
@@ -60,7 +61,9 @@ public class BoardBuilderTest {
         Board.BoardBuilder builder = new Board.BoardBuilder();
         Board board = builder.selectPath(selectedPath).build();
 
-        List<SectionType> expectedSectionTypes = Board.BoardBuilder.paths.get(selectedPath);
+        List<SectionType> expectedSectionTypes = Board.BoardBuilder.paths.get(selectedPath).stream()
+                .map(SectionWithRotationPositionSectionDirection::getSectionType)
+                .toList();;
 
         List<Section> sections = board.getSections();
         assertEquals(expectedSectionTypes.size(), sections.size(), "Number of sections should match");

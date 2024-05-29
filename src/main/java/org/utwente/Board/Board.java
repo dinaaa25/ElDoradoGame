@@ -3,6 +3,7 @@ package org.utwente.Board;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
+import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
@@ -13,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Map.entry;
+import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
+import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
 
 public class Board {
     private final List<Section> sections;
@@ -74,61 +77,59 @@ public class Board {
             return sectionToAdd.orElseThrow(IllegalArgumentException::new);
         }
 
-        public static final Map<Path, List<SectionType>> paths = Map.ofEntries(
+        public static final Map<Path, List<SectionWithRotationPositionSectionDirection>> paths = Map.ofEntries(
                 entry(Path.HillsOfGold, List.of(
-                        SectionType.B,
-                        SectionType.C,
-                        SectionType.G,
-                        SectionType.K,
-                        SectionType.J,
-                        SectionType.D,
-                        SectionType.ElDoradoTwo
+                        new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 1, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, PT_NORTHEAST)
                 )),
-                entry(Path.HomeStretch, List.of(
-                        SectionType.B,
-                        SectionType.J,
-                        SectionType.Q,
-                        SectionType.K,
-                        SectionType.M,
-                        SectionType.C,
-                        SectionType.ElDoradoTwo
-                )),
+//                entry(Path.HomeStretch, List.of(
+//                        SectionType.B,
+//                        SectionType.J,
+//                        SectionType.Q,
+//                        SectionType.K,
+//                        SectionType.M,
+//                        SectionType.C,
+//                        SectionType.ElDoradoTwo
+//                )),
                 entry(Path.WindingPaths, List.of(
-                        SectionType.B,
-                        SectionType.I,
-                        SectionType.F,
-                        SectionType.G,
-                        SectionType.C,
-                        SectionType.N,
-                        SectionType.ElDorado
-                )),
-                entry(Path.Serpentine, List.of(
-                        SectionType.A,
-                        SectionType.C,
-                        SectionType.E,
-                        SectionType.G,
-                        SectionType.J,
-                        SectionType.M,
-                        SectionType.ElDorado
-                )),
-                entry(Path.Swamplands, List.of(
-                        SectionType.A,
-                        SectionType.R,
-                        SectionType.D,
-                        SectionType.H,
-                        SectionType.E,
-                        SectionType.O,
-                        SectionType.ElDorado
-                )),
-                entry(Path.WitchCauldron, List.of(
-                        SectionType.A,
-                        SectionType.L,
-                        SectionType.G,
-                        SectionType.D,
-                        SectionType.M,
-                        SectionType.I,
-                        SectionType.ElDorado
+                        new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 1, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.I, 3, 1, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.F, -3, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 1, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 1, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, FT_EAST)
                 ))
+//                entry(Path.Serpentine, List.of(
+//                        SectionType.A,
+//                        SectionType.C,
+//                        SectionType.E,
+//                        SectionType.G,
+//                        SectionType.J,
+//                        SectionType.M,
+//                        SectionType.ElDorado
+//                )),
+//                entry(Path.Swamplands, List.of(
+//                        SectionType.A,
+//                        SectionType.R,
+//                        SectionType.D,
+//                        SectionType.H,
+//                        SectionType.E,
+//                        SectionType.O,
+//                        SectionType.ElDorado
+//                )),
+//                entry(Path.WitchCauldron, List.of(
+//                        SectionType.A,
+//                        SectionType.L,
+//                        SectionType.G,
+//                        SectionType.D,
+//                        SectionType.M,
+//                        SectionType.I,
+//                        SectionType.ElDorado
+//                ))
         );
 
         public BoardBuilder addInitialSection(Section section) {
@@ -168,7 +169,9 @@ public class Board {
 
         public BoardBuilder buildPath() {
             assert path != null : "Path is null";
-            List<SectionType> sectionTypes = paths.get(path);
+            List<SectionType> sectionTypes = paths.get(path).stream()
+                    .map(SectionWithRotationPositionSectionDirection::getSectionType)
+                    .toList();
             sectionTypes.stream()
                     .map(BoardBuilder::getSectionBySectionType)
                     .forEach(sections::add);
