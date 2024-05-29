@@ -159,6 +159,15 @@ public class HexGridPanel extends JPanel {
         int textY = y + metrics.getHeight() / 2 - metrics.getDescent() + HEX_SIZE / 2;
         g2d.drawString(text, textX, textY);
 
+        // Draw the power
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 12));
+        metrics = g2d.getFontMetrics();
+        String powerText = String.valueOf(tile.getPower());
+        int powerTextX = (int) (x - HEX_SIZE / 1.3);
+        int powerTextY = y - HEX_SIZE / 2 + metrics.getAscent();
+        g2d.drawString(powerText, powerTextX, powerTextY);
+
         // Draw player
         if (!tile.getPlayers().isEmpty()) {
             int playerYOffset = y - HEX_SIZE / 2;
