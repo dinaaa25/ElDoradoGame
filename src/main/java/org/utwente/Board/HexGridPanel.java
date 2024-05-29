@@ -5,6 +5,7 @@ import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.player.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class HexGridPanel extends JPanel {
     private BufferedImage macheteImage;
     private Blockade blockade;
     private boolean flatTop;
+    private Board board;
 
     public HexGridPanel(List<Tile> tiles, boolean flatTop) {
         this.tiles = tiles;
@@ -34,6 +36,11 @@ public class HexGridPanel extends JPanel {
         loadImages();
         calculatePreferredSize();
         initializeBlockade();
+        initializeGame();
+    }
+
+    private void initializeGame() {
+//        this.board = new Board.BoardBuilder().addSection();
     }
 
     private void loadImages() {
@@ -88,7 +95,7 @@ public class HexGridPanel extends JPanel {
 
         for (Tile tile : tiles) {
             Point p = flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
-            drawHexagon(g2d, p.x + offsetX, p.y + offsetY, tile.getTileType(), tile.getQ(), tile.getR());
+            drawHexagon(g2d, p.x + offsetX, p.y + offsetY, tile);
         }
 
         if (blockade != null) {
@@ -111,7 +118,7 @@ public class HexGridPanel extends JPanel {
         return new Point(x, y);
     }
 
-    private void drawHexagon(Graphics2D g2d, int x, int y, TileType tileType, int q, int r) {
+    private void drawHexagon(Graphics2D g2d, int x, int y, Tile tile) {
         Path2D hexagon = new Path2D.Double();
         Point[] vertices = new Point[6];
         for (int i = 0; i < 6; i++) {
@@ -127,11 +134,11 @@ public class HexGridPanel extends JPanel {
         }
         hexagon.closePath();
 
-        if (tileType == TileType.Machete && macheteImage != null) {
+        if (tile.getTileType() == TileType.Machete && macheteImage != null) {
             TexturePaint texturePaint = new TexturePaint(macheteImage, new Rectangle(x - HEX_SIZE, y - HEX_SIZE, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
         } else {
-            g2d.setColor(getColorForTileType(tileType));
+            g2d.setColor(getColorForTileType(tile.getTileType()));
         }
         g2d.fill(hexagon);
 
@@ -142,13 +149,27 @@ public class HexGridPanel extends JPanel {
         g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Arial", Font.BOLD, 12));
         FontMetrics metrics = g2d.getFontMetrics();
-        String text = q + ", " + r;
+        String text = tile.getQ() + ", " + tile.getR();
         int textX = x - metrics.stringWidth(text) / 2;
         int textY = y + metrics.getHeight() / 2 - metrics.getDescent() + HEX_SIZE / 2;
         g2d.drawString(text, textX, textY);
 
+        // Draw player
+        if (!tile.getPlayers().isEmpty()) {
+            int playerYOffset = y - HEX_SIZE / 2;
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            metrics = g2d.getFontMetrics();
+            for (Player player : tile.getPlayers()) {
+                int playerTextX = x - metrics.stringWidth(player.getName()) / 2;
+                int playerTextY = playerYOffset + metrics.getHeight() / 2 - metrics.getDescent();
+                g2d.drawString(player.getName(), playerTextX, playerTextY);
+                playerYOffset += metrics.getHeight(); // Move down for the next player
+            }
+        }
+
         // Draw text if the tile type is START
-        if (tileType == TileType.Start) {
+        if (tile.getTileType() == TileType.Start) {
             g2d.setColor(Color.BLACK);
             g2d.setFont(new Font("Arial", Font.BOLD, 12));
             metrics = g2d.getFontMetrics();
@@ -157,6 +178,34 @@ public class HexGridPanel extends JPanel {
             int startTextY = y + metrics.getHeight() / 2 - metrics.getDescent();
             g2d.drawString(startText, startTextX, startTextY);
         }
+    }
+
+    private void drawPlayerIcon(Graphics2D g2d, int x, int y, String playerName) {
+        int headRadius = 5;
+        int bodyWidth = 10;
+        int bodyHeight = 15;
+        int capWidth = 10;
+        int capHeight = 5;
+
+        // Draw head
+        g2d.setColor(Color.PINK);
+        g2d.fillOval(x - headRadius, y - headRadius, 2 * headRadius, 2 * headRadius);
+
+        // Draw body
+        g2d.setColor(Color.BLUE);
+        g2d.fillRect(x - bodyWidth / 2, y, bodyWidth, bodyHeight);
+
+        // Draw cap
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRect(x - capWidth / 2, y - headRadius - capHeight, capWidth, capHeight);
+
+        // Draw player name below the icon
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.BOLD, 10));
+        FontMetrics metrics = g2d.getFontMetrics();
+        int textX = x - metrics.stringWidth(playerName) / 2;
+        int textY = y + bodyHeight + metrics.getHeight();
+        g2d.drawString(playerName, textX, textY);
     }
 
     private Point[] calculateVertices(Point startPixel, Point endPixel) {
@@ -192,6 +241,10 @@ public class HexGridPanel extends JPanel {
         }
     }
 
+    public void setTiles(List<Tile> tiles) {
+        this.tiles = tiles;
+    }
+
     public static void main(String[] args) {
         List<Tile> tiles = new ArrayList<>();
 
@@ -217,6 +270,16 @@ public class HexGridPanel extends JPanel {
             tiles.addAll(sectionBTiles);
         }
 
+        // Add player to Tile to visualize
+        Player player1 = new Player("Stijn");
+        Player player2 = new Player("Mark");
+        tiles.stream()
+                .filter(t -> t.getTileType() == TileType.Start)
+                .findFirst()
+                .ifPresent(tile -> {tile.placePlayer(player1);
+                tile.placePlayer(player2);
+                });
+
         boolean flatTop = false;
 
         JFrame frame = new JFrame("Hex Grid");
@@ -226,8 +289,9 @@ public class HexGridPanel extends JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        Timer timer = new Timer(5000, e -> panel.removeBlockade());
+        Timer timer = new Timer(2000, e -> {panel.removeBlockade();
+        panel.setTiles(tiles.subList(0, tiles.size() - 1));
+        panel.repaint();});
         timer.setRepeats(false);
         timer.start();
     }
