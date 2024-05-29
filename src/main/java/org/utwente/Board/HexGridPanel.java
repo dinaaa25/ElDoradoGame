@@ -245,6 +245,10 @@ public class HexGridPanel extends JPanel {
         this.tiles = tiles;
     }
 
+    private List<Tile> getTiles() {
+        return this.tiles;
+    }
+
     public static void main(String[] args) {
         List<Tile> tiles = new ArrayList<>();
 
@@ -289,10 +293,30 @@ public class HexGridPanel extends JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        Timer timer = new Timer(2000, e -> {panel.removeBlockade();
-        panel.setTiles(tiles.subList(0, tiles.size() - 1));
-        panel.repaint();});
-        timer.setRepeats(false);
+        Timer timer = new Timer(2000, e -> {
+            panel.removeBlockade();
+            panel.setTiles(panel.getTiles().subList(0, panel.getTiles().size() - 1));
+
+            DirectionType.Direction direction = DirectionType.PointyTopDirection.NORTHEAST;
+            Tile playerTile = tiles.stream()
+                    .filter(tile -> tile.getPlayers().stream().anyMatch(player -> player.equals(player1)))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Player not found in any tile"));
+
+            int q = playerTile.getQ() + direction.getDq();
+            int r = playerTile.getR() + direction.getDr();
+            Tile tileTo = tiles.stream().filter(tile -> tile.getQ() == q && tile.getR() == r).findFirst().orElse(null);
+
+            if (tileTo == null) {
+                throw new IllegalArgumentException("Moving in that direction is not valid");
+            }
+
+            tileTo.placePlayer(player1);
+            playerTile.removePlayer(player1);
+            panel.repaint();
+        });
+
+        timer.setRepeats(true);
         timer.start();
     }
 }
