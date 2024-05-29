@@ -51,7 +51,7 @@ public class HexGridPanel extends JPanel {
         }
     }
 
-    private void calculatePreferredSize() {
+    public void calculatePreferredSize() {
         if (tiles.isEmpty()) {
             setPreferredSize(new Dimension(800, 600));
             return;
@@ -216,22 +216,15 @@ public class HexGridPanel extends JPanel {
     }
 
     private Color getColorForTileType(TileType tileType) {
-        switch (tileType) {
-            case Machete:
-                return new Color(101, 140, 35);
-            case Paddle:
-                return new Color(107, 194, 235);
-            case Coin:
-                return new Color(241, 215, 95);
-            case Basecamp:
-                return new Color(203, 85, 35);
-            case Mountain:
-                return new Color(106, 100, 74);
-            case Cave:
-                return new Color(224, 159, 65);
-            default:
-                return Color.LIGHT_GRAY; // Default color
-        }
+        return switch (tileType) {
+            case Machete -> new Color(101, 140, 35);
+            case Paddle -> new Color(107, 194, 235);
+            case Coin -> new Color(241, 215, 95);
+            case Basecamp -> new Color(203, 85, 35);
+            case Mountain -> new Color(106, 100, 74);
+            case Cave -> new Color(224, 159, 65);
+            default -> Color.LIGHT_GRAY; // Default color
+        };
     }
 
     public void removeBlockade() {
@@ -249,53 +242,87 @@ public class HexGridPanel extends JPanel {
         return this.tiles;
     }
 
-    public static void main(String[] args) {
-        List<Tile> tiles = new ArrayList<>();
-
+    public void attachBoardSection(List<Tile> tiles, SectionType sectionType, DirectionType.FlatTopDirection direction, int placement) {
         List<Section> sections = SectionLoader.loadSections();
-        Optional<Section> sectionA = sections.stream()
-                .filter(s -> s.getSectionType() == SectionType.A)
+        Optional<Section> optionalSection = sections.stream()
+                .filter(s -> s.getSectionType() == sectionType)
                 .findFirst();
-
-        sectionA.ifPresent(section -> tiles.addAll(section.getTiles()));
-
-        Optional<Section> sectionB = sections.stream()
-                .filter(s -> s.getSectionType() == SectionType.B)
-                .findFirst();
-
-        if (sectionB.isPresent() && sectionA.isPresent()) {
-            List<Tile> sectionBTiles = sectionB.get().getTiles();
-            int translationQ = sectionA.get().getMaxQ() + 1 + 3; // Connect to the top right
-            int translationR = sectionA.get().getMinR() - 1; // Maybe adjust
-            for (Tile tile : sectionBTiles) {
+        if (optionalSection.isEmpty()) {
+            throw new IllegalArgumentException("This section Type does not exist");
+        }
+        if (tiles.isEmpty()) {
+            tiles.addAll(optionalSection.get().getTiles());
+        } else {
+            List<Tile> newTiles = new ArrayList<>();
+            Section lastSection = sections.get(sections.size() - 1);
+            int translationQ;
+            int translationR;
+            switch (direction) {
+                case NORTHEAST:
+                    translationQ = lastSection.getMaxQ() + 1 + 3;
+                    translationR = lastSection.getMinR() - 1 + placement;
+                    break;
+                case SOUTHEAST:
+                    translationQ = lastSection.getMaxQ() + placement;
+                    translationR = lastSection.getMaxR() + 1 - placement;
+                    break;
+                case SOUTH:
+                    translationQ = lastSection.getMinQ() - placement;
+                    translationR = lastSection.getMaxR() + 3 + 1;
+                    break;
+                case SOUTHWEST:
+                    translationQ = lastSection.getMinQ() - 3 - 1;
+                    translationR = lastSection.getMaxR() + 1 - placement;
+                    break;
+                case NORTHWEST:
+                    translationQ = lastSection.getMinQ() - placement;
+                    translationR = lastSection.getMinR() - 1 + placement;
+                    break;
+                case NORTH:
+                    translationQ = lastSection.getMinQ() + placement;
+                    translationR = lastSection.getMaxR() + placement;
+                default:
+                    translationQ = lastSection.getMaxQ() + placement;
+                    translationR = lastSection.getMinR() - 3 - 1;
+            }
+            for (Tile tile : optionalSection.get().getTiles()) {
                 tile.setQ(tile.getQ() + translationQ);
                 tile.setR(tile.getR() + translationR);
+                newTiles.add(tile);
             }
-            tiles.addAll(sectionBTiles);
+            tiles.addAll(newTiles);
         }
+    }
 
+    public static void main(String[] args) {
+        List<Tile> tiles = new ArrayList<>();
         // Add player to Tile to visualize
         Player player1 = new Player("Stijn");
         Player player2 = new Player("Mark");
-        tiles.stream()
-                .filter(t -> t.getTileType() == TileType.Start)
-                .findFirst()
-                .ifPresent(tile -> {tile.placePlayer(player1);
-                tile.placePlayer(player2);
-                });
 
         boolean flatTop = false;
 
         JFrame frame = new JFrame("Hex Grid");
         HexGridPanel panel = new HexGridPanel(tiles, flatTop);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.attachBoardSection(tiles, SectionType.A, DirectionType.FlatTopDirection.NORTHEAST, 0);
+        panel.attachBoardSection(tiles, SectionType.C, DirectionType.FlatTopDirection.NORTHEAST, 0);
+        panel.attachBoardSection(tiles, SectionType.D, DirectionType.FlatTopDirection.SOUTH, 0);
+        tiles.stream()
+                .filter(t -> t.getTileType() == TileType.Start)
+                .findFirst()
+                .ifPresent(tile -> {tile.placePlayer(player1);
+                    tile.placePlayer(player2);
+                });
+        panel.setTiles(tiles);
+        panel.calculatePreferredSize();
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         Timer timer = new Timer(2000, e -> {
             panel.removeBlockade();
-            panel.setTiles(panel.getTiles().subList(0, panel.getTiles().size() - 1));
+//            panel.setTiles(panel.getTiles().subList(0, panel.getTiles().size() - 1));
 
             DirectionType.Direction direction = panel.flatTop ? DirectionType.FlatTopDirection.NORTH :  DirectionType.PointyTopDirection.NORTHEAST;
             Tile playerTile = tiles.stream()
@@ -316,7 +343,7 @@ public class HexGridPanel extends JPanel {
             panel.repaint();
         });
 
-        timer.setRepeats(true);
+        timer.setRepeats(false);
         timer.start();
     }
 }

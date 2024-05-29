@@ -44,10 +44,26 @@ public class Section {
                 .orElseThrow(() -> new IllegalStateException("Section has no tiles"));
     }
 
+    public int getMinQ() {
+        return tiles.stream()
+                .mapToInt(Tile::getQ)
+                .min()
+                .orElseThrow(() -> new IllegalStateException("Section has no tiles"));
+    }
+
     public int getMinR() {
         return tiles.stream()
                 .mapToInt(Tile::getR)
                 .min()
                 .orElseThrow(() -> new IllegalStateException("Section has no tiles"));
     }
+
+    public int getMaxR() {
+        return tiles.stream()
+                .mapToInt(Tile::getR)
+                .max()
+                .orElseThrow(() -> new IllegalStateException("Section has no tiles"));
+    }
+
+
 }
