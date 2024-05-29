@@ -256,6 +256,16 @@ public class HexGridPanel extends JPanel {
         return this.tileSections;
     }
 
+    public void buildPredefinedBoard(Path path) {
+        switch (path) {
+            case HillsOfGold:
+                List<SectionType> sectionTypeList = Board.BoardBuilder.paths.get(Path.HillsOfGold);
+                for (SectionType sectionType : sectionTypeList) {
+                    attachBoardSection(sectionType, DirectionType.FlatTopDirection.NORTH, 0);
+                }
+        }
+    }
+
     public void attachBoardSection(SectionType sectionType, DirectionType.FlatTopDirection direction, int placement) {
         List<Section> sections = SectionLoader.loadSections();
         Optional<Section> optionalSection = sections.stream()
@@ -329,12 +339,12 @@ public class HexGridPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(panel.calculatePreferredSize());
-
-        panel.attachBoardSection(SectionType.A, DirectionType.FlatTopDirection.NORTHEAST, 0);
-        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.NORTHEAST, 0);
-        panel.attachBoardSection(SectionType.D, DirectionType.FlatTopDirection.SOUTHEAST, 0);
-        panel.attachBoardSection(SectionType.E, DirectionType.FlatTopDirection.SOUTH, 0);
-        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.SOUTH, 1);
+        panel.buildPredefinedBoard(Path.HillsOfGold);
+//        panel.attachBoardSection(SectionType.A, DirectionType.FlatTopDirection.NORTHEAST, 0);
+//        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.NORTHEAST, 0);
+//        panel.attachBoardSection(SectionType.D, DirectionType.FlatTopDirection.SOUTHEAST, 0);
+//        panel.attachBoardSection(SectionType.E, DirectionType.FlatTopDirection.SOUTH, 0);
+//        panel.attachBoardSection(SectionType.C, DirectionType.FlatTopDirection.SOUTH, 1);
         tileSections.stream()
                 .flatMap(List::stream)
                 .filter(t -> t.getTileType() == TileType.Start)
