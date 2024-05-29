@@ -338,7 +338,7 @@ public class HexGridPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setPreferredSize(panel.calculatePreferredSize());
-        panel.buildPredefinedBoard(Path.HillsOfGold);
+        panel.buildPredefinedBoard(Path.WitchCauldron);
 //        panel.attachBoardSection(SectionType.A, DirectionType.FlatTopDirection.NORTHWEST, 0, 0);
         tileSections.stream()
                 .flatMap(List::stream)

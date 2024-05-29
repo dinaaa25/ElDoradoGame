@@ -88,7 +88,7 @@ public class BoardBuilderTest {
     @Test
     void testGetElDoradoTile() {
         Board.BoardBuilder builder = new Board.BoardBuilder();
-        Board board = builder.selectPath(Path.WindingPaths).build();
+        Board board = builder.selectPath(Path.HillsOfGold).build();
         Tile elDoradoTile = board.getElDoradoTile();
         assertTrue(elDoradoTile.isEndTile());
     }
