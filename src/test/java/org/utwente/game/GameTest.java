@@ -6,8 +6,10 @@ import org.utwente.Board.Blockade;
 import org.utwente.Board.Board;
 import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
+import java.awt.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,7 +122,7 @@ public class GameTest {
     public void testTwoPlayersAtEndWithBlockades() {
         // put two players at the end
         List<Tile> lastTiles = board.getLastWaitingTiles();
-        Blockade blockade = new Blockade();
+        Blockade blockade = new Blockade(TileType.Coin, new Point(3, -3), new Point(3, -2), 2);
         dina.addBlockade(blockade);
         board.placePlayer(lastTiles.get(0), dina);
         game.nextPlayer();
