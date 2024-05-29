@@ -297,7 +297,7 @@ public class HexGridPanel extends JPanel {
             panel.removeBlockade();
             panel.setTiles(panel.getTiles().subList(0, panel.getTiles().size() - 1));
 
-            DirectionType.Direction direction = DirectionType.PointyTopDirection.NORTHEAST;
+            DirectionType.Direction direction = panel.flatTop ? DirectionType.FlatTopDirection.NORTH :  DirectionType.PointyTopDirection.NORTHEAST;
             Tile playerTile = tiles.stream()
                     .filter(tile -> tile.getPlayers().stream().anyMatch(player -> player.equals(player1)))
                     .findFirst()
