@@ -1,5 +1,8 @@
 package org.utwente.Board;
 
+import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Blockade.BlockadeController;
+import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
@@ -30,7 +33,7 @@ public class HexGridPanel extends JPanel {
     private int offsetX;
     private int offsetY;
     private BufferedImage macheteImage;
-    private Blockade blockade;
+    private BlockadeController blockadeController;
     private boolean flatTop;
     private Board board;
 
@@ -91,7 +94,7 @@ public class HexGridPanel extends JPanel {
     private void initializeBlockade() {
         Point start = new Point(3, -3);
         Point end = new Point(5, -5);
-        blockade = new Blockade(TileType.Coin, start, end, 2);
+        blockadeController = new BlockadeController(new Blockade(TileType.Coin, start, end, 2), new BlockadeView());
     }
 
     @Override
@@ -100,6 +103,7 @@ public class HexGridPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+
         for (List<Tile> section : tileSections) {
             for (Tile tile : section) {
                 Point p = flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
@@ -107,11 +111,12 @@ public class HexGridPanel extends JPanel {
             }
         }
 
-        if (blockade != null) {
+        if (blockadeController.getBlockade() != null) {
+            Blockade blockade = blockadeController.getBlockade();
             Point startPixel = flatTop ? flatTopHexToPixel(blockade.getStart().x, blockade.getStart().y) : pointyTopHexToPixel(blockade.getStart().x, blockade.getStart().y);
             Point endPixel = flatTop ? flatTopHexToPixel(blockade.getEnd().x, blockade.getEnd().y) : pointyTopHexToPixel(blockade.getEnd().x, blockade.getEnd().y);
             Point[] vertices = calculateVertices(startPixel, endPixel);
-            blockade.draw(g2d, vertices);
+            blockadeController.getBlockadeView().draw(g2d, vertices, blockade.isRemoved());
         }
     }
 
@@ -218,8 +223,8 @@ public class HexGridPanel extends JPanel {
     }
 
     public void removeBlockade() {
-        if (blockade != null) {
-            blockade.remove();
+        if (blockadeController.getBlockade() != null) {
+            blockadeController.getBlockade().remove();
             repaint();
         }
     }

@@ -2,7 +2,7 @@ package org.utwente.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.utwente.Board.Blockade;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Board;
 import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
