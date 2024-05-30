@@ -9,7 +9,6 @@ import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
-import org.utwente.game.Game;
 import org.utwente.game.GameConfig;
 import org.utwente.player.Player;
 
@@ -45,11 +44,6 @@ public class HexGridPanel extends JPanel {
         loadImages();
         calculatePreferredSize();
         initializeBlockade();
-        initializeGame();
-    }
-
-    private void initializeGame() {
-        // this.board = new Board.BoardBuilder().addSection();
     }
 
     private void loadImages() {
