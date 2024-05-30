@@ -20,4 +20,6 @@ public class GameConfig {
         TILE_COLORS.put(TileType.Mountain, new Color(106, 100, 74));
         TILE_COLORS.put(TileType.Cave, new Color(224, 159, 65));
     }
+
+    public static final int HEX_SIZE = 40;
 }
