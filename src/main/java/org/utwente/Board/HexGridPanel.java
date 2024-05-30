@@ -9,6 +9,8 @@ import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.game.Game;
+import org.utwente.game.GameConfig;
 import org.utwente.player.Player;
 
 import javax.imageio.ImageIO;
@@ -161,7 +163,7 @@ public class HexGridPanel extends JPanel {
 
         // Draw the coordinates
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.BOLD, 12));
+        g2d.setFont(GameConfig.TILE_FONT);
         FontMetrics metrics = g2d.getFontMetrics();
         String text = tile.getQ() + ", " + tile.getR();
         int textX = x - metrics.stringWidth(text) / 2;
@@ -170,7 +172,7 @@ public class HexGridPanel extends JPanel {
 
         // Draw the power
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Arial", Font.BOLD, 12));
+        g2d.setFont(GameConfig.TILE_FONT);
         metrics = g2d.getFontMetrics();
         String powerText = String.valueOf(tile.getPower());
         int powerTextX = (int) (x - HEX_SIZE / 1.3);
@@ -181,7 +183,7 @@ public class HexGridPanel extends JPanel {
         if (!tile.getPlayers().isEmpty()) {
             int playerYOffset = y - HEX_SIZE / 2;
             g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            g2d.setFont(GameConfig.TILE_FONT);
             metrics = g2d.getFontMetrics();
             for (Player player : tile.getPlayers()) {
                 int playerTextX = x - metrics.stringWidth(player.getName()) / 2;
@@ -194,7 +196,7 @@ public class HexGridPanel extends JPanel {
         // Draw text if the tile type is START
         if (tile.getTileType() == TileType.Start) {
             g2d.setColor(Color.BLACK);
-            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            g2d.setFont(GameConfig.TILE_FONT);
             metrics = g2d.getFontMetrics();
             String startText = "Start";
             int startTextX = x - metrics.stringWidth(startText) / 2;
