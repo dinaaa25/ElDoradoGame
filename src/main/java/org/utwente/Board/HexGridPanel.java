@@ -8,14 +8,15 @@ import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileController;
 import org.utwente.Tile.TileType;
+import org.utwente.Tile.TileView;
 import org.utwente.game.GameConfig;
 import org.utwente.player.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ import java.util.Optional;
 
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+import static org.utwente.game.GameConfig.HEX_SIZE;
 
 public class HexGridPanel extends JPanel {
-    private static final int HEX_SIZE = 40;
     private static final int PADDING = 100;
     private List<List<Tile>> tileSections;
     private int panelWidth;
@@ -103,7 +104,8 @@ public class HexGridPanel extends JPanel {
         for (List<Tile> section : tileSections) {
             for (Tile tile : section) {
                 Point p = flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
-                drawHexagon(g2d, p.x + offsetX, p.y + offsetY, tile);
+                TileController tileController = new TileController(tile, new TileView());
+                tileController.updateView(g2d, p.x + offsetX, p.y + offsetY, HEX_SIZE, flatTop, macheteImage);
             }
         }
 
@@ -128,94 +130,11 @@ public class HexGridPanel extends JPanel {
         return new Point(x, y);
     }
 
-    private void drawHexagon(Graphics2D g2d, int x, int y, Tile tile) {
-        Path2D hexagon = new Path2D.Double();
-        Point[] vertices = new Point[6];
-        for (int i = 0; i < 6; i++) {
-            double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
-            int dx = (int) (x + HEX_SIZE * Math.cos(angle));
-            int dy = (int) (y + HEX_SIZE * Math.sin(angle));
-            vertices[i] = new Point(dx, dy);
-            if (i == 0) {
-                hexagon.moveTo(dx, dy);
-            } else {
-                hexagon.lineTo(dx, dy);
-            }
-        }
-        hexagon.closePath();
-
-        if (tile.getTileType() == TileType.Machete && macheteImage != null) {
-            TexturePaint texturePaint = new TexturePaint(macheteImage, new Rectangle(x - HEX_SIZE, y - HEX_SIZE, 2 * HEX_SIZE, 2 * HEX_SIZE));
-            g2d.setPaint(texturePaint);
-        } else {
-            g2d.setColor(tile.getTileColor());
-        }
-        g2d.fill(hexagon);
-
-        g2d.setColor(Color.BLACK);
-        g2d.draw(hexagon);
-
-        // Draw the coordinates
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(GameConfig.TILE_FONT);
-        FontMetrics metrics = g2d.getFontMetrics();
-        String text = tile.getQ() + ", " + tile.getR();
-        int textX = x - metrics.stringWidth(text) / 2;
-        int textY = y + metrics.getHeight() / 2 - metrics.getDescent() + HEX_SIZE / 2;
-        g2d.drawString(text, textX, textY);
-
-        // Draw the power
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(GameConfig.TILE_FONT);
-        metrics = g2d.getFontMetrics();
-        String powerText = String.valueOf(tile.getPower());
-        int powerTextX = (int) (x - HEX_SIZE / 1.3);
-        int powerTextY = y - HEX_SIZE / 2 + metrics.getAscent();
-        g2d.drawString(powerText, powerTextX, powerTextY);
-
-        // Draw player
-        if (!tile.getPlayers().isEmpty()) {
-            int playerYOffset = y - HEX_SIZE / 2;
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(GameConfig.TILE_FONT);
-            metrics = g2d.getFontMetrics();
-            for (Player player : tile.getPlayers()) {
-                int playerTextX = x - metrics.stringWidth(player.getName()) / 2;
-                int playerTextY = playerYOffset + metrics.getHeight() / 2 - metrics.getDescent();
-                g2d.drawString(player.getName(), playerTextX, playerTextY);
-                playerYOffset += metrics.getHeight(); // Move down for the next player
-            }
-        }
-
-        // Draw text if the tile type is START
-        if (tile.getTileType() == TileType.Start) {
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(GameConfig.TILE_FONT);
-            metrics = g2d.getFontMetrics();
-            String startText = "Start";
-            int startTextX = x - metrics.stringWidth(startText) / 2;
-            int startTextY = y + metrics.getHeight() / 2 - metrics.getDescent();
-            g2d.drawString(startText, startTextX, startTextY);
-        }
-    }
-
     private Point[] calculateVertices(Point startPixel, Point endPixel) {
         Point[] vertices = new Point[2];
         vertices[0] = startPixel;
         vertices[1] = endPixel;
         return vertices;
-    }
-
-    private Color getColorForTileType(TileType tileType) {
-        return switch (tileType) {
-            case Machete -> new Color(101, 140, 35);
-            case Paddle -> new Color(107, 194, 235);
-            case Coin -> new Color(241, 215, 95);
-            case Basecamp -> new Color(203, 85, 35);
-            case Mountain -> new Color(106, 100, 74);
-            case Cave -> new Color(224, 159, 65);
-            default -> Color.LIGHT_GRAY; // Default color
-        };
     }
 
     public void removeBlockade() {
@@ -234,7 +153,6 @@ public class HexGridPanel extends JPanel {
     }
 
     public void buildPredefinedBoard(Path path) {
-        flatTop = true;
         List<SectionWithRotationPositionSectionDirection> sectionWithRotationPositionSectionDirectionList = Board.BoardBuilder.paths.get(path);
         flatTop = sectionWithRotationPositionSectionDirectionList.stream()
                 .findFirst()
