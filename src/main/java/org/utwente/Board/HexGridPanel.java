@@ -56,7 +56,7 @@ public class HexGridPanel extends JPanel {
 
     public Dimension calculatePreferredSize() {
         if (tileSections.isEmpty() || tileSections.get(0).isEmpty()) {
-            setPreferredSize(new Dimension(800, 600));
+            setPreferredSize(new Dimension(GameConfig.DEFAULT_BOARD_SIZE_X, GameConfig.DEFAULT_BOARD_SIZE_Y));
             return null;
         }
 
