@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
+import org.utwente.market.model.CardTypeSpec;
 import org.utwente.market.model.Market;
+import org.utwente.market.model.MarketSetup;
 import org.utwente.market.model.Order;
 
 public class MarketTest {
@@ -104,6 +106,34 @@ public class MarketTest {
     Order order = new Order(CardType.Tausendsassa, 0);
     Card card = market.buy(order);
     assertNull(card);
+  }
+
+  @Test
+  public void testCardInReserve() {
+    for (CardTypeSpec cardSpec : MarketSetup.reserve.cardSpecification) {
+      assertFalse(market.cardInCurrent(cardSpec.getType()));
+      assertTrue(market.cardInReserve(cardSpec.getType()));
+    }
+  }
+
+  @Test
+  public void testCardInCurrent() {
+    for (CardTypeSpec cardSpec : MarketSetup.active.cardSpecification) {
+      assertFalse(market.cardInReserve(cardSpec.getType()));
+      assertTrue(market.cardInCurrent(cardSpec.getType()));
+    }
+  }
+
+  @Test
+  public void cannotBuyCardOutsideMarket() {
+    Card card = market.buy(new Order(CardType.Forscher, 5));
+    assertNull(card);
+  }
+
+  @Test
+  public void nothingRemovedIfCardNotInMarket() {
+    market.removeCardFromMarket(CardType.Forscher);
+    assertEquals(85, market.getRemainingCardAmount());
   }
 
 }

@@ -42,7 +42,9 @@ public class CardTest {
   @Test
   void testSettersCard() {
     card.setCardType(CardType.Entdecker);
-    assertEquals();
+    assertEquals(CardType.Entdecker, card.getCardType());
+    card.setConsumedPower(3);
+    assertEquals(3, card.getConsumedPower());
   }
 
 }

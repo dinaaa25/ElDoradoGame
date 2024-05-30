@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class Market {
-    private int CURRENT_FULL_SIZE = 6;
+    private static final int CURRENT_FULL_SIZE = 6;
     private Map<CardType, Integer> currentCards;
     private Map<CardType, Integer> reserveCards;
 
@@ -56,7 +56,7 @@ public class Market {
         return this.currentCards.containsKey(type);
     }
 
-    private void removeCardFromMarket(CardType key) {
+    public void removeCardFromMarket(CardType key) {
         if (cardInReserve(key)) {
             // move card to current cards.
             Integer res = this.reserveCards.get(key);
@@ -71,7 +71,6 @@ public class Market {
                 this.currentCards.remove(key);
             }
         }
-
     }
 
     public int getRemainingCardAmount() {

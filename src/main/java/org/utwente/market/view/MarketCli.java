@@ -21,18 +21,19 @@ public class MarketCli implements MarketView {
   private PrintStream stream;
   private EventHandler<MarketOrderEvent> eventHandler;
   private EventHandler<InputEvent> inputEventHandler;
-  private Scanner scanner = new Scanner(System.in);
+  private Scanner scanner;
   private String orderInput;
   private Order order;
   private Market market;
   private boolean exit = false;
 
-  public MarketCli(PrintStream stream) {
+  public MarketCli(PrintStream stream, Scanner scanner) {
     this.stream = stream;
+    this.scanner = new Scanner(System.in);
   }
 
   public MarketCli() {
-    this(System.out);
+    this(System.out, new Scanner(System.in));
   }
 
   public void run() {
@@ -51,7 +52,7 @@ public class MarketCli implements MarketView {
   @Override
   public void displayPurchaseResult(Card card) {
     String cardDisplay = CardFormat.formatCard(card.getCardType());
-    System.out.println(cardDisplay);
+    stream.println(cardDisplay);
   }
 
   private void printStraightLine() {
