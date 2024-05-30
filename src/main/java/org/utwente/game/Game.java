@@ -6,11 +6,12 @@ import org.utwente.Board.Board;
 import org.utwente.Tile.Tile;
 import org.utwente.player.Player;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Game {
+public class Game extends JPanel {
     private String gameName;
     private String gameDescription;
     private Board board;

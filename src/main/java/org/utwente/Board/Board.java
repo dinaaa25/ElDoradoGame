@@ -58,6 +58,10 @@ public class Board {
         lastTile.placePlayer(player);
     }
 
+    public void updateView() {
+
+    }
+
     public static class BoardBuilder {
         private final List<Section> sections;
         private Path path;
