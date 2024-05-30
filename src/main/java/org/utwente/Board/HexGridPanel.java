@@ -148,7 +148,7 @@ public class HexGridPanel extends JPanel {
             TexturePaint texturePaint = new TexturePaint(macheteImage, new Rectangle(x - HEX_SIZE, y - HEX_SIZE, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
         } else {
-            g2d.setColor(getColorForTileType(tile.getTileType()));
+            g2d.setColor(tile.getTileColor());
         }
         g2d.fill(hexagon);
 

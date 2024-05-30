@@ -6,7 +6,11 @@ import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+
+import static org.utwente.game.GameConfig.TILE_COLORS;
 
 public class Tile {
     private int q;
@@ -67,6 +71,10 @@ public class Tile {
             this.q = -tempR;
             this.r = tempQ + tempR;
         }
+    }
+
+    public Color getTileColor() {
+        return TILE_COLORS.getOrDefault(tileType, Color.LIGHT_GRAY);
     }
 
     public boolean hasCaveCoins() {
