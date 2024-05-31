@@ -1,5 +1,6 @@
 package org.utwente.Board;
 
+import lombok.Getter;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
@@ -20,10 +21,13 @@ import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*
 public class Board {
     private final List<Section> sections;
     private final Path path;
+    @Getter
+    private final boolean flatTop;
 
-    public Board(List<Section> sections, Path path) {
+    public Board(List<Section> sections, Path path, boolean flatTop) {
         this.sections = sections;
         this.path = path;
+        this.flatTop = flatTop;
     }
 
     public List<Tile> getStartingTiles() {
@@ -58,13 +62,10 @@ public class Board {
         lastTile.placePlayer(player);
     }
 
-    public void updateView() {
-
-    }
-
     public static class BoardBuilder {
         private final List<Section> sections;
         private Path path;
+        private boolean flatTop;
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
@@ -174,13 +175,91 @@ public class Board {
 
         public BoardBuilder buildPath() {
             assert path != null : "Path is null";
-            List<SectionType> sectionTypes = paths.get(path).stream()
-                    .map(SectionWithRotationPositionSectionDirection::getSectionType)
-                    .toList();
-            sectionTypes.stream()
-                    .map(BoardBuilder::getSectionBySectionType)
-                    .forEach(sections::add);
+            List<SectionWithRotationPositionSectionDirection> sectionWithRotationPositionSectionDirectionList = paths.get(path);
+            flatTop = sectionWithRotationPositionSectionDirectionList.stream()
+                    .findFirst()
+                    .map(section -> section.getSectionDirection() instanceof SectionDirectionType.FlatTopSectionDirection)
+                    .orElse(false);
+            for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
+                attachBoardSection(sectionWithRotationPositionSectionDirection.getSectionType(), sectionWithRotationPositionSectionDirection.getSectionDirection(), sectionWithRotationPositionSectionDirection.getPlacement(), sectionWithRotationPositionSectionDirection.getRotation());
+            }
             return this;
+        }
+
+        private void attachBoardSection(SectionType sectionType, SectionDirectionType.SectionDirection sectionDirection, int placement, int rotation) {
+            List<Section> availableSections = SectionLoader.loadSections();
+            Optional<Section> optionalSection = availableSections.stream()
+                    .filter(s -> s.getSectionType() == sectionType)
+                    .findFirst();
+            if (optionalSection.isEmpty()) {
+                throw new IllegalArgumentException("This section Type does not exist");
+            }
+            Section section = optionalSection.get();
+            for (Tile tile : section.getTiles()) {
+                tile.rotate(rotation);
+            }
+
+            if (sections.isEmpty()) {
+                sections.add(section);
+            } else {
+                Section lastSection = sections.get(sections.size() - 1);
+                int minQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).min().orElse(0);
+                int maxQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).max().orElse(0);
+                int minR = lastSection.getTiles().stream().mapToInt(Tile::getR).min().orElse(0);
+                int maxR = lastSection.getTiles().stream().mapToInt(Tile::getR).max().orElse(0);
+
+                int translationQ;
+                int translationR;
+
+                if (sectionType == SectionType.O) {
+                    if (sectionDirection.equals(PT_NORTHEAST)) {
+                        if (rotation == 0) {
+                            translationQ = maxQ;
+                            translationR = minR - 2;
+                        } else if (rotation == 1) {
+                            translationQ = maxQ + 2;
+                            translationR = minR + 1;
+                        } else {
+                            translationQ = maxQ;
+                            translationR = minR;
+                        }
+                    } else if (sectionDirection.equals(PT_NORTH)) {
+                        translationQ = maxQ;
+                        translationR = minR - 2;
+                    } else {
+                        translationQ = maxQ - minQ;
+                        translationR = maxR - minR;
+                    }
+                } else {
+                    if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
+                        translationQ = maxQ + 1 + 3;
+                        translationR = minR - 1 + placement;
+                    } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
+                        translationQ = maxQ + placement;
+                        translationR = maxR + 1 - placement;
+                    } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
+                        translationQ = minQ - placement;
+                        translationR = maxR + 3 + 1;
+                    } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
+                        translationQ = minQ - 3 - 1;
+                        translationR = maxR + 1 - placement;
+                    } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
+                        translationQ = minQ - placement;
+                        translationR = minR - 1 + placement;
+                    } else if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
+                        translationQ = maxQ + placement;
+                        translationR = minR - 3 - 1;
+                    } else {
+                        translationQ = maxQ;
+                        translationR = minR;
+                    }
+                }
+                for (Tile tile : section.getTiles()) {
+                    tile.setQ(tile.getQ() + translationQ);
+                    tile.setR(tile.getR() + translationR);
+                }
+                sections.add(section);
+            }
         }
 
         public List<Section> getSections() {
@@ -190,7 +269,7 @@ public class Board {
         public Board build() {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
-            return new Board(sections, path);
+            return new Board(sections, path, flatTop);
         }
     }
 }

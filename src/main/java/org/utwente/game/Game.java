@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Game extends JPanel {
+public class Game {
     private String gameName;
     private String gameDescription;
     private Board board;

@@ -1,8 +1,11 @@
 package org.utwente.Tile;
 
+import lombok.Getter;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@Getter
 public class TileController {
     private Tile tile;
     private TileView tileView;
