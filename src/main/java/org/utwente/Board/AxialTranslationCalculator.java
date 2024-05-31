@@ -8,7 +8,7 @@ import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*
 
 public class AxialTranslationCalculator {
 
-        public record AxialTranslation(int q, int r) {}
+    public record AxialTranslation(int q, int r) {}
 
     public AxialTranslation getTranslation(SectionType sectionType, SectionDirectionType.SectionDirection sectionDirection, int rotation, int maxQ, int minR, int minQ, int maxR, int placement) {
         int translationQ;

@@ -26,7 +26,7 @@ public class GameTest {
     @BeforeEach
     public void setUp() {
         Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-        board = boardBuilder.selectPath(Path.HillsOfGold).build();
+        board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().build();
         dina = new Player("Dina");
         mark = new Player("Mark");
         stijn = new Player("Stijn");
