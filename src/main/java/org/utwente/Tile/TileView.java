@@ -65,9 +65,9 @@ public class TileView {
         }
     }
 
-    private void drawPlayers(Graphics2D g2d, Set<Player> players, int x, int y, int hexSize) {
+    private void drawPlayers(Graphics2D g2d, Set<Player> players, int x, int y) {
         if (!players.isEmpty()) {
-            int playerYOffset = y - hexSize / 2;
+            int playerYOffset = y - HEX_SIZE / 2;
             FontMetrics metrics = g2d.getFontMetrics();
             for (Player player : players) {
                 PlayerController playerController = new PlayerController(player, new PlayerView());
@@ -83,6 +83,6 @@ public class TileView {
         drawHexagon(hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
         drawPower(g2d, x, y, tile);
-        drawPlayers(g2d, tile.getPlayers(), x, y, HEX_SIZE);
+        drawPlayers(g2d, tile.getPlayers(), x, y);
     }
 }

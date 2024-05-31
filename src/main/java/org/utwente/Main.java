@@ -3,7 +3,9 @@ package org.utwente;
 import lombok.Getter;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
+import org.utwente.Board.DirectionType;
 import org.utwente.Board.Path;
+import org.utwente.Tile.Tile;
 import org.utwente.game.Game;
 import org.utwente.game.GameController;
 import org.utwente.game.GameView;
@@ -67,6 +69,7 @@ public class Main extends JPanel {
             Main mainPanel = new Main();
             GameController gameController = mainPanel.getGameController();
             JFrame frame = new JFrame(gameController.getGame().getGameName());
+            gameController.getGame().placePlayersStart();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             JScrollPane scrollPane = new JScrollPane(mainPanel);
