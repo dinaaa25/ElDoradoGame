@@ -10,6 +10,12 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/misc.xml
+.idea/gradle.xml
+.idea/jsonSchemas.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea
 *.iws
 *.iml
 *.ipr

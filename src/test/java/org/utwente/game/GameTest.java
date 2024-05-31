@@ -2,12 +2,14 @@ package org.utwente.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.utwente.Board.Blockade;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Board;
 import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
+import java.awt.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +26,7 @@ public class GameTest {
     @BeforeEach
     public void setUp() {
         Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-        board = boardBuilder.selectPath(Path.HillsOfGold).build();
+        board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().build();
         dina = new Player("Dina");
         mark = new Player("Mark");
         stijn = new Player("Stijn");
@@ -120,7 +122,7 @@ public class GameTest {
     public void testTwoPlayersAtEndWithBlockades() {
         // put two players at the end
         List<Tile> lastTiles = board.getLastWaitingTiles();
-        Blockade blockade = new Blockade();
+        Blockade blockade = new Blockade(TileType.Coin, new Point(3, -3), new Point(3, -2), 2);
         dina.addBlockade(blockade);
         board.placePlayer(lastTiles.get(0), dina);
         game.nextPlayer();

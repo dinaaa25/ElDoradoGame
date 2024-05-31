@@ -45,7 +45,6 @@ public class MoveActionTest {
         assertTrue(tileTo.getPlayers().stream().map(player -> player.getName()).toList().contains("Dina"));
     }
 
-    // TODO: refactor if switched to polar coordinates
     @Test
     public void testIsTileToNeighbour() {
         Resource card = new Card(CardType.Entdecker);

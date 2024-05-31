@@ -1,6 +1,6 @@
 package org.utwente.player;
 
-import org.utwente.Board.Blockade;
+import org.utwente.Board.Blockade.Blockade;
 
 import java.util.ArrayList;
 import java.util.List;

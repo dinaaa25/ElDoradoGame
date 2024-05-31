@@ -2,26 +2,29 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.utwente.Board.AxialTranslationCalculator;
+import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
 
-import java.sql.Array;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+
+import static org.utwente.game.GameConfig.TILE_COLORS;
 
 public class Tile {
-    private final int x;
-    private final int y;
+    private int q;
+    private int r;
     private final TileType tileType;
     private final int power;
     private final List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
 
-    public Tile(int x, int y, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
-        this.x = x;
-        this.y = y;
+    public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
+        this.q = q;
+        this.r = r;
         this.tileType = tileType;
         this.power = power;
         this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
@@ -30,10 +33,26 @@ public class Tile {
     }
 
     @JsonCreator
-    public Tile(@JsonProperty("x") int x, @JsonProperty("y") int y, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
+    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
                 @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
 
-        this(x, y, tileType, power, new ArrayList<>(), isLastWaitingTile);
+        this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
+    }
+
+    public int getQ() {
+        return q;
+    }
+
+    public void setQ(int q) {
+        this.q = q;
+    }
+
+    public void setR(int r) {
+        this.r = r;
+    }
+
+    public int getR() {
+        return r;
     }
 
     public TileType getTileType() {
@@ -42,6 +61,21 @@ public class Tile {
 
     public int getPower() {
         return power;
+    }
+
+    public void rotate(int turns) {
+        turns = ((turns % 6) + 6) % 6;
+
+        for (int i = 0; i < turns; i++) {
+            int tempQ = this.q;
+            int tempR = this.r;
+            this.q = -tempR;
+            this.r = tempQ + tempR;
+        }
+    }
+
+    public Color getTileColor() {
+        return TILE_COLORS.getOrDefault(tileType, Color.LIGHT_GRAY);
     }
 
     public boolean hasCaveCoins() {
@@ -76,8 +110,8 @@ public class Tile {
     @Override
     public String toString() {
         return "Tile{" +
-                "x=" + x +
-                ", y=" + y +
+                "x=" + q +
+                ", y=" + r +
                 ", tileType=" + tileType +
                 ", power=" + power +
                 ", caveCoins=" + caveCoins +
@@ -102,6 +136,23 @@ public class Tile {
 
 
     public boolean isNeighbor(Tile tile) {
-        return true;
+        if (tile == null) {
+            return false;
+        }
+
+        for (DirectionType.Direction direction : DirectionType.POINTY_TOP.getDirections()) {
+            int neighborQ = this.q + direction.getDq();
+            int neighborR = this.r + direction.getDr();
+            if (neighborQ == tile.getQ() && neighborR == tile.getR()) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    public void translate(AxialTranslationCalculator.AxialTranslation translationParameters) {
+        q += translationParameters.q();
+        r += translationParameters.r();
+    }
+
 }

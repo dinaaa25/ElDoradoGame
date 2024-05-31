@@ -1,12 +1,8 @@
 package org.utwente.Tile;
 
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.CaveCoin.CaveCoinType;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,4 +52,49 @@ class TileTest {
         tile.retrieveCoin();
         assertEquals(0, tile.getCaveCoinCount());
     }
+
+    @Test
+    void testNeighbourTiles() {
+        Tile tileTo = new Tile(0, 1, TileType.Machete, 2, new ArrayList<>(), false);
+        Tile tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
+        assertTrue(tileFrom.isNeighbor(tileTo), tileFrom.toString() + " should be neighbour of " + tileTo.toString());
+    }
+
+    @Test
+    void testNonNeighbourTiles() {
+        Tile tileTo = new Tile(0, -2, TileType.Machete, 2, new ArrayList<>(), false);
+        Tile tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
+        assertFalse(tileFrom.isNeighbor(tileTo), tileFrom.toString() + " should not be neighbour of " + tileTo.toString());
+    }
+
+    @Test
+    public void testRotate() {
+        Tile tile = new Tile(2, -1, TileType.Coin, 2, new ArrayList<>(), false);
+
+        // Rotate 1 turn (60 degrees clockwise)
+        tile.rotate(1);
+        assertEquals(1, tile.getQ());
+        assertEquals(1, tile.getR());
+
+        // Rotate 2 more turns (120 degrees clockwise, total 3 turns)
+        tile.rotate(2);
+        assertEquals(-2, tile.getQ());
+        assertEquals(1, tile.getR());
+
+        // Rotate 3 more turns (180 degrees clockwise, total 6 turns)
+        tile.rotate(3);
+        assertEquals(2, tile.getQ());
+        assertEquals(-1, tile.getR());
+
+        // Rotate -1 turn (60 degrees counter-clockwise)
+        tile.rotate(-1);
+        assertEquals(1, tile.getQ());
+        assertEquals(-2, tile.getR());
+
+        // Rotate -5 more turns (300 degrees counter-clockwise, total -6 turns)
+        tile.rotate(-5);
+        assertEquals(2, tile.getQ());
+        assertEquals(-1, tile.getR());
+    }
 }
+
