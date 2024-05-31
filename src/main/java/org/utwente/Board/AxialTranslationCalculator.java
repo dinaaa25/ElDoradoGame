@@ -1,7 +1,6 @@
 package org.utwente.Board;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.utwente.Section.SectionType;
 
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
@@ -9,16 +8,7 @@ import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*
 
 public class AxialTranslationCalculator {
 
-    @Getter
-    public static class AxialTranslation {
-        private final int q;
-        private final int r;
-
-        public AxialTranslation(int q, int r) {
-            this.q = q;
-            this.r = r;
-        }
-    }
+        public record AxialTranslation(int q, int r) {}
 
     public AxialTranslation getTranslation(SectionType sectionType, SectionDirectionType.SectionDirection sectionDirection, int rotation, int maxQ, int minR, int minQ, int maxR, int placement) {
         int translationQ;

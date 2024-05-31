@@ -151,8 +151,8 @@ public class Tile {
     }
 
     public void translate(AxialTranslationCalculator.AxialTranslation translationParameters) {
-        q += translationParameters.getQ();
-        r += translationParameters.getR();
+        q += translationParameters.q();
+        r += translationParameters.r();
     }
 
 }
