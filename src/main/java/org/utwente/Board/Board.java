@@ -89,8 +89,8 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 1, PT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 0, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, -2, 0, PT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, PT_NORTHEAST)
+//                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, -2, 0, PT_NORTHEAST)
                 )),
                 entry(Path.HomeStretch, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, FT_NORTHEAST),
@@ -170,7 +170,7 @@ public class Board {
                 throw new IllegalArgumentException("Path is null");
             }
             this.path = path;
-            return this.buildPath();
+            return this;
         }
 
         public BoardBuilder buildPath() {
@@ -181,22 +181,22 @@ public class Board {
                     .map(section -> section.getSectionDirection() instanceof SectionDirectionType.FlatTopSectionDirection)
                     .orElse(false);
             for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
-                attachBoardSection(sectionWithRotationPositionSectionDirection.getSectionType(), sectionWithRotationPositionSectionDirection.getSectionDirection(), sectionWithRotationPositionSectionDirection.getPlacement(), sectionWithRotationPositionSectionDirection.getRotation());
+                attachBoardSection(sectionWithRotationPositionSectionDirection);
             }
             return this;
         }
 
-        private void attachBoardSection(SectionType sectionType, SectionDirectionType.SectionDirection sectionDirection, int placement, int rotation) {
+        private void attachBoardSection(SectionWithRotationPositionSectionDirection sectionWithData) {
             List<Section> availableSections = SectionLoader.loadSections();
             Optional<Section> optionalSection = availableSections.stream()
-                    .filter(s -> s.getSectionType() == sectionType)
+                    .filter(s -> s.getSectionType() == sectionWithData.getSectionType())
                     .findFirst();
             if (optionalSection.isEmpty()) {
                 throw new IllegalArgumentException("This section Type does not exist");
             }
             Section section = optionalSection.get();
             for (Tile tile : section.getTiles()) {
-                tile.rotate(rotation);
+                tile.rotate(sectionWithData.getRotation());
             }
 
             if (sections.isEmpty()) {
@@ -210,6 +210,12 @@ public class Board {
 
                 int translationQ;
                 int translationR;
+
+                SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
+                int rotation = sectionWithData.getRotation();
+                int placement = sectionWithData.getPlacement();
+                SectionType sectionType = sectionWithData.getSectionType();
+
 
                 if (sectionType == SectionType.O) {
                     if (sectionDirection.equals(PT_NORTHEAST)) {

@@ -15,7 +15,7 @@ public class TileController {
         this.tileView = tileView;
     }
 
-    public void updateView(Graphics2D g2d, int x, int y, int hexSize, boolean flatTop, BufferedImage image) {
-        tileView.drawTile(g2d, tile, x, y, hexSize, flatTop, image);
+    public void updateView(Graphics2D g2d, int x, int y, boolean flatTop, BufferedImage image) {
+        tileView.drawTile(g2d, tile, x, y, flatTop, image);
     }
 }

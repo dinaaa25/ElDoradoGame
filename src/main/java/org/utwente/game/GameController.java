@@ -15,7 +15,7 @@ public class GameController {
         this.gameView = gameView;
     }
 
-    public void updateView(Graphics2D g2d, BufferedImage macheteImage) {
-        gameView.drawGame(g2d, game, macheteImage);
+    public void updateView(Graphics2D g2d, int offsetX, int offsetY, BufferedImage macheteImage) {
+        gameView.drawGame(g2d, offsetX, offsetY, game, macheteImage);
     }
 }

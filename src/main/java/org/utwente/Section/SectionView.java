@@ -11,12 +11,12 @@ import java.util.List;
 import static org.utwente.game.GameConfig.HEX_SIZE;
 
 public class SectionView {
-    public void drawSection(Graphics2D g2d, Section section, int offsetX, int offsetY, int hexSize, boolean flatTop, BufferedImage image) {
+    public void drawSection(Graphics2D g2d, Section section, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
         List<Tile> tiles = section.getTiles();
         for (Tile tile : tiles) {
             TileController tileController = new TileController(tile, new TileView());
             Point tilePosition = flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
-            tileController.updateView(g2d, tilePosition.x + offsetX, tilePosition.y + offsetY, hexSize, flatTop, image);
+            tileController.updateView(g2d, tilePosition.x + offsetX, tilePosition.y + offsetY, flatTop, image);
         }
     }
 

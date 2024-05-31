@@ -77,12 +77,12 @@ public class TileView {
         }
     }
 
-    public void drawTile(Graphics2D g2d, Tile tile, int x, int y, int hexSize, boolean flatTop, BufferedImage image) {
+    public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, BufferedImage image) {
         Path2D.Double hexagon = createHexagon(flatTop, x, y);
         setTileTexture(g2d, x, y, tile, image);
         drawHexagon(hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
         drawPower(g2d, x, y, tile);
-        drawPlayers(g2d, tile.getPlayers(), x, y, hexSize);
+        drawPlayers(g2d, tile.getPlayers(), x, y, HEX_SIZE);
     }
 }

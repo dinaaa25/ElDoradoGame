@@ -15,7 +15,7 @@ public class BoardController {
         this.boardView = boardView;
     }
 
-    public void updateView(Graphics2D g2d, int offsetX, int offsetY, int hexSize, boolean flatTop, BufferedImage image) {
-        boardView.drawBoard(g2d, board, offsetX, offsetY, hexSize, flatTop, image);
+    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
+        boardView.drawBoard(g2d, board, offsetX, offsetY, flatTop, image);
     }
 }

@@ -20,7 +20,7 @@ public class SectionController {
         return sectionView;
     }
 
-    public void updateView(Graphics2D g2d, int offsetX, int offsetY, int hexSize, boolean flatTop, BufferedImage image) {
-        sectionView.drawSection(g2d, section, offsetX, offsetY, hexSize, flatTop, image);
+    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
+        sectionView.drawSection(g2d, section, offsetX, offsetY, flatTop, image);
     }
 }
