@@ -2,6 +2,7 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.utwente.Board.AxialTranslationCalculator;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
@@ -148,4 +149,10 @@ public class Tile {
         }
         return false;
     }
+
+    public void translate(AxialTranslationCalculator.AxialTranslation translationParameters) {
+        q += translationParameters.getQ();
+        r += translationParameters.getR();
+    }
+
 }

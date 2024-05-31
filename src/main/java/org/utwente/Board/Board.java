@@ -208,61 +208,15 @@ public class Board {
                 int minR = lastSection.getTiles().stream().mapToInt(Tile::getR).min().orElse(0);
                 int maxR = lastSection.getTiles().stream().mapToInt(Tile::getR).max().orElse(0);
 
-                int translationQ;
-                int translationR;
-
                 SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
                 int rotation = sectionWithData.getRotation();
                 int placement = sectionWithData.getPlacement();
                 SectionType sectionType = sectionWithData.getSectionType();
 
+                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionType, sectionDirection, rotation, maxQ, minR, minQ, maxR, placement);
 
-                if (sectionType == SectionType.O) {
-                    if (sectionDirection.equals(PT_NORTHEAST)) {
-                        if (rotation == 0) {
-                            translationQ = maxQ;
-                            translationR = minR - 2;
-                        } else if (rotation == 1) {
-                            translationQ = maxQ + 2;
-                            translationR = minR + 1;
-                        } else {
-                            translationQ = maxQ;
-                            translationR = minR;
-                        }
-                    } else if (sectionDirection.equals(PT_NORTH)) {
-                        translationQ = maxQ;
-                        translationR = minR - 2;
-                    } else {
-                        translationQ = maxQ - minQ;
-                        translationR = maxR - minR;
-                    }
-                } else {
-                    if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
-                        translationQ = maxQ + 1 + 3;
-                        translationR = minR - 1 + placement;
-                    } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
-                        translationQ = maxQ + placement;
-                        translationR = maxR + 1 - placement;
-                    } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
-                        translationQ = minQ - placement;
-                        translationR = maxR + 3 + 1;
-                    } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
-                        translationQ = minQ - 3 - 1;
-                        translationR = maxR + 1 - placement;
-                    } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
-                        translationQ = minQ - placement;
-                        translationR = minR - 1 + placement;
-                    } else if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
-                        translationQ = maxQ + placement;
-                        translationR = minR - 3 - 1;
-                    } else {
-                        translationQ = maxQ;
-                        translationR = minR;
-                    }
-                }
                 for (Tile tile : section.getTiles()) {
-                    tile.setQ(tile.getQ() + translationQ);
-                    tile.setR(tile.getR() + translationR);
+                    tile.translate(axialTranslation);
                 }
                 sections.add(section);
             }
