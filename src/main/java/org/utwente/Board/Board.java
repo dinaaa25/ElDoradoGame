@@ -133,10 +133,10 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.L, -1, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, -2, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, -2, 0, FT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.M, 0, 1, FT_SOUTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.I, -1, 0, FT_WEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_NORTHWEST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 4, 0, PT_NORTHWEST)
                 )),
                 entry(Path.TestGame, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
