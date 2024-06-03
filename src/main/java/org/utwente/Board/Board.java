@@ -87,10 +87,10 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, PT_NORTH),
-                        new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 0, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, -2, 0, PT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 1, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 1, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 1, 0, FT_EAST)
                 )),
                 entry(Path.HomeStretch, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, FT_NORTHEAST),
