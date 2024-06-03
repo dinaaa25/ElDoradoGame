@@ -18,4 +18,14 @@ public class SectionWithRotationPositionSectionDirection {
         this.placement = placement;
         this.sectionDirection = sectionDirection;
     }
+
+    @Override
+    public String toString() {
+        return "SectionWithRotationPositionSectionDirection{" +
+                "sectionType=" + sectionType +
+                ", rotation=" + rotation +
+                ", placement=" + placement +
+                ", sectionDirection=" + sectionDirection +
+                '}';
+    }
 }

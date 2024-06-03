@@ -135,6 +135,23 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.M, 0, 1, FT_SOUTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.I, -1, 0, FT_WEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_NORTHWEST)
+                )),
+                entry(Path.TestGame, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 2, 1, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 2, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 2, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, PT_SOUTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 3, 0, PT_SOUTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 1, 1, PT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 1, 1, PT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 1, 1, PT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 0, PT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 2, 1, PT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, PT_NORTH)
+
+
                 ))
         );
 
@@ -180,8 +197,14 @@ public class Board {
                     .findFirst()
                     .map(section -> section.getSectionDirection() instanceof SectionDirectionType.FlatTopSectionDirection)
                     .orElse(false);
+            SectionWithRotationPositionSectionDirection lastSection = null;
             for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
+                if (lastSection != null && lastSection.getSectionType() == SectionType.O && (sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_NORTHWEST)) {
+                    sectionWithRotationPositionSectionDirection.setPlacement(-1);
+                }
                 attachBoardSection(sectionWithRotationPositionSectionDirection);
+                lastSection = sectionWithRotationPositionSectionDirection;
+
             }
             return this;
         }
@@ -195,9 +218,7 @@ public class Board {
                 throw new IllegalArgumentException("This section Type does not exist");
             }
             Section section = optionalSection.get();
-            for (Tile tile : section.getTiles()) {
-                tile.rotate(sectionWithData.getRotation());
-            }
+            rotateSection(section, sectionWithData);
 
             if (sections.isEmpty()) {
                 sections.add(section);
@@ -208,17 +229,18 @@ public class Board {
                 int minR = lastSection.getTiles().stream().mapToInt(Tile::getR).min().orElse(0);
                 int maxR = lastSection.getTiles().stream().mapToInt(Tile::getR).max().orElse(0);
 
-                SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
-                int rotation = sectionWithData.getRotation();
-                int placement = sectionWithData.getPlacement();
-                SectionType sectionType = sectionWithData.getSectionType();
-
-                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionType, sectionDirection, rotation, maxQ, minR, minQ, maxR, placement);
+                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionWithData, maxQ, minR, minQ, maxR);
 
                 for (Tile tile : section.getTiles()) {
                     tile.translate(axialTranslation);
                 }
                 sections.add(section);
+            }
+        }
+
+        private void rotateSection(Section section, SectionWithRotationPositionSectionDirection sectionWithData) {
+            for (Tile tile : section.getTiles()) {
+                tile.rotate(sectionWithData.getRotation());
             }
         }
 
