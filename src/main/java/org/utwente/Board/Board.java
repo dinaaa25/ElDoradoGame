@@ -112,12 +112,12 @@ public class Board {
                 )),
                 entry(Path.Serpentine, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.C, -2, 1, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, -2, 0, PT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 0, PT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, 3, 0, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.J, 3, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.M, -1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 0, 0, PT_SOUTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.M, -1, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 2, 0, FT_SOUTHEAST)
                 )),
                 entry(Path.Swamplands, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
