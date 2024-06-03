@@ -127,7 +127,7 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 1, FT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, FT_WEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 1, FT_WEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_SOUTHWEST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 3, 0, PT_SOUTHWEST)
                 )),
                 entry(Path.WitchCauldron, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
