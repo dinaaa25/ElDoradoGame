@@ -150,8 +150,22 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 0, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 2, 1, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, PT_NORTH)
-
-
+                )),
+                entry(Path.TestGameFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 1, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 2, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, FT_NORTHEAST)
                 ))
         );
 
@@ -199,7 +213,7 @@ public class Board {
                     .orElse(false);
             SectionWithRotationPositionSectionDirection lastSection = null;
             for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
-                if (lastSection != null && lastSection.getSectionType() == SectionType.O && (sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_NORTHWEST)) {
+                if (lastSection != null && lastSection.getSectionType() == SectionType.O && (sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_NORTHWEST || sectionWithRotationPositionSectionDirection.getSectionDirection() == FT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == FT_NORTHWEST)) {
                     sectionWithRotationPositionSectionDirection.setPlacement(-1);
                 }
                 attachBoardSection(sectionWithRotationPositionSectionDirection);

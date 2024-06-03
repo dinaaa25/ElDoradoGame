@@ -7,5 +7,6 @@ public enum Path {
     Serpentine,
     Swamplands,
     WitchCauldron,
-    TestGame
+    TestGame,
+    TestGameFT
 }

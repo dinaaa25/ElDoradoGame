@@ -22,33 +22,33 @@ public class AxialTranslationCalculator {
         Integer translationR = null;
 
         if (sectionType == SectionType.O) {
-            if (sectionDirection.equals(PT_NORTH)) {
+            if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
                 if (rotation == 0 || rotation == 3) {
                     translationQ = maxQ - placement;
                     translationR = minR - 2;
                 }
             }
-            else if (sectionDirection.equals(PT_NORTHEAST)) {
+            else if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
                 if (rotation == 1 || rotation == 4) {
                     translationQ = maxQ + 2;
                     translationR = minR + 1 - placement;
                 }
-            } else if (sectionDirection.equals(PT_SOUTHEAST)) {
+            } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
                 if (rotation == 2 || rotation == 5) {
                     translationQ = maxQ - 1 + placement;
                     translationR = maxR - placement;
                 }
-            } else if (sectionDirection.equals(PT_SOUTH)) {
+            } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
                 if (rotation == 0 || rotation == 3) {
                     translationQ = minQ + 1 - placement;
                     translationR = maxR + 2;
                 }
-            } else if (sectionDirection.equals(PT_SOUTHWEST)) {
+            } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
                 if (rotation == 4 || rotation == 1) {
                     translationQ = minQ - 2;
                     translationR = maxR - 1 + placement;
                 }
-            } else if (sectionDirection.equals(PT_NORTHWEST)) {
+            } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
                 if (rotation == 5 || rotation == 2) {
                     translationQ = minQ + 1 - placement;
                     translationR = minR + placement;
