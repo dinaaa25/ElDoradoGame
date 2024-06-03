@@ -153,19 +153,19 @@ public class Board {
                 )),
                 entry(Path.TestGameFT, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 1, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 2, 0, FT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, FT_SOUTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHWEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 1, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 0, FT_WEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 2, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 0, FT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, FT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 0, 0, FT_NORTHEAST)
                 ))
         );
 
