@@ -8,5 +8,7 @@ public enum Path {
     Swamplands,
     WitchCauldron,
     TestGame,
-    TestGameFT
+    TestGameFT,
+    TestGameElDorado,
+    TestGameElDoradoFT,
 }

@@ -121,10 +121,12 @@ public class Board {
                 )),
                 entry(Path.Swamplands, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, 2, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.R, 1, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 2, 1, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.H, 2, 0, FT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 0, FT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 0, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 1, FT_WEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_SOUTHWEST)
                 )),
                 entry(Path.WitchCauldron, List.of(
@@ -166,7 +168,16 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 0, 0, FT_NORTHEAST)
+                )),
+                entry(Path.TestGameElDorado, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, FT_NORTHWEST)
+                )),
+                entry(Path.TestGameElDoradoFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, PT_NORTH)
                 ))
+
         );
 
         public BoardBuilder addInitialSection(Section section) {
