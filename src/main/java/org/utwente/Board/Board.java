@@ -1,6 +1,7 @@
 package org.utwente.Board;
 
 import lombok.Getter;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
@@ -9,10 +10,7 @@ import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
@@ -22,12 +20,15 @@ public class Board {
     private final List<Section> sections;
     private final Path path;
     @Getter
+    private List<Blockade> blockades;
+    @Getter
     private final boolean flatTop;
 
-    public Board(List<Section> sections, Path path, boolean flatTop) {
+    public Board(List<Section> sections, Path path, boolean flatTop, List<Blockade> blockades) {
         this.sections = sections;
         this.path = path;
         this.flatTop = flatTop;
+        this.blockades = blockades;
     }
 
     public List<Tile> getStartingTiles() {
@@ -66,10 +67,12 @@ public class Board {
         private final List<Section> sections;
         private Path path;
         private boolean flatTop;
+        private List<Blockade> blockades;
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
             this.availableSections = SectionLoader.loadSections();
+            this.blockades = new ArrayList<>();
         }
 
         private List<Section> availableSections;
@@ -215,6 +218,44 @@ public class Board {
             return this;
         }
 
+        public BoardBuilder addBlockades() {
+            if (sections.isEmpty()) {
+                throw new IllegalArgumentException("Sections are empty");
+            }
+            if (sections.size() < 5) {
+                throw new IllegalStateException("Not at least 5 sections in BoardBuilder");
+            }
+            List<Blockade> blockades = getBlockadesList();
+            Collections.shuffle(blockades);
+            int numberOfBlockades = blockades.size() - 1;
+
+            List<Blockade> selectedBlockades = blockades.subList(0, numberOfBlockades);
+            int count = 0;
+            for (Blockade blockade : selectedBlockades) {
+                blockade.initialize(sections.get(count), sections.get(count + 1));
+            }
+            this.blockades.addAll(selectedBlockades);
+            return this;
+        }
+
+        private static List<Blockade> getBlockadesList() {
+            Blockade blockade1 = new Blockade(TileType.Machete, 1, 1);
+            Blockade blockade2 = new Blockade(TileType.Coin, 1, 2);
+            Blockade blockade3 = new Blockade(TileType.Discard, 1, 3);
+            Blockade blockade4 = new Blockade(TileType.Paddle, 1, 4);
+            Blockade blockade5 = new Blockade(TileType.Machete, 2, 5);
+            Blockade blockade6 = new Blockade(TileType.Discard, 2, 6);
+
+            List<Blockade> blockades = new ArrayList<>();
+            blockades.add(blockade1);
+            blockades.add(blockade2);
+            blockades.add(blockade3);
+            blockades.add(blockade4);
+            blockades.add(blockade5);
+            blockades.add(blockade6);
+            return blockades;
+        }
+
         public BoardBuilder buildPath() {
             assert path != null : "Path is null";
             List<SectionWithRotationPositionSectionDirection> sectionWithRotationPositionSectionDirectionList = paths.get(path);
@@ -276,7 +317,8 @@ public class Board {
         public Board build() {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
-            return new Board(sections, path, flatTop);
+            assert !blockades.isEmpty() : "No blockades found";
+            return new Board(sections, path, flatTop, blockades);
         }
     }
 }

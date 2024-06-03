@@ -1,5 +1,8 @@
 package org.utwente.Board;
 
+import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Blockade.BlockadeController;
+import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionController;
 import org.utwente.Section.SectionView;
@@ -71,9 +74,16 @@ public class BoardView {
 
     public void drawBoard(Graphics2D g2d, Board board, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
         List<Section> sections = board.getSections();
+        List<Blockade> blockades = board.getBlockades();
         for (Section section : sections) {
             SectionController sectionController = new SectionController(section, new SectionView());
             sectionController.updateView(g2d, offsetX, offsetY, flatTop, image);
+        }
+        int counter = 0;
+        for (Blockade blockade : blockades) {
+            BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
+            blockadeController.updateView(g2d, counter * 60);
+            counter++;
         }
     }
 }

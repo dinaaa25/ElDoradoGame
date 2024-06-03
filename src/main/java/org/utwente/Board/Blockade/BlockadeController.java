@@ -16,7 +16,7 @@ public class BlockadeController {
         this.blockadeView = blockadeView;
     }
 
-    public void updateView(Graphics2D g2d, Point[] vertices) {
-        blockadeView.draw(g2d, vertices, blockade.isRemoved());
+    public void updateView(Graphics2D g2d, int yOffset) {
+        blockadeView.draw(g2d, blockade, yOffset);
     }
 }
