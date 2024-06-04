@@ -29,7 +29,6 @@ public class Board {
         this.path = path;
         this.flatTop = flatTop;
         this.blockades = blockades;
-        updateBlockadeTiles(blockades.get(0));
         updateAllBlockadeTiles();
     }
 
@@ -71,7 +70,6 @@ public class Board {
             for (Tile tileSection2 : blockade.getSection2().getTiles()) {
                 if (tileSection1.isNeighbor(tileSection2)) {
                     blockadeTiles.add(tileSection1);
-//                    blockadeTiles.add(tileSection2);
                 }
             }
         }
@@ -87,8 +85,10 @@ public class Board {
     }
 
     public void updateAllBlockadeTiles() {
-        for (Blockade blockade : blockades) {
-            updateBlockadeTiles(blockade);
+        if (blockades != null) {
+            for (Blockade blockade : blockades) {
+                updateBlockadeTiles(blockade);
+            }
         }
     }
 
@@ -214,9 +214,9 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTH),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTHWEST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 0, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.F, 0, 0, PT_SOUTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 0, 0, PT_SOUTHWEST)
                 ))
         );
 
@@ -265,11 +265,13 @@ public class Board {
             List<Blockade> blockades = getBlockadesList();
             Collections.shuffle(blockades);
             int numberOfBlockades = sections.size() - 1;
-            System.out.println(numberOfBlockades);
 
-            List<Blockade> selectedBlockades = blockades.subList(0, numberOfBlockades);
+            List<Blockade> selectedBlockades = blockades.subList(0, Math.min(blockades.size() - 1, numberOfBlockades));
             int count = 0;
             for (Blockade blockade : selectedBlockades) {
+                if (count == numberOfBlockades) {
+                    break;
+                }
                 blockade.initialize(sections.get(count), sections.get(count + 1));
                 count++;
             }
