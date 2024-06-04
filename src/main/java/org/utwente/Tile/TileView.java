@@ -1,6 +1,7 @@
 package org.utwente.Tile;
 
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Section.Section;
 import org.utwente.game.GameConfig;
@@ -66,6 +67,7 @@ public class TileView {
     }
 
     private void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
+        BlockadeView blockadeView = new BlockadeView();
         Path2D.Double hexagonPath = createHexagonPath(vertices);
         g2d.fill(hexagonPath);
 
@@ -89,7 +91,7 @@ public class TileView {
 
             if (tile.isBlockadeTile() && edges.contains(i)) {
                 g2d.setStroke(thickStroke);
-                g2d.setColor(tile.getBlockade().getBlockadeColor());
+                g2d.setColor(blockadeView.getBlockadeColor(tile.getTileType()));
                 g2d.setStroke(new BasicStroke(14));
             } else {
                 g2d.setStroke(basicStroke);

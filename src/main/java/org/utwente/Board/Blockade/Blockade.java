@@ -34,10 +34,6 @@ public class Blockade {
     public void remove() {
         isRemoved = true;
     }
-
-    public Color getBlockadeColor() {
-        return TILE_COLORS.getOrDefault(tileType, Color.LIGHT_GRAY);
-    }
 }
 
 
