@@ -26,7 +26,7 @@ public class GameTest {
     @BeforeEach
     public void setUp() {
         Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-        board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().build();
+        board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addBlockades().build();
         dina = new Player("Dina");
         mark = new Player("Mark");
         stijn = new Player("Stijn");
@@ -122,7 +122,7 @@ public class GameTest {
     public void testTwoPlayersAtEndWithBlockades() {
         // put two players at the end
         List<Tile> lastTiles = board.getLastWaitingTiles();
-        Blockade blockade = new Blockade(TileType.Coin, new Point(3, -3), new Point(3, -2), 2);
+        Blockade blockade = new Blockade(TileType.Coin, 1, 1);
         dina.addBlockade(blockade);
         board.placePlayer(lastTiles.get(0), dina);
         game.nextPlayer();

@@ -11,4 +11,5 @@ public enum Path {
     TestGameFT,
     TestGameElDorado,
     TestGameElDoradoFT,
+    BlockadeTest,
 }

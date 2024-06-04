@@ -5,6 +5,10 @@ import lombok.Setter;
 import org.utwente.Section.Section;
 import org.utwente.Tile.TileType;
 
+import java.awt.*;
+
+import static org.utwente.game.GameConfig.TILE_COLORS;
+
 @Getter
 @Setter
 public class Blockade {
@@ -31,9 +35,9 @@ public class Blockade {
         isRemoved = true;
     }
 
-
-
-
+    public Color getBlockadeColor() {
+        return TILE_COLORS.getOrDefault(tileType, Color.LIGHT_GRAY);
+    }
 }
 
 

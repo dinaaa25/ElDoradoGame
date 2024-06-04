@@ -1,5 +1,9 @@
 package org.utwente.Section;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.utwente.Board.DirectionType;
+import org.utwente.Board.SectionDirectionType;
 import org.utwente.Tile.Tile;
 
 import java.util.List;
@@ -7,6 +11,9 @@ import java.util.List;
 public class Section {
     private final List<Tile> tiles;
     private final SectionType sectionType;
+    @Getter
+    @Setter
+    private SectionDirectionType.SectionDirection directionType;
 
     public Section(List<Tile> tiles, SectionType sectionType) {
         this.tiles = tiles;

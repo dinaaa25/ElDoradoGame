@@ -29,6 +29,8 @@ public class Board {
         this.path = path;
         this.flatTop = flatTop;
         this.blockades = blockades;
+        updateBlockadeTiles(blockades.get(0));
+        updateAllBlockadeTiles();
     }
 
     public List<Tile> getStartingTiles() {
@@ -63,11 +65,39 @@ public class Board {
         lastTile.placePlayer(player);
     }
 
+    public List<Tile> getBlockadeTiles(Blockade blockade) {
+        Set<Tile> blockadeTiles = new HashSet<>();
+        for (Tile tileSection1 : blockade.getSection1().getTiles()) {
+            for (Tile tileSection2 : blockade.getSection2().getTiles()) {
+                if (tileSection1.isNeighbor(tileSection2)) {
+                    blockadeTiles.add(tileSection1);
+//                    blockadeTiles.add(tileSection2);
+                }
+            }
+        }
+        return new ArrayList<>(blockadeTiles);
+    }
+
+    public void updateBlockadeTiles(Blockade blockade) {
+        List<Tile> blockadeTiles = getBlockadeTiles(blockade);
+        for (Tile tile : blockadeTiles) {
+            tile.setBlockadeTile(true);
+            tile.setBlockade(blockade);
+        }
+    }
+
+    public void updateAllBlockadeTiles() {
+        for (Blockade blockade : blockades) {
+            updateBlockadeTiles(blockade);
+        }
+    }
+
     public static class BoardBuilder {
+        @Getter
         private final List<Section> sections;
         private Path path;
         private boolean flatTop;
-        private List<Blockade> blockades;
+        private final List<Blockade> blockades;
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
@@ -179,8 +209,15 @@ public class Board {
                 entry(Path.TestGameElDoradoFT, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, PT_NORTH)
+                )),
+                entry(Path.BlockadeTest, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_SOUTHWEST)
                 ))
-
         );
 
         public BoardBuilder addInitialSection(Section section) {
@@ -222,17 +259,19 @@ public class Board {
             if (sections.isEmpty()) {
                 throw new IllegalArgumentException("Sections are empty");
             }
-            if (sections.size() < 5) {
-                throw new IllegalStateException("Not at least 5 sections in BoardBuilder");
+            if (sections.size() < 2) {
+                throw new IllegalStateException("Not at least 2 sections in BoardBuilder");
             }
             List<Blockade> blockades = getBlockadesList();
             Collections.shuffle(blockades);
-            int numberOfBlockades = blockades.size() - 1;
+            int numberOfBlockades = sections.size() - 1;
+            System.out.println(numberOfBlockades);
 
             List<Blockade> selectedBlockades = blockades.subList(0, numberOfBlockades);
             int count = 0;
             for (Blockade blockade : selectedBlockades) {
                 blockade.initialize(sections.get(count), sections.get(count + 1));
+                count++;
             }
             this.blockades.addAll(selectedBlockades);
             return this;
@@ -284,6 +323,7 @@ public class Board {
                 throw new IllegalArgumentException("This section Type does not exist");
             }
             Section section = optionalSection.get();
+            section.setDirectionType(sectionWithData.getSectionDirection());
             rotateSection(section, sectionWithData);
 
             if (sections.isEmpty()) {
@@ -308,10 +348,6 @@ public class Board {
             for (Tile tile : section.getTiles()) {
                 tile.rotate(sectionWithData.getRotation());
             }
-        }
-
-        public List<Section> getSections() {
-            return sections;
         }
 
         public Board build() {

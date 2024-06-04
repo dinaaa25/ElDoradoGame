@@ -2,7 +2,10 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.utwente.Board.AxialTranslationCalculator;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
@@ -21,6 +24,12 @@ public class Tile {
     private final List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
+    @Getter
+    @Setter
+    private boolean isBlockadeTile;
+    @Getter
+    @Setter
+    private Blockade blockade;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
         this.q = q;
@@ -30,6 +39,7 @@ public class Tile {
         this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
         this.players = new HashSet<>();
         this.isLastWaitingTile = isLastWaitingTile;
+        this.isBlockadeTile = false;
     }
 
     @JsonCreator
