@@ -17,18 +17,22 @@ import java.util.List;
 import static org.utwente.game.GameConfig.TILE_COLORS;
 
 public class Tile {
+    @Setter
+    @Getter
     private int q;
+    @Getter
+    @Setter
     private int r;
+    @Getter
     private final TileType tileType;
+    @Getter
     private final int power;
     private final List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
     @Getter
-    @Setter
     private boolean isBlockadeTile;
     @Getter
-    @Setter
     private Blockade blockade;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
@@ -49,28 +53,9 @@ public class Tile {
         this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
-    public int getQ() {
-        return q;
-    }
-
-    public void setQ(int q) {
-        this.q = q;
-    }
-
-    public void setR(int r) {
-        this.r = r;
-    }
-
-    public int getR() {
-        return r;
-    }
-
-    public TileType getTileType() {
-        return tileType;
-    }
-
-    public int getPower() {
-        return power;
+    public void setBlockade(Blockade blockade) {
+        this.blockade = blockade;
+        this.isBlockadeTile = true;
     }
 
     public void rotate(int turns) {

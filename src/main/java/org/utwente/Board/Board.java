@@ -79,7 +79,6 @@ public class Board {
     public void updateBlockadeTiles(Blockade blockade) {
         List<Tile> blockadeTiles = getBlockadeTiles(blockade);
         for (Tile tile : blockadeTiles) {
-            tile.setBlockadeTile(true);
             tile.setBlockade(blockade);
         }
     }
@@ -272,7 +271,11 @@ public class Board {
             }
             List<Blockade> blockades = getBlockadesList();
             Collections.shuffle(blockades);
-            int numberOfBlockades = sections.size() - 1;
+            List<Section> nonElDoradoSections = sections.stream()
+                    .filter(section -> section.getSectionType() != SectionType.ElDorado && section.getSectionType() != SectionType.ElDoradoTwo)
+                    .toList();
+            int numberOfBlockades = nonElDoradoSections.size() - 1;
+
 
             List<Blockade> selectedBlockades = blockades.subList(0, Math.min(blockades.size() - 1, numberOfBlockades));
             int count = 0;
@@ -280,7 +283,7 @@ public class Board {
                 if (count == numberOfBlockades) {
                     break;
                 }
-                blockade.initialize(sections.get(count), sections.get(count + 1));
+                blockade.initialize(nonElDoradoSections.get(count), nonElDoradoSections.get(count + 1));
                 count++;
             }
             this.blockades.addAll(selectedBlockades);
