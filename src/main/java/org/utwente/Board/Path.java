@@ -6,5 +6,6 @@ public enum Path {
     WindingPaths,
     Serpentine,
     Swamplands,
-    WitchCauldron
+    WitchCauldron,
+    TestGame
 }
