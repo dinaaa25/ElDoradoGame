@@ -29,7 +29,6 @@ public class Board {
         this.path = path;
         this.flatTop = flatTop;
         this.blockades = blockades;
-        updateAllBlockadeTiles();
     }
 
     public List<Tile> getStartingTiles() {
@@ -62,33 +61,6 @@ public class Board {
 
     public void placePlayer(Tile lastTile, Player player) {
         lastTile.placePlayer(player);
-    }
-
-    public List<Tile> getBlockadeTiles(Blockade blockade) {
-        Set<Tile> blockadeTiles = new HashSet<>();
-        for (Tile tileSection1 : blockade.getSection1().getTiles()) {
-            for (Tile tileSection2 : blockade.getSection2().getTiles()) {
-                if (tileSection1.isNeighbor(tileSection2)) {
-                    blockadeTiles.add(tileSection1);
-                }
-            }
-        }
-        return new ArrayList<>(blockadeTiles);
-    }
-
-    public void updateBlockadeTiles(Blockade blockade) {
-        List<Tile> blockadeTiles = getBlockadeTiles(blockade);
-        for (Tile tile : blockadeTiles) {
-            tile.setBlockade(blockade);
-        }
-    }
-
-    public void updateAllBlockadeTiles() {
-        if (blockades != null) {
-            for (Blockade blockade : blockades) {
-                updateBlockadeTiles(blockade);
-            }
-        }
     }
 
     public static class BoardBuilder {
@@ -238,6 +210,33 @@ public class Board {
             return this;
         }
 
+        private void updateBlockadeTiles(Blockade blockade) {
+            List<Tile> blockadeTiles = getBlockadeTiles(blockade);
+            for (Tile tile : blockadeTiles) {
+                tile.setBlockade(blockade);
+            }
+        }
+
+        private List<Tile> getBlockadeTiles(Blockade blockade) {
+            Set<Tile> blockadeTiles = new HashSet<>();
+            for (Tile tileSection1 : blockade.getSection1().getTiles()) {
+                for (Tile tileSection2 : blockade.getSection2().getTiles()) {
+                    if (tileSection1.isNeighbor(tileSection2)) {
+                        blockadeTiles.add(tileSection1);
+                    }
+                }
+            }
+            return new ArrayList<>(blockadeTiles);
+        }
+
+        public void updateAllBlockadeTiles() {
+            if (blockades != null) {
+                for (Blockade blockade : blockades) {
+                    updateBlockadeTiles(blockade);
+                }
+            }
+        }
+
         public BoardBuilder addSection(Section section) {
             if (section.isStartingSection()) {
                 throw new IllegalArgumentException("Section is starting section");
@@ -287,6 +286,7 @@ public class Board {
                 count++;
             }
             this.blockades.addAll(selectedBlockades);
+            updateAllBlockadeTiles();
             return this;
         }
 

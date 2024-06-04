@@ -91,7 +91,7 @@ public class TileView {
 
             if (tile.isBlockadeTile() && edges.contains(i)) {
                 g2d.setStroke(thickStroke);
-                g2d.setColor(blockadeView.getBlockadeColor(tile.getTileType()));
+                g2d.setColor(blockadeView.getBlockadeColor(tile.getBlockade().getTileType()));
                 g2d.setStroke(new BasicStroke(14));
             } else {
                 g2d.setStroke(basicStroke);
