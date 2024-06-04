@@ -261,6 +261,12 @@ public class Board {
             return this;
         }
 
+        private List<Section> getNonElDoradoSections() {
+            return sections.stream()
+                    .filter(section -> section.getSectionType() != SectionType.ElDorado && section.getSectionType() != SectionType.ElDoradoTwo)
+                    .toList();
+        }
+
         public BoardBuilder addBlockades() {
             if (sections.isEmpty()) {
                 throw new IllegalArgumentException("Sections are empty");
@@ -270,9 +276,7 @@ public class Board {
             }
             List<Blockade> blockades = getBlockadesList();
             Collections.shuffle(blockades);
-            List<Section> nonElDoradoSections = sections.stream()
-                    .filter(section -> section.getSectionType() != SectionType.ElDorado && section.getSectionType() != SectionType.ElDoradoTwo)
-                    .toList();
+            List<Section> nonElDoradoSections = getNonElDoradoSections();
             int numberOfBlockades = nonElDoradoSections.size() - 1;
 
 
@@ -366,7 +370,7 @@ public class Board {
         public Board build() {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
-            assert !blockades.isEmpty() : "No blockades found";
+            assert !getNonElDoradoSections().isEmpty() || !blockades.isEmpty() : "No blockades found in setups without ElDorado";
             return new Board(sections, path, flatTop, blockades);
         }
     }

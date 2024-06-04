@@ -20,7 +20,7 @@ public class BoardTest {
     @Test
     public void testBlockadeTilesRetrieval() {
         Blockade blockade = board.getBlockades().get(0);
-        List<Tile> blockadeTiles =  board.getBlockadeTiles(blockade);
+        List<Tile> blockadeTiles = blockade.getBlockadeTiles();
 
         Tile tile1 = new Tile(0, -3, TileType.Machete, 1, false);
         Tile tile2 = new Tile(1, -3, TileType.Basecamp, 1, false);
