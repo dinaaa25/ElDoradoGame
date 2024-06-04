@@ -4,13 +4,12 @@ import java.util.Scanner;
 import java.io.*;
 
 import org.utwente.market.controller.InputEvent;
-import org.utwente.market.controller.MarketOrderEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.util.Ansi;
-import org.utwente.util.EventHandler;
+import java.awt.event.*;
 
 import lombok.Setter;
 import lombok.Getter;
@@ -19,8 +18,8 @@ import lombok.Getter;
 @Setter
 public class MarketCli implements MarketView {
   private PrintStream stream;
-  private EventHandler<MarketOrderEvent> eventHandler;
-  private EventHandler<InputEvent> inputEventHandler;
+  private ActionListener eventHandler;
+  private ActionListener inputEventHandler;
   private Scanner scanner;
   private String orderInput;
   private Order order;
@@ -39,7 +38,7 @@ public class MarketCli implements MarketView {
   public void run() {
     while (!exit) {
       String input = scanner.nextLine();
-      inputEventHandler.handle(new InputEvent(input));
+      inputEventHandler.actionPerformed(new InputEvent(input));
     }
   }
 
@@ -81,7 +80,7 @@ public class MarketCli implements MarketView {
   }
 
   @Override
-  public void setOnOrder(EventHandler<MarketOrderEvent> eventHandler) {
+  public void setOnOrder(ActionListener eventHandler) {
     this.eventHandler = eventHandler;
   }
 
@@ -96,7 +95,7 @@ public class MarketCli implements MarketView {
   }
 
   @Override
-  public void setOnInput(EventHandler<InputEvent> eventHandler) {
+  public void setOnInput(ActionListener eventHandler) {
     this.inputEventHandler = eventHandler;
   }
 

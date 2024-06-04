@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.utwente.market.exceptions.BuyException;
+
+import java.util.ArrayList;
 import lombok.Getter;
 
 @Getter
@@ -29,23 +32,40 @@ public class Market {
         this(MarketSetup.active.cardSpecification, MarketSetup.reserve.cardSpecification);
     }
 
-    public boolean canBuy(Order order) {
-        return ((reserveIsOpen() && reserveCards.containsKey(order.getCardToken()))
-                || currentCards.containsKey(order.getCardToken()))
-                && order.getMoney() >= order.getCardToken().purchaseValue;
+    public ValidationResult canBuy(Order order) {
+        if (!cardInReserve(order.getCardToken()) && !cardInCurrent(order.getCardToken())) {
+            return new ValidationResult(false, "Card is not part of the market.");
+        }
+        if (!reserveIsOpen() && cardInReserve(order.getCardToken())) {
+            return new ValidationResult(false, "Card is in reserve and reserve is closed.");
+        }
+        if (order.getMoney() < order.getCardToken().purchaseValue) {
+            return new ValidationResult(false, "Cannot buy card with the given coins");
+        }
+
+        return new ValidationResult(true, null);
     }
 
     public boolean reserveIsOpen() {
         return Market.CURRENT_FULL_SIZE > this.currentCards.size();
     }
 
-    public Card buy(Order order) {
-        if (order != null && canBuy(order)) {
-            removeCardFromMarket(order.getCardToken());
-            return new Card(order.getCardToken());
+    public record ValidationResult(boolean status, String message) {
+
+    }
+
+    public Card buy(Order order) throws BuyException {
+        if (order == null) {
+            throw new BuyException("Order is empty");
+        }
+        ValidationResult validationResult = canBuy(order);
+
+        if (validationResult.status == false) {
+            throw new BuyException(validationResult.message);
         }
 
-        return null;
+        removeCardFromMarket(order.getCardToken());
+        return new Card(order.getCardToken());
     }
 
     public boolean cardInReserve(CardType type) {
@@ -82,5 +102,13 @@ public class Market {
             result += cardQ;
         }
         return result;
+    }
+
+    public List<CardType> getCurrent() {
+        return new ArrayList<>(this.currentCards.keySet());
+    }
+
+    public List<CardType> getReserve() {
+        return new ArrayList<>(this.reserveCards.keySet());
     }
 }
