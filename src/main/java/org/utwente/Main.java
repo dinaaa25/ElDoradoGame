@@ -3,9 +3,7 @@ package org.utwente;
 import lombok.Getter;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
-import org.utwente.Board.DirectionType;
 import org.utwente.Board.Path;
-import org.utwente.Tile.Tile;
 import org.utwente.game.Game;
 import org.utwente.game.GameController;
 import org.utwente.game.GameView;
@@ -30,7 +28,7 @@ public class Main extends JPanel {
 
     public Main() {
         Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-        Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().build();
+        Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addBlockades().build();
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
         gameController = new GameController(new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameView());

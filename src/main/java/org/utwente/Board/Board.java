@@ -1,6 +1,7 @@
 package org.utwente.Board;
 
 import lombok.Getter;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
@@ -9,10 +10,7 @@ import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
@@ -22,12 +20,15 @@ public class Board {
     private final List<Section> sections;
     private final Path path;
     @Getter
+    private List<Blockade> blockades;
+    @Getter
     private final boolean flatTop;
 
-    public Board(List<Section> sections, Path path, boolean flatTop) {
+    public Board(List<Section> sections, Path path, boolean flatTop, List<Blockade> blockades) {
         this.sections = sections;
         this.path = path;
         this.flatTop = flatTop;
+        this.blockades = blockades;
     }
 
     public List<Tile> getStartingTiles() {
@@ -63,13 +64,16 @@ public class Board {
     }
 
     public static class BoardBuilder {
+        @Getter
         private final List<Section> sections;
         private Path path;
         private boolean flatTop;
+        private final List<Blockade> blockades;
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
             this.availableSections = SectionLoader.loadSections();
+            this.blockades = new ArrayList<>();
         }
 
         private List<Section> availableSections;
@@ -176,8 +180,23 @@ public class Board {
                 entry(Path.TestGameElDoradoFT, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, PT_NORTH)
+                )),
+                entry(Path.BlockadeTest, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 0, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.F, 0, 0, PT_SOUTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 0, 0, PT_SOUTHWEST)
+                )),
+                entry(Path.BlockadeTestFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 0, 0, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.F, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 0, 0, FT_WEST)
                 ))
-
         );
 
         public BoardBuilder addInitialSection(Section section) {
@@ -189,6 +208,33 @@ public class Board {
             }
             sections.add(section);
             return this;
+        }
+
+        private void updateBlockadeTiles(Blockade blockade) {
+            List<Tile> blockadeTiles = getBlockadeTiles(blockade);
+            for (Tile tile : blockadeTiles) {
+                tile.setBlockade(blockade);
+            }
+        }
+
+        private List<Tile> getBlockadeTiles(Blockade blockade) {
+            Set<Tile> blockadeTiles = new HashSet<>();
+            for (Tile tileSection1 : blockade.getSection1().getTiles()) {
+                for (Tile tileSection2 : blockade.getSection2().getTiles()) {
+                    if (tileSection1.isNeighbor(tileSection2)) {
+                        blockadeTiles.add(tileSection1);
+                    }
+                }
+            }
+            return new ArrayList<>(blockadeTiles);
+        }
+
+        public void updateAllBlockadeTiles() {
+            if (blockades != null) {
+                for (Blockade blockade : blockades) {
+                    updateBlockadeTiles(blockade);
+                }
+            }
         }
 
         public BoardBuilder addSection(Section section) {
@@ -213,6 +259,57 @@ public class Board {
             }
             this.path = path;
             return this;
+        }
+
+        private List<Section> getNonElDoradoSections() {
+            return sections.stream()
+                    .filter(section -> section.getSectionType() != SectionType.ElDorado && section.getSectionType() != SectionType.ElDoradoTwo)
+                    .toList();
+        }
+
+        public BoardBuilder addBlockades() {
+            if (sections.isEmpty()) {
+                throw new IllegalArgumentException("Sections are empty");
+            }
+            if (sections.size() < 2) {
+                throw new IllegalStateException("Not at least 2 sections in BoardBuilder");
+            }
+            List<Blockade> blockades = getBlockadesList();
+            Collections.shuffle(blockades);
+            List<Section> nonElDoradoSections = getNonElDoradoSections();
+            int numberOfBlockades = nonElDoradoSections.size() - 1;
+
+
+            List<Blockade> selectedBlockades = blockades.subList(0, Math.min(blockades.size() - 1, numberOfBlockades));
+            int count = 0;
+            for (Blockade blockade : selectedBlockades) {
+                if (count == numberOfBlockades) {
+                    break;
+                }
+                blockade.initialize(nonElDoradoSections.get(count), nonElDoradoSections.get(count + 1));
+                count++;
+            }
+            this.blockades.addAll(selectedBlockades);
+            updateAllBlockadeTiles();
+            return this;
+        }
+
+        private static List<Blockade> getBlockadesList() {
+            Blockade blockade1 = new Blockade(TileType.Machete, 1, 1);
+            Blockade blockade2 = new Blockade(TileType.Coin, 1, 2);
+            Blockade blockade3 = new Blockade(TileType.Discard, 1, 3);
+            Blockade blockade4 = new Blockade(TileType.Paddle, 1, 4);
+            Blockade blockade5 = new Blockade(TileType.Machete, 2, 5);
+            Blockade blockade6 = new Blockade(TileType.Discard, 2, 6);
+
+            List<Blockade> blockades = new ArrayList<>();
+            blockades.add(blockade1);
+            blockades.add(blockade2);
+            blockades.add(blockade3);
+            blockades.add(blockade4);
+            blockades.add(blockade5);
+            blockades.add(blockade6);
+            return blockades;
         }
 
         public BoardBuilder buildPath() {
@@ -243,6 +340,7 @@ public class Board {
                 throw new IllegalArgumentException("This section Type does not exist");
             }
             Section section = optionalSection.get();
+            section.setDirectionType(sectionWithData.getSectionDirection());
             rotateSection(section, sectionWithData);
 
             if (sections.isEmpty()) {
@@ -269,14 +367,11 @@ public class Board {
             }
         }
 
-        public List<Section> getSections() {
-            return sections;
-        }
-
         public Board build() {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
-            return new Board(sections, path, flatTop);
+            assert !getNonElDoradoSections().isEmpty() || !blockades.isEmpty() : "No blockades found in setups without ElDorado";
+            return new Board(sections, path, flatTop, blockades);
         }
     }
 }

@@ -2,7 +2,10 @@ package org.utwente.Tile;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.utwente.Board.AxialTranslationCalculator;
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.Player;
@@ -14,13 +17,23 @@ import java.util.List;
 import static org.utwente.game.GameConfig.TILE_COLORS;
 
 public class Tile {
+    @Setter
+    @Getter
     private int q;
+    @Getter
+    @Setter
     private int r;
+    @Getter
     private final TileType tileType;
+    @Getter
     private final int power;
     private final List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
+    @Getter
+    private boolean isBlockadeTile;
+    @Getter
+    private Blockade blockade;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
         this.q = q;
@@ -30,6 +43,7 @@ public class Tile {
         this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
         this.players = new HashSet<>();
         this.isLastWaitingTile = isLastWaitingTile;
+        this.isBlockadeTile = false;
     }
 
     @JsonCreator
@@ -39,28 +53,9 @@ public class Tile {
         this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
-    public int getQ() {
-        return q;
-    }
-
-    public void setQ(int q) {
-        this.q = q;
-    }
-
-    public void setR(int r) {
-        this.r = r;
-    }
-
-    public int getR() {
-        return r;
-    }
-
-    public TileType getTileType() {
-        return tileType;
-    }
-
-    public int getPower() {
-        return power;
+    public void setBlockade(Blockade blockade) {
+        this.blockade = blockade;
+        this.isBlockadeTile = true;
     }
 
     public void rotate(int turns) {

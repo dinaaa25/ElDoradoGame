@@ -59,7 +59,7 @@ public class BoardBuilderTest {
     @EnumSource(Path.class)
     void testPathSelection(Path selectedPath) {
         Board.BoardBuilder builder = new Board.BoardBuilder();
-        Board board = builder.selectPath(selectedPath).buildPath().build();
+        Board board = builder.selectPath(selectedPath).buildPath().addBlockades().build();
 
         List<SectionType> expectedSectionTypes = Board.BoardBuilder.paths.get(selectedPath).stream()
                 .map(SectionWithRotationPositionSectionDirection::getSectionType)
@@ -88,7 +88,7 @@ public class BoardBuilderTest {
     @Test
     void testGetElDoradoTile() {
         Board.BoardBuilder builder = new Board.BoardBuilder();
-        Board board = builder.selectPath(Path.HillsOfGold).buildPath().build();
+        Board board = builder.selectPath(Path.HillsOfGold).buildPath().addBlockades().build();
         Tile elDoradoTile = board.getElDoradoTile();
         assertTrue(elDoradoTile.isEndTile());
     }

@@ -1,40 +1,104 @@
 package org.utwente.Tile;
 
+import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Blockade.BlockadeView;
+import org.utwente.Board.SectionDirectionType;
+import org.utwente.Section.Section;
 import org.utwente.game.GameConfig;
 import org.utwente.player.Player;
 import org.utwente.player.PlayerController;
 import org.utwente.player.PlayerView;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 import static org.utwente.game.GameConfig.HEX_SIZE;
 
 
 public class TileView {
-    private Path2D.Double createHexagon(boolean flatTop, int x, int y) {
-        Path2D.Double hexagon = new Path2D.Double();
+    private Point2D.Double[] createHexagonVertices(boolean flatTop, int x, int y) {
+        Point2D.Double[] vertices = new Point2D.Double[6];
         for (int i = 0; i < 6; i++) {
             double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
-            int dx = (int) (x + HEX_SIZE * Math.cos(angle));
-            int dy = (int) (y + HEX_SIZE * Math.sin(angle));
-            if (i == 0) {
-                hexagon.moveTo(dx, dy);
-            } else {
-                hexagon.lineTo(dx, dy);
-            }
+            vertices[i] = new Point2D.Double(
+                    x + HEX_SIZE * Math.cos(angle),
+                    y + HEX_SIZE * Math.sin(angle)
+            );
+        }
+        return vertices;
+    }
+
+    private Path2D.Double createHexagonPath(Point2D.Double[] vertices) {
+        Path2D.Double hexagon = new Path2D.Double();
+        hexagon.moveTo(vertices[0].x, vertices[0].y);
+        for (int i = 1; i < vertices.length; i++) {
+            hexagon.lineTo(vertices[i].x, vertices[i].y);
         }
         hexagon.closePath();
         return hexagon;
     }
 
-    private void drawHexagon(Tile tile, Path2D.Double hexagon, Graphics2D g2d) {
-        g2d.fill(hexagon);
-        g2d.setColor(Color.BLACK);
-        if (!tile.isEndTile()) {
-            g2d.draw(hexagon);
+    private List<Integer> getEdgesForSectionDirection(SectionDirectionType.SectionDirection sectionDirection) {
+        if (sectionDirection instanceof SectionDirectionType.FlatTopSectionDirection flatTopSectionDirection) {
+            return switch (flatTopSectionDirection) {
+                case FT_NORTHEAST -> List.of(4, 5);
+                case FT_EAST -> List.of(5, 0);
+                case FT_SOUTHEAST -> List.of(0, 1);
+                case FT_SOUTHWEST -> List.of(1, 2);
+                case FT_WEST -> List.of(2, 3);
+                case FT_NORTHWEST -> List.of(3, 4);
+            };
+        } else if (sectionDirection instanceof SectionDirectionType.PointyTopSectionDirection pointyTopSectionDirection) {
+            return switch (pointyTopSectionDirection) {
+                case PT_NORTH -> List.of(3, 4);
+                case PT_NORTHEAST -> List.of(4, 5);
+                case PT_SOUTHEAST -> List.of(5, 0);
+                case PT_SOUTH -> List.of(0, 1);
+                case PT_SOUTHWEST -> List.of(1, 2);
+                case PT_NORTHWEST -> List.of(2, 3);
+            };
+        }
+        return List.of(0, 0);
+    }
+
+    private void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
+        BlockadeView blockadeView = new BlockadeView();
+        Path2D.Double hexagonPath = createHexagonPath(vertices);
+        g2d.fill(hexagonPath);
+
+        BasicStroke basicStroke = new BasicStroke((2));
+        BasicStroke thickStroke = new BasicStroke(8);
+
+        List<Integer> edges = Objects.requireNonNullElse(
+                Optional.ofNullable(tile.getBlockade())
+                        .map(Blockade::getSection2)
+                        .map(Section::getDirectionType)
+                        .map(this::getEdgesForSectionDirection)
+                        .orElse(null),
+                Collections.emptyList()
+        );
+
+        for (int i = 0; i < vertices.length; i++) {
+            g2d.setStroke(basicStroke);
+
+            Point2D.Double start = vertices[i];
+            Point2D.Double end = vertices[(i + 1) % vertices.length];
+
+            if (tile.isBlockadeTile() && edges.contains(i)) {
+                g2d.setStroke(thickStroke);
+                g2d.setColor(blockadeView.getBlockadeColor(tile.getBlockade().getTileType()));
+                g2d.setStroke(new BasicStroke(14));
+            } else {
+                g2d.setStroke(basicStroke);
+                g2d.setColor(Color.BLACK);
+            }
+
+            g2d.draw(new Line2D.Double(start, end));
         }
     }
 
@@ -80,7 +144,7 @@ public class TileView {
     }
 
     public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, BufferedImage image) {
-        Path2D.Double hexagon = createHexagon(flatTop, x, y);
+        Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
         setTileTexture(g2d, x, y, tile, image);
         drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
