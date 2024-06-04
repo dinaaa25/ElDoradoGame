@@ -2,7 +2,6 @@ package org.utwente.Section;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.utwente.Board.DirectionType;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Tile.Tile;
 

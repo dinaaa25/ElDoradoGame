@@ -217,6 +217,14 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.E, 0, 0, PT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.F, 0, 0, PT_SOUTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, 0, 0, PT_SOUTHWEST)
+                )),
+                entry(Path.BlockadeTestFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 0, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 0, 0, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.F, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 0, 0, FT_WEST)
                 ))
         );
 
