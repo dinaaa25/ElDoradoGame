@@ -7,7 +7,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class GameConfig {
-    public static final Font TILE_FONT = new Font("Arial", Font.BOLD, 12);;
+    public static final Font TILE_FONT = new Font("Arial", Font.BOLD, 8);;
     public static final int DEFAULT_BOARD_SIZE_X = 600;
     public static final int DEFAULT_BOARD_SIZE_Y = 800;
     public static final int PADDING = 50;
@@ -20,7 +20,8 @@ public class GameConfig {
         TILE_COLORS.put(TileType.Basecamp, new Color(203, 85, 35));
         TILE_COLORS.put(TileType.Mountain, new Color(106, 100, 74));
         TILE_COLORS.put(TileType.Cave, new Color(224, 159, 65));
+        TILE_COLORS.put(TileType.ElDorado, new Color(166, 128, 72));
     }
 
-    public static final int HEX_SIZE = 40;
+    public static final int HEX_SIZE = 25;
 }

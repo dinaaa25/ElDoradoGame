@@ -30,10 +30,12 @@ public class TileView {
         return hexagon;
     }
 
-    private void drawHexagon(Path2D.Double hexagon, Graphics2D g2d) {
+    private void drawHexagon(Tile tile, Path2D.Double hexagon, Graphics2D g2d) {
         g2d.fill(hexagon);
         g2d.setColor(Color.BLACK);
-        g2d.draw(hexagon);
+        if (!tile.isEndTile()) {
+            g2d.draw(hexagon);
+        }
     }
 
     private void drawCoordinates(Graphics2D g2d, int x, int y, Tile tile) {
@@ -80,7 +82,7 @@ public class TileView {
     public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, BufferedImage image) {
         Path2D.Double hexagon = createHexagon(flatTop, x, y);
         setTileTexture(g2d, x, y, tile, image);
-        drawHexagon(hexagon, g2d);
+        drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
         drawPower(g2d, x, y, tile);
         drawPlayers(g2d, tile.getPlayers(), x, y);

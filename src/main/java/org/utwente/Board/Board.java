@@ -87,54 +87,56 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 0, PT_NORTH),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, PT_NORTH),
-                        new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 0, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, -2, 0, PT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 1, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.J, 1, 1, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 1, PT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 1, 0, FT_EAST)
                 )),
                 entry(Path.HomeStretch, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 0, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.J, -1, 1, FT_NORTHEAST),
-//                        new SectionWithRotationPositionSectionDirection(SectionType.Q, -2, 1, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.Q, 4, 1, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 1, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.M, -2, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 1, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 1, 1, PT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 0, 0, PT_NORTHEAST)
                 )),
                 entry(Path.WindingPaths, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.B, 1, 1, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.I, 3, 1, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.F, -3, 0, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.G, 1, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.G, 1, 0, FT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.C, 0, 1, FT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.N, -2, 0, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, -2, 0, FT_NORTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, PT_NORTHEAST)
                 )),
                 entry(Path.Serpentine, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.C, -2, 1, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.C, -2, 0, PT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 0, PT_NORTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, 3, 0, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.J, 3, 0, PT_NORTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.M, -1, 1, PT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 0, 0, PT_SOUTHEAST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.M, -1, 0, PT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDoradoTwo, 2, 0, FT_SOUTHEAST)
                 )),
                 entry(Path.Swamplands, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, 2, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.R, 1, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, 2, 1, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.H, 2, 0, FT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 0, FT_SOUTHEAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 0, FT_WEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_SOUTHWEST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.E, 1, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.K, 0, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 3, 0, PT_SOUTHWEST)
                 )),
                 entry(Path.WitchCauldron, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.L, -1, 0, FT_EAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.G, -2, 1, FT_EAST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.D, -2, 1, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.D, -2, 0, FT_SOUTHEAST),
                         new SectionWithRotationPositionSectionDirection(SectionType.M, 0, 1, FT_SOUTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.I, -1, 0, FT_WEST),
-                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 0, 0, FT_NORTHWEST)
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 4, 0, PT_NORTHWEST)
                 )),
                 entry(Path.TestGame, List.of(
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
@@ -150,9 +152,32 @@ public class Board {
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 0, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.A, 2, 1, PT_NORTHWEST),
                         new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, PT_NORTH)
-
-
+                )),
+                entry(Path.TestGameFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 1, 0, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_EAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 2, 0, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 3, 1, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_SOUTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 4, 0, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_WEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 5, 0, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 1, FT_NORTHWEST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.O, 0, 0, FT_NORTHEAST)
+                )),
+                entry(Path.TestGameElDorado, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, PT_NORTH),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, FT_NORTHWEST)
+                )),
+                entry(Path.TestGameElDoradoFT, List.of(
+                        new SectionWithRotationPositionSectionDirection(SectionType.A, 0, 0, FT_NORTHEAST),
+                        new SectionWithRotationPositionSectionDirection(SectionType.ElDorado, 5, 0, PT_NORTH)
                 ))
+
         );
 
         public BoardBuilder addInitialSection(Section section) {
@@ -199,7 +224,7 @@ public class Board {
                     .orElse(false);
             SectionWithRotationPositionSectionDirection lastSection = null;
             for (SectionWithRotationPositionSectionDirection sectionWithRotationPositionSectionDirection : sectionWithRotationPositionSectionDirectionList) {
-                if (lastSection != null && lastSection.getSectionType() == SectionType.O && (sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_NORTHWEST)) {
+                if (lastSection != null && lastSection.getSectionType() == SectionType.O && (sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == PT_NORTHWEST || sectionWithRotationPositionSectionDirection.getSectionDirection() == FT_SOUTHEAST || sectionWithRotationPositionSectionDirection.getSectionDirection() == FT_NORTHWEST)) {
                     sectionWithRotationPositionSectionDirection.setPlacement(-1);
                 }
                 attachBoardSection(sectionWithRotationPositionSectionDirection);
