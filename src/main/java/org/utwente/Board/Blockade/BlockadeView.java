@@ -8,7 +8,7 @@ public class BlockadeView {
         int padding = 20;
         int lineLength = 100;
 
-        g2d.setColor(blockade.isRemoved() ? Color.GRAY : Color.RED);
+        g2d.setColor(blockade.isRemoved() ? Color.WHITE : blockade.getBlockadeColor());
         g2d.setStroke(new BasicStroke(5));
         g2d.draw(new Line2D.Double(padding, padding + yOffset, padding + lineLength, padding + yOffset));
 
