@@ -1,6 +1,6 @@
 package org.utwente.player;
 
-import org.utwente.game.GameConfig;
+import org.utwente.game.view.GameConfig;
 
 import java.awt.*;
 

@@ -4,7 +4,7 @@ import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Section.Section;
-import org.utwente.game.GameConfig;
+import org.utwente.game.view.GameConfig;
 import org.utwente.player.Player;
 import org.utwente.player.PlayerController;
 import org.utwente.player.PlayerView;
@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
-import static org.utwente.game.GameConfig.HEX_SIZE;
+import static org.utwente.game.view.GameConfig.HEX_SIZE;
 
 
 public class TileView {

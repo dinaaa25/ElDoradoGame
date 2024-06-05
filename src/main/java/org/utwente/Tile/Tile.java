@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static org.utwente.game.GameConfig.TILE_COLORS;
+import static org.utwente.game.view.GameConfig.TILE_COLORS;
 
 public class Tile {
     @Setter

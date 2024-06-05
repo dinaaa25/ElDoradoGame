@@ -1,4 +1,4 @@
-package org.utwente.game;
+package org.utwente.game.model;
 
 
 import org.utwente.Board.Blockade.Blockade;
@@ -6,7 +6,6 @@ import org.utwente.Board.Board;
 import org.utwente.Tile.Tile;
 import org.utwente.player.Player;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

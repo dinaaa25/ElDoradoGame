@@ -1,4 +1,4 @@
-package org.utwente.game;
+package org.utwente.game.model;
 
 public enum ActionType {
     PlayCards(0),

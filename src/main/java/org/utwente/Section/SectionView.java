@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import static org.utwente.game.GameConfig.HEX_SIZE;
+import static org.utwente.game.view.GameConfig.HEX_SIZE;
 
 public class SectionView {
     public void drawSection(Graphics2D g2d, Section section, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {

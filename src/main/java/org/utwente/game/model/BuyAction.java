@@ -1,10 +1,10 @@
-package org.utwente.game;
+package org.utwente.game.model;
 
 import org.utwente.market.model.Order;
 import org.utwente.market.model.Resource;
 import org.utwente.player.Player;
 
-public class BuyAction extends Action{
+public class BuyAction extends Action {
 
     private Order order;
 
@@ -13,12 +13,12 @@ public class BuyAction extends Action{
     }
 
     @Override
-    void execute() {
+    public void execute() {
 
     }
 
     @Override
-    boolean validate() {
+    public boolean validate() {
         return true;
     }
 }

@@ -1,4 +1,4 @@
-package org.utwente.game;
+package org.utwente.game.view;
 
 import org.utwente.Tile.TileType;
 

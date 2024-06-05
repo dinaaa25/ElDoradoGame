@@ -9,8 +9,6 @@ import org.utwente.Tile.TileType;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.utwente.game.GameConfig.TILE_COLORS;
-
 @Getter
 @Setter
 public class Blockade {
