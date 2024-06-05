@@ -1,9 +1,9 @@
 package org.utwente.Board;
 
 import lombok.Getter;
+import org.utwente.Tile.TileImageLoader;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 @Getter
 public class BoardController {
@@ -15,7 +15,7 @@ public class BoardController {
         this.boardView = boardView;
     }
 
-    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
-        boardView.drawBoard(g2d, board, offsetX, offsetY, flatTop, image);
+    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
+        boardView.drawBoard(g2d, board, offsetX, offsetY, flatTop, tileImageLoader);
     }
 }

@@ -5,23 +5,20 @@ import org.utwente.Board.Board;
 import org.utwente.Board.BoardController;
 import org.utwente.Board.BoardView;
 import org.utwente.Board.Path;
+import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameGui;
 import org.utwente.player.Player;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class Main extends JPanel {
     @Getter
     private final GameController gameController;
-    private BufferedImage macheteImage;
+    private TileImageLoader tileImageLoader;
     @Getter
     private int offsetX;
     @Getter
@@ -38,11 +35,9 @@ public class Main extends JPanel {
     }
 
     private void loadImages() {
-        try {
-            macheteImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/machete-bg.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        TileImageLoader tileImageLoader = new TileImageLoader();
+        tileImageLoader.loadTileImages();
+        this.tileImageLoader = tileImageLoader;
     }
 
     public void calculatePreferredSize(Board board) {
@@ -62,7 +57,7 @@ public class Main extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         Game game = gameController.getGame();
         BoardController boardController = new BoardController(game.getBoard(), new BoardView());
-        boardController.updateView(g2d, offsetX, offsetY, game.getBoard().isFlatTop(), macheteImage);
+        boardController.updateView(g2d, offsetX, offsetY, game.getBoard().isFlatTop(), tileImageLoader);
     }
 
     public static void main(String[] args) {

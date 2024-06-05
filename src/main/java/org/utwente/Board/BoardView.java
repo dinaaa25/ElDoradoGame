@@ -7,10 +7,10 @@ import org.utwente.Section.Section;
 import org.utwente.Section.SectionController;
 import org.utwente.Section.SectionView;
 import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.view.GameConfig;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
@@ -72,12 +72,12 @@ public class BoardView {
         return new Point(offsetX, offsetY);
     }
 
-    public void drawBoard(Graphics2D g2d, Board board, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
+    public void drawBoard(Graphics2D g2d, Board board, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
         for (Section section : sections) {
             SectionController sectionController = new SectionController(section, new SectionView());
-            sectionController.updateView(g2d, offsetX, offsetY, flatTop, image);
+            sectionController.updateView(g2d, offsetX, offsetY, flatTop, tileImageLoader);
         }
         int counter = 0;
         for (Blockade blockade : blockades) {
