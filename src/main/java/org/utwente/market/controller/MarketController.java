@@ -29,7 +29,7 @@ public class MarketController {
         } catch (BuyException exception) {
           view.displayError(exception.getMessage());
         } catch (IllegalArgumentException exception) {
-          view.displayError(exception.getMessage());
+          view.displayError(String.format("%s is not a card in the game.", e.getActionCommand()));
         } catch (NullPointerException exception) {
           view.displayError(exception.getMessage());
         }
