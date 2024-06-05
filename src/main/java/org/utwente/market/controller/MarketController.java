@@ -10,8 +10,8 @@ import org.utwente.market.view.MarketView;
 import java.awt.event.*;
 
 public class MarketController {
-  private MarketView view;
-  private Market model;
+  private final MarketView view;
+  private final Market model;
 
   public MarketController(MarketView view, Market model) {
     this.view = view;
