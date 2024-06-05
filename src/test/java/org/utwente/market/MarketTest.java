@@ -96,9 +96,9 @@ public class MarketTest {
 
     Card card = null;
     try {
-      market.buy(order);
+      card = market.buy(order);
     } catch (BuyException e) {
-
+      System.out.println(e);
     }
     assertNotNull(card);
     assertEquals(card.getCardType(), CardType.Tausendsassa);

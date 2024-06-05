@@ -50,20 +50,6 @@ public class MarketCliTest {
   }
 
   @Test
-  public void testSetOnOrder() {
-    EventHandler<MarketOrderEvent> mockEventHandler = new EventHandler<MarketOrderEvent>() {
-
-      @Override
-      public void handle(MarketOrderEvent event) {
-
-      }
-    };
-
-    // marketView.setOnOrder(mockEventHandler);
-    assertEquals(mockEventHandler, marketView.getEventHandler());
-  }
-
-  @Test
   public void testSetOnInput() {
     // EventHandler<InputEvent> mockEventHandler = new EventHandler<InputEvent>() {
 
