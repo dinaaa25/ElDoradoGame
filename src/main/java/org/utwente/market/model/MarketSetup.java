@@ -25,7 +25,7 @@ public enum MarketSetup {
           new CardTypeSpec(CardType.Schatzruhe),
           new CardTypeSpec(CardType.Fernsprechgerat)));
 
-  public List<CardTypeSpec> cardSpecification;
+  public final List<CardTypeSpec> cardSpecification;
 
   private MarketSetup(List<CardTypeSpec> cardTypeSpecs) {
     cardSpecification = cardTypeSpecs;
