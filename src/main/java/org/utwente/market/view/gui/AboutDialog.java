@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -47,13 +48,7 @@ public class AboutDialog extends JDialog {
       JLabel label = new JLabel(
           "Successfully Purchased" + card.name(), SwingConstants.CENTER);
       contentPane.add(label);
-
-      ImageIcon icon = new ImageIcon(
-          String.format("/Users/mark/Projects/master-cs/set2024team03project/src/main/resources/%s.png",
-              card.name().toLowerCase()));
-      Image image = icon.getImage();
-      Image scaledImage = image.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
-      ImageIcon scaledIcon = new ImageIcon(scaledImage);
+      ImageIcon scaledIcon = CardHelper.getImageIcon(card, new Dimension(140, 200));
       label = new JLabel(
           scaledIcon, SwingConstants.CENTER);
       contentPane.add(label);

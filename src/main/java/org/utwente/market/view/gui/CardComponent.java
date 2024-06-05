@@ -17,13 +17,7 @@ public class CardComponent extends JButton {
 
   public CardComponent(CardType card) {
     super(card.name() + "\n" + "$" + card.purchaseValue);
-    ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    URL url = classloader.getResource(String.format("images/%s.png", card.name().toLowerCase()));
-    ImageIcon icon = new ImageIcon(url);
-    this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    Image image = icon.getImage();
-    Image scaledImage = image.getScaledInstance(WIDTH, HEIGHT - 30, Image.SCALE_SMOOTH);
-    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+    ImageIcon scaledIcon = CardHelper.getImageIcon(card, new Dimension(WIDTH, HEIGHT - 30));
     Font titleFont = new Font("Sans", Font.BOLD, 18);
     this.setIcon(scaledIcon);
     this.setFont(titleFont);
