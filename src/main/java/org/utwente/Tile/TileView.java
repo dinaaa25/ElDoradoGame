@@ -122,9 +122,10 @@ public class TileView {
         g2d.drawString(powerText, powerTextX, powerTextY);
     }
 
-    private void setTileTexture(Graphics2D g2d, int x, int y, Tile tile, BufferedImage image) {
-        if (tile.getTileType() == TileType.Machete && image != null) {
-            TexturePaint texturePaint = new TexturePaint(image, new Rectangle(x - HEX_SIZE, y - HEX_SIZE, 2 * HEX_SIZE, 2 * HEX_SIZE));
+    private void setTileTexture(Graphics2D g2d, int x, int y, Tile tile, TileImageLoader tileImageLoader) {
+        BufferedImage tileImage = tileImageLoader.getTileImage(tile.getTileType(), tile.getPower());
+        if (tileImage != null) {
+            TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(x - HEX_SIZE, y - HEX_SIZE, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
         } else {
             g2d.setColor(tile.getTileColor());
@@ -143,9 +144,9 @@ public class TileView {
         }
     }
 
-    public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, BufferedImage image) {
+    public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, TileImageLoader tileImageLoader) {
         Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
-        setTileTexture(g2d, x, y, tile, image);
+        setTileTexture(g2d, x, y, tile, tileImageLoader);
         drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
         drawPower(g2d, x, y, tile);
