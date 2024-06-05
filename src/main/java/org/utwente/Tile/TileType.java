@@ -1,28 +1,29 @@
 package org.utwente.Tile;
 
+import lombok.Getter;
 import org.utwente.market.model.PowerType;
 
 import java.util.List;
 
+@Getter
 public enum TileType {
 
-    Machete(List.of(PowerType.Machete, PowerType.Wild)),
-    Paddle(List.of(PowerType.Paddle, PowerType.Wild)),
-    Coin(List.of(PowerType.Coin, PowerType.Wild)),
-    Basecamp(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect)),
-    Discard(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect)),
-    Mountain(List.of()),
-    Cave(List.of()),
-    ElDorado(List.of()),
-    Start(List.of());
+    Machete(List.of(PowerType.Machete, PowerType.Wild), new PowerRange(1, 3)),
+    Paddle(List.of(PowerType.Paddle, PowerType.Wild), new PowerRange(1, 3)),
+    Coin(List.of(PowerType.Coin, PowerType.Wild), new PowerRange(1, 4)),
+    Basecamp(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect), new PowerRange(1, 3)),
+    Discard(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect), new PowerRange(1, 3)),
+    Mountain(List.of(), new PowerRange(0)),
+    Cave(List.of(), new PowerRange(0)),
+    ElDorado(List.of(), new PowerRange(0)),
+    Start(List.of(), new PowerRange(0));
 
-    List<PowerType> powerTypeList;
+    final List<PowerType> powerTypeList;
+    private final PowerRange powerRange;
 
-    TileType(List<PowerType> powerTypeList) {
+    TileType(List<PowerType> powerTypeList, PowerRange powerRange) {
         this.powerTypeList = powerTypeList;
+        this.powerRange = powerRange;
     }
 
-    public List<PowerType> getPowerTypeList() {
-        return this.powerTypeList;
-    }
 }

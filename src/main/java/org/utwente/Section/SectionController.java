@@ -1,7 +1,8 @@
 package org.utwente.Section;
 
+import org.utwente.Tile.TileImageLoader;
+
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class SectionController {
     private final Section section;
@@ -20,7 +21,7 @@ public class SectionController {
         return sectionView;
     }
 
-    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, BufferedImage image) {
-        sectionView.drawSection(g2d, section, offsetX, offsetY, flatTop, image);
+    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
+        sectionView.drawSection(g2d, section, offsetX, offsetY, flatTop, tileImageLoader);
     }
 }
