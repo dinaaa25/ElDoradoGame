@@ -162,8 +162,8 @@ public class MarketGui extends JFrame implements MarketView {
   }
 
   private void addCardsToGrid(List<CardType> cards) {
-    for (int i = 0; i < cards.size(); i++) {
-      addCard((CardType) cards.get(i), coord);
+    for (CardType card : cards) {
+      addCard(card, coord);
       coord.nextColumn();
     }
   }
