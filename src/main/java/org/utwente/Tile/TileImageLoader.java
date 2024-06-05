@@ -14,7 +14,6 @@ public class TileImageLoader {
             Map<Integer, BufferedImage> imagesForTileType = new HashMap<>();
             for (int power : tileType.getPowerRange().getRange()) {
                 String imagePath = String.format("/images/tiles/%s-%d.png", tileType.name(), power);
-                System.out.println(imagePath);
                 try {
                     BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource(imagePath)));
                     imagesForTileType.put(power, image);
