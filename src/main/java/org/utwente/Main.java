@@ -61,7 +61,8 @@ public class Main extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         Game game = gameController.getGame();
-
+        BoardController boardController = new BoardController(game.getBoard(), new BoardView());
+        boardController.updateView(g2d, offsetX, offsetY, game.getBoard().isFlatTop(), macheteImage);
     }
 
     public static void main(String[] args) {
