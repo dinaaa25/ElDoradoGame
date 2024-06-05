@@ -38,7 +38,30 @@ public class MarketCli implements MarketView {
   public void run() {
     while (!exit) {
       String input = scanner.nextLine();
-      inputEventHandler.actionPerformed(new InputEvent(input));
+
+      if (input.equals("exit")) {
+        exit();
+      }
+      if (input.equals("show")) {
+        displayMarket();
+      }
+      if (input.startsWith("buy")) {
+        String[] arguments = input.split(" ");
+
+        try {
+          // to title case:
+          String token = String.valueOf(arguments[1].charAt(0)).toUpperCase() +
+              arguments[1].substring(1);
+          this.eventHandler.actionPerformed(new ActionEvent(this, 0, token));
+        } catch (Exception e) {
+          if (arguments.length >= 2) {
+            displayError(String.format("%s is not a card in the game.",
+                arguments[1]));
+          } else {
+            displayError("Please provide a card name to buy.");
+          }
+        }
+      }
     }
   }
 

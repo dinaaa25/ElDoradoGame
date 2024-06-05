@@ -21,4 +21,6 @@ public interface MarketView {
   void setOnInput(ActionListener eventHandler);
 
   void exit();
+
+  void run();
 }
