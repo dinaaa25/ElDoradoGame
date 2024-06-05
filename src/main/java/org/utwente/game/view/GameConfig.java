@@ -24,5 +24,5 @@ public class GameConfig {
         TILE_COLORS.put(TileType.ElDorado, new Color(166, 128, 72));
     }
 
-    public static final int HEX_SIZE = 25;
+    public static final int HEX_SIZE = 50;
 }
