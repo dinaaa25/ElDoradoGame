@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
-import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;

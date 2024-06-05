@@ -3,7 +3,6 @@ package org.utwente.market.view;
 import java.util.Scanner;
 import java.io.*;
 
-import org.utwente.market.controller.InputEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;

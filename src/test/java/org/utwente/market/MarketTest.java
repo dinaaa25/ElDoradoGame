@@ -1,10 +1,10 @@
 package org.utwente.market;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import org.utwente.market.model.Order;
 
 public class MarketTest {
   Market market;
+  final int MAX_CARDS = 51;
 
   @BeforeEach
   public void setup() {
@@ -30,7 +31,7 @@ public class MarketTest {
     assertNotNull(market.getReserveCards());
     assertEquals(6, market.getCurrentCards().size());
     assertEquals(11, market.getReserveCards().size());
-    assertEquals(85, market.getRemainingCardAmount());
+    assertEquals(MAX_CARDS, market.getRemainingCardAmount());
   }
 
   @Test
@@ -78,7 +79,7 @@ public class MarketTest {
     Order order = new Order(CardType.Kartograph, 4);
     assertFalse((market.canBuy(order)).status());
     try {
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
         market.buy(new Order(CardType.Tausendsassa, 10));
       }
       market.buy(order);
@@ -102,7 +103,7 @@ public class MarketTest {
     }
     assertNotNull(card);
     assertEquals(card.getCardType(), CardType.Tausendsassa);
-    assertEquals(84, market.getRemainingCardAmount());
+    assertEquals(MAX_CARDS - 1, market.getRemainingCardAmount());
   }
 
   @Test
@@ -116,7 +117,7 @@ public class MarketTest {
     Order order = new Order(CardType.Kartograph, 4);
     assertFalse((market.canBuy(order)).status());
     try {
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
         market.buy(new Order(CardType.Tausendsassa, 10));
       }
     } catch (Exception e) {
@@ -131,7 +132,7 @@ public class MarketTest {
     assertTrue((market.canBuy(order)).status());
     try {
 
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
         market.buy(new Order(CardType.Tausendsassa, 10));
       }
     } catch (BuyException e) {
@@ -182,7 +183,7 @@ public class MarketTest {
   @Test
   public void nothingRemovedIfCardNotInMarket() {
     market.removeCardFromMarket(CardType.Forscher);
-    assertEquals(85, market.getRemainingCardAmount());
+    assertEquals(MAX_CARDS, market.getRemainingCardAmount());
   }
 
 }
