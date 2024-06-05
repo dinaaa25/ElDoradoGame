@@ -38,4 +38,13 @@ public class Card implements Resource {
     public int getPower() {
         return remainingPower();
     }
+
+    public CardType getCardType() {
+        return this.cardType;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Card[cardType=%s, consumedPower=%d]", this.cardType, this.consumedPower);
+    }
 }

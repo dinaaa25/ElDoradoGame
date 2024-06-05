@@ -1,12 +1,18 @@
-package org.utwente.player;
+package org.utwente.player.model;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.player.PlayerColor;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class Player {
 
     private String name;
@@ -14,30 +20,40 @@ public class Player {
     @Getter
     @Setter
     private PlayerColor color;
+    private Pile discardPile;
+    private Pile playPile;
+    private Pile outOfGamePile;
+    private Pile drawPile;
 
-    public Player(String name){
+    public Player(String name) {
         this.name = name;
         this.blockades = new ArrayList<Blockade>();
+        PileBuilder builder = new PileBuilder();
+        this.discardPile = builder.setPlayer(this).build();
+        Pile startPile = builder.setPlayer(this).addStartingCards().build();
+        this.outOfGamePile = builder.setPlayer(this).build();
+        this.playPile = startPile.draw(4);
+        this.drawPile = startPile;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void addBlockade(Blockade b){
+    public void addBlockade(Blockade b) {
         this.blockades.add(b);
     }
 
-    public int getBlockadeCount(){
+    public int getBlockadeCount() {
         return blockades.size();
     }
 
     public Blockade getMaxBlockade() {
         int maxPower = 0;
         Blockade maxBlockade = null;
-        for(Blockade b : blockades) {
+        for (Blockade b : blockades) {
             int currentPower = b.getPower();
-            if(maxPower < currentPower){
+            if (maxPower < currentPower) {
                 maxPower = currentPower;
                 maxBlockade = b;
             }
@@ -47,12 +63,11 @@ public class Player {
 
     @Override
     public boolean equals(Object p) {
-        if(p instanceof Player) {
-            Player elPlayer = (Player)p;
+        if (p instanceof Player) {
+            Player elPlayer = (Player) p;
             return this.getName().equals(elPlayer.getName());
         }
         return false;
     }
-
 
 }
