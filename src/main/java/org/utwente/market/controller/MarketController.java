@@ -28,6 +28,10 @@ public class MarketController {
           view.displayMarket();
         } catch (BuyException exception) {
           view.displayError(exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+          view.displayError(exception.getMessage());
+        } catch (NullPointerException exception) {
+          view.displayError(exception.getMessage());
         }
       }
 
