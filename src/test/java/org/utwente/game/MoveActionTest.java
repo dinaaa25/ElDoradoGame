@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.game.model.Action;
+import org.utwente.game.model.MoveAction;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;

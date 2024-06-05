@@ -29,7 +29,7 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok:1.18.32")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
     // mockito
-    testImplementation("org.mockito:mockito-all:1.10.19")
+    testImplementation("org.mockito:mockito-core:5.12.0")
 }
 
 tasks.test {

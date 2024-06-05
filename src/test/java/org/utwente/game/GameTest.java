@@ -7,9 +7,9 @@ import org.utwente.Board.Board;
 import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.game.model.Game;
 import org.utwente.player.Player;
 
-import java.awt.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

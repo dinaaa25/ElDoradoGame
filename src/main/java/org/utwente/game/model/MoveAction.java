@@ -1,4 +1,4 @@
-package org.utwente.game;
+package org.utwente.game.model;
 
 
 import org.utwente.Tile.Tile;
@@ -26,13 +26,13 @@ public class MoveAction extends Action {
     }
 
     @Override
-    void execute() {
+    public void execute() {
         tileTo.placePlayer(this.player);
         tileFrom.removePlayer(this.player);
     }
 
     @Override
-    boolean validate() {
+    public boolean validate() {
         return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
     }
 

@@ -1,4 +1,4 @@
-package org.utwente.game;
+package org.utwente.game.model;
 
 
 import org.utwente.market.model.Resource;
@@ -14,9 +14,9 @@ public abstract class Action{
         this.resource = resource;
     }
 
-    abstract void execute();
+    public abstract void execute();
 
-    abstract boolean validate();
+    public abstract boolean validate();
 
 
 }

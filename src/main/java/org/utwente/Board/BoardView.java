@@ -7,14 +7,14 @@ import org.utwente.Section.Section;
 import org.utwente.Section.SectionController;
 import org.utwente.Section.SectionView;
 import org.utwente.Tile.Tile;
-import org.utwente.game.GameConfig;
+import org.utwente.game.view.GameConfig;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import static org.utwente.game.GameConfig.HEX_SIZE;
-import static org.utwente.game.GameConfig.PADDING;
+import static org.utwente.game.view.GameConfig.HEX_SIZE;
+import static org.utwente.game.view.GameConfig.PADDING;
 
 public class BoardView {
     public Dimension calculatePreferredSize(Board board) {

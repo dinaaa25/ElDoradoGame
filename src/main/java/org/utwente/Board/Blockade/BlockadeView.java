@@ -5,8 +5,8 @@ import org.utwente.Tile.TileType;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-import static org.utwente.game.GameConfig.INFO_FONT;
-import static org.utwente.game.GameConfig.TILE_COLORS;
+import static org.utwente.game.view.GameConfig.INFO_FONT;
+import static org.utwente.game.view.GameConfig.TILE_COLORS;
 
 public class BlockadeView {
 
