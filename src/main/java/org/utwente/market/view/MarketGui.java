@@ -1,7 +1,6 @@
 package org.utwente.market.view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
@@ -15,7 +14,10 @@ import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.market.view.gui.AboutDialog;
 import org.utwente.market.view.gui.CardComponent;
+import org.utwente.market.view.gui.ErrorDialog;
 import org.utwente.market.view.gui.GridCoordinate;
+import org.utwente.market.view.gui.MarketConfig;
+
 import java.util.*;
 
 public class MarketGui extends JFrame implements MarketView {
@@ -48,7 +50,6 @@ public class MarketGui extends JFrame implements MarketView {
     AboutDialog dialog = new AboutDialog(this);
     dialog.setCard(card.getCardType());
     dialog.display();
-    dialog.setVisible(true);
   }
 
   @Override
@@ -76,7 +77,8 @@ public class MarketGui extends JFrame implements MarketView {
 
   @Override
   public void displayError(String errorMessage) {
-
+    ErrorDialog errorDialog = new ErrorDialog(f, errorMessage);
+    errorDialog.display();
   }
 
   @Override
@@ -91,7 +93,6 @@ public class MarketGui extends JFrame implements MarketView {
 
   @Override
   public void setOnInput(ActionListener eventHandler) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'setOnInput'");
   }
 
@@ -110,15 +111,14 @@ public class MarketGui extends JFrame implements MarketView {
     coord.nextRow();
 
     l = new JLabel("Welcome to el Dorado Market.");
-    Font titleFont = new Font("Sans", Font.BOLD, 24);
-    l.setFont(titleFont);
-    l.setForeground(new Color(241, 245, 249));
+    l.setFont(MarketConfig.MARKET_TITLE);
+    l.setForeground(MarketConfig.MARKET_TEXT_COLOR);
     panel.add(l, c);
 
     JLabel subtitle = new JLabel("What would you like to buy today?");
     subtitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 40, 0));
-    subtitle.setFont(new Font("Sans", Font.BOLD, 16));
-    subtitle.setForeground(new Color(241, 245, 249));
+    subtitle.setFont(MarketConfig.MARKET_CARD_FONT);
+    subtitle.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     c.fill = GridBagConstraints.HORIZONTAL;
     c.weightx = 0.0;
     c.gridwidth = 3;
@@ -131,12 +131,11 @@ public class MarketGui extends JFrame implements MarketView {
     GridBagConstraints c = new GridBagConstraints();
     JLabel subtitle = new JLabel("These are the reserve cards:");
     subtitle.setBorder(BorderFactory.createEmptyBorder(30, 10, 30, 10));
-    subtitle.setFont(new Font("Sans", Font.BOLD, 16));
-    subtitle.setForeground(new Color(241, 245, 249));
+    subtitle.setFont(MarketConfig.MARKET_CARD_FONT);
+    subtitle.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     c.fill = GridBagConstraints.HORIZONTAL;
     c.weightx = 0.0;
     c.gridwidth = 3;
-    System.out.println(coord);
     c.gridx = coord.x;
     c.gridy = coord.y;
     panel.add(subtitle, c);

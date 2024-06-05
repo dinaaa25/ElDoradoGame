@@ -22,7 +22,7 @@ public class MarketController {
       @Override
       public void actionPerformed(ActionEvent e) {
         try {
-          Card card = model.buy(new Order(CardType.valueOf(e.getActionCommand()), 100));
+          Card card = model.buy(new Order(CardType.valueOf(e.getActionCommand()), 3));
           view.displayPurchaseResult(card);
           view.setMarket(model);
           view.displayMarket();
