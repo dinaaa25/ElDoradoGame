@@ -2,6 +2,8 @@ package org.utwente.Board;
 
 import lombok.Getter;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinLoader;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
@@ -11,10 +13,12 @@ import org.utwente.Tile.TileType;
 import org.utwente.player.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+import static org.utwente.util.ListUtils.splitListIntoChunks;
 
 public class Board {
     private final List<Section> sections;
@@ -253,6 +257,16 @@ public class Board {
             return this;
         }
 
+        private List<Tile> getTilesByTileType(TileType tileType) {
+            if (sections.isEmpty()) {
+                throw new IllegalStateException("First build the selected path");
+            }
+            return sections.stream()
+                    .flatMap(section -> section.getTiles().stream())
+                    .filter(tile -> tile.getTileType() == tileType)
+                    .collect(Collectors.toList());
+        }
+
         public BoardBuilder selectPath(Path path) {
             if (path == null) {
                 throw new IllegalArgumentException("Path is null");
@@ -365,6 +379,26 @@ public class Board {
             for (Tile tile : section.getTiles()) {
                 tile.rotate(sectionWithData.getRotation());
             }
+        }
+
+        public BoardBuilder addCaveCoinTiles() {
+            List<CaveCoin> caveCoins = CaveCoinLoader.loadCoins();
+            List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, 4);
+            List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
+
+            Collections.shuffle(caveCoinChunks, new Random());
+            Collections.shuffle(caveTiles, new Random());
+
+            int numTiles = caveTiles.size();
+            int numChunks = caveCoinChunks.size();
+            int minSize = Math.min(numTiles, numChunks);
+
+            for (int i = 0; i < minSize; i++) {
+                Tile tile = caveTiles.get(i);
+                List<CaveCoin> chunk = caveCoinChunks.get(i);
+                tile.setCaveCoins(chunk);
+            }
+            return this;
         }
 
         public Board build() {

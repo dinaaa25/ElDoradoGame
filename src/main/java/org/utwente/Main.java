@@ -29,7 +29,7 @@ public class Main extends JPanel {
 
     public Main() {
         Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-        Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addBlockades().build();
+        Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addCaveCoinTiles().addBlockades().build();
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
         gameController = new GameController(new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui(), 1);

@@ -27,7 +27,9 @@ public class Tile {
     private final TileType tileType;
     @Getter
     private final int power;
-    private final List<CaveCoin> caveCoins;
+    @Getter
+    @Setter
+    private List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
     @Getter
