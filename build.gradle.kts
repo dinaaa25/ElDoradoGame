@@ -30,6 +30,9 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
     // mockito
     testImplementation("org.mockito:mockito-core:5.12.0")
+    // team4 board
+    implementation("org.json:json:20240303")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
 }
 
 tasks.test {
