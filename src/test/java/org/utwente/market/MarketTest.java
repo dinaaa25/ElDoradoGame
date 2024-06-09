@@ -27,10 +27,10 @@ public class MarketTest {
 
   @Test
   public void createMarket() {
-    assertNotNull(market.getCurrentCards());
-    assertNotNull(market.getReserveCards());
-    assertEquals(6, market.getCurrentCards().size());
-    assertEquals(11, market.getReserveCards().size());
+    assertNotNull(market.getCurrentCardsSpec());
+    assertNotNull(market.getReserveCardsSpec());
+    assertEquals(6, market.getCurrentCardsSpec().size());
+    assertEquals(11, market.getReserveCardsSpec().size());
     assertEquals(MAX_CARDS, market.getRemainingCardAmount());
   }
 
