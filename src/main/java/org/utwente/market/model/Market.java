@@ -77,15 +77,15 @@ public class Market {
     public void removeCardFromMarket(CardType key) {
         if (cardInReserve(key)) {
             // move card to current cards.
-            Integer res = this.reserveCards.get(key);
-            this.currentCards.put(key, --res);
+            Integer cardAmount = this.reserveCards.get(key);
+            this.currentCards.put(key, --cardAmount);
             this.reserveCards.remove(key);
         } else if (cardInCurrent(key)) {
-            Integer res = this.currentCards.get(key);
+            Integer cardAmount = this.currentCards.get(key);
             // card is given to the player
-            this.currentCards.replace(key, --res);
+            this.currentCards.replace(key, --cardAmount);
             // remove card type that is empty.
-            if (res <= 0) {
+            if (cardAmount <= 0) {
                 this.currentCards.remove(key);
             }
         }
