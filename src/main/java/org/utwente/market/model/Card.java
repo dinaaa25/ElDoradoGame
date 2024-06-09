@@ -29,7 +29,7 @@ public class Card implements Resource {
 
     public void removePower(int power) throws CardPowerException {
         if (power > remainingPower()) {
-            throw new CardPowerException();
+            throw new CardPowerException("Not enough power to remove.");
         }
         this.consumedPower += power;
     }

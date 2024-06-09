@@ -18,16 +18,11 @@ public class Market {
     private Map<CardType, Integer> reserveCards;
 
     public Market(List<CardTypeSpec> current, List<CardTypeSpec> reserve) {
-        this.currentCards = new HashMap<>();
-        this.reserveCards = new HashMap<>();
+        this.currentCards = current.stream()
+                .collect(Collectors.toMap(CardTypeSpec::getType, CardTypeSpec::getQuantity));
+        this.reserveCards = reserve.stream()
+                .collect(Collectors.toMap(CardTypeSpec::getType, CardTypeSpec::getQuantity));
 
-        for (CardTypeSpec currentCardTypeSpec : current) {
-            this.currentCards.put(currentCardTypeSpec.getType(), currentCardTypeSpec.getQuantity());
-        }
-
-        for (CardTypeSpec reserveCardTypeSpec : reserve) {
-            this.reserveCards.put(reserveCardTypeSpec.getType(), reserveCardTypeSpec.getQuantity());
-        }
     }
 
     public Market() {
