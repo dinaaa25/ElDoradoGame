@@ -1,6 +1,5 @@
 package org.utwente.market.model;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.*;
@@ -14,13 +13,13 @@ import lombok.Getter;
 @Getter
 public class Market {
     private static final int CURRENT_FULL_SIZE = 6;
-    private Map<CardType, Integer> currentCards;
-    private Map<CardType, Integer> reserveCards;
+    private Map<CardType, Integer> currentCardsSpec;
+    private Map<CardType, Integer> reserveCardsSpec;
 
     public Market(List<CardTypeSpec> current, List<CardTypeSpec> reserve) {
-        this.currentCards = current.stream()
+        this.currentCardsSpec = current.stream()
                 .collect(Collectors.toMap(CardTypeSpec::getType, CardTypeSpec::getQuantity));
-        this.reserveCards = reserve.stream()
+        this.reserveCardsSpec = reserve.stream()
                 .collect(Collectors.toMap(CardTypeSpec::getType, CardTypeSpec::getQuantity));
 
     }
@@ -44,7 +43,7 @@ public class Market {
     }
 
     public boolean reserveIsOpen() {
-        return Market.CURRENT_FULL_SIZE > this.currentCards.size();
+        return Market.CURRENT_FULL_SIZE > this.currentCardsSpec.size();
     }
 
     public Card buy(Order order) throws BuyException {
@@ -62,32 +61,32 @@ public class Market {
     }
 
     public boolean cardInReserve(CardType type) {
-        return this.reserveCards.containsKey(type);
+        return this.reserveCardsSpec.containsKey(type);
     }
 
     public boolean cardInCurrent(CardType type) {
-        return this.currentCards.containsKey(type);
+        return this.currentCardsSpec.containsKey(type);
     }
 
     public void removeCardFromMarket(CardType key) {
         if (cardInReserve(key)) {
             // move card to current cards.
-            Integer cardAmount = this.reserveCards.get(key);
-            this.currentCards.put(key, --cardAmount);
-            this.reserveCards.remove(key);
+            Integer cardAmount = this.reserveCardsSpec.get(key);
+            this.currentCardsSpec.put(key, --cardAmount);
+            this.reserveCardsSpec.remove(key);
         } else if (cardInCurrent(key)) {
-            Integer cardAmount = this.currentCards.get(key);
+            Integer cardAmount = this.currentCardsSpec.get(key);
             // card is given to the player
-            this.currentCards.replace(key, --cardAmount);
+            this.currentCardsSpec.replace(key, --cardAmount);
             // remove card type that is empty.
             if (cardAmount <= 0) {
-                this.currentCards.remove(key);
+                this.currentCardsSpec.remove(key);
             }
         }
     }
 
     public int getRemainingCardAmount() {
-        return Stream.of(currentCards, reserveCards)
+        return Stream.of(currentCardsSpec, reserveCardsSpec)
                 .flatMap(map -> map.values().stream())
                 .mapToInt(Integer::intValue)
                 .sum();
@@ -95,19 +94,19 @@ public class Market {
     }
 
     public List<CardType> getCurrent() {
-        return new ArrayList<>(this.currentCards.keySet());
+        return new ArrayList<>(this.currentCardsSpec.keySet());
     }
 
     public List<CardType> getReserve() {
-        return new ArrayList<>(this.reserveCards.keySet());
+        return new ArrayList<>(this.reserveCardsSpec.keySet());
     }
 
     public Integer getRemainingAmount(CardType card) {
         if (this.cardInCurrent(card)) {
-            return this.currentCards.get(card);
+            return this.currentCardsSpec.get(card);
         }
         if (this.cardInReserve(card)) {
-            return this.reserveCards.get(card);
+            return this.reserveCardsSpec.get(card);
         }
 
         return 0;
