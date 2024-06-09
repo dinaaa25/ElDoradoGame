@@ -11,7 +11,7 @@ import org.utwente.market.model.CardType;
 public class CardHelper {
   public static ImageIcon getImageIcon(CardType card) {
     ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-    URL url = classloader.getResource(String.format("images/%s.png", card.name().toLowerCase()));
+    URL url = classloader.getResource(String.format("images/cards/%s.png", card.name().toLowerCase()));
     return new ImageIcon(url);
   }
 

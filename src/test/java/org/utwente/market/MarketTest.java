@@ -50,7 +50,7 @@ public class MarketTest {
 
   @Test
   public void testBuyCardFail() {
-    Order order = new Order(CardType.Abenturerin, 0);
+    Order order = new Order(CardType.Abenteurerin, 0);
     Card card = null;
 
     try {

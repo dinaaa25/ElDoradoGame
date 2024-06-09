@@ -14,12 +14,12 @@ public class CardTest {
 
   @BeforeEach
   public void setup() {
-    this.card = new Card(CardType.Abenturerin);
+    this.card = new Card(CardType.Abenteurerin);
   }
 
   @Test
   public void testRemainingPower() {
-    assertEquals(CardType.Abenturerin.power.intValue(), card.remainingPower());
+    assertEquals(CardType.Abenteurerin.power.intValue(), card.remainingPower());
   }
 
   @Test

@@ -1,5 +1,7 @@
 package org.utwente.market.view.gui;
 
+import java.awt.*;
+
 public class GridCoordinate {
   public final int columns = 4;
   public int y;
@@ -26,5 +28,14 @@ public class GridCoordinate {
   @Override
   public String toString() {
     return String.format("Coordinate[x=%d,y=%d]", x, y);
+  }
+
+  public GridBagConstraints toGridBagConstraints(int width) {
+    var constraints = new GridBagConstraints();
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridx = x;
+    constraints.gridy = y;
+    constraints.gridwidth = width;
+    return constraints;
   }
 }

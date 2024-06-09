@@ -10,31 +10,31 @@ import org.utwente.market.view.MarketView;
 import java.awt.event.*;
 
 public class MarketController {
-    private final MarketView view;
-    private final Market model;
+  private final MarketView view;
+  private final Market model;
 
-    public MarketController(MarketView view, Market model) {
-        this.view = view;
-        this.model = model;
-        this.view.setMarket(model);
-        this.view.setOnOrder(new ActionListener() {
+  public MarketController(MarketView view, Market model) {
+    this.view = view;
+    this.model = model;
+    this.view.setMarket(model);
+    this.view.setOnOrder(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Card card = model.buy(new Order(CardType.valueOf(e.getActionCommand()), 3));
-                    view.displayPurchaseResult(card);
-                    view.setMarket(model);
-                    view.displayMarket();
-                } catch (BuyException exception) {
-                    view.displayError(exception.getMessage());
-                } catch (IllegalArgumentException exception) {
-                    view.displayError(String.format("%s is not a card in the game.", e.getActionCommand()));
-                } catch (NullPointerException exception) {
-                    view.displayError(exception.getMessage());
-                }
-            }
-        });
-    }
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        try {
+          Card card = model.buy(new Order(CardType.valueOf(e.getActionCommand()), 3));
+          view.displayPurchaseResult(card);
+          view.setMarket(model);
+        } catch (BuyException exception) {
+          view.displayError(exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+          view.displayError(String.format("%s is not a card in the game.", e.getActionCommand()));
+        } catch (NullPointerException exception) {
+          view.displayError(exception.getMessage());
+        }
+      }
+
+    });
+  }
 
 }

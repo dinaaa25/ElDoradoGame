@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.utwente.market.exceptions.BuyException;
+import org.utwente.util.ValidationResult;
 
 import java.util.ArrayList;
 import lombok.Getter;
@@ -50,18 +51,14 @@ public class Market {
         return Market.CURRENT_FULL_SIZE > this.currentCards.size();
     }
 
-    public record ValidationResult(boolean status, String message) {
-
-    }
-
     public Card buy(Order order) throws BuyException {
         if (order == null) {
             throw new BuyException("Order is empty");
         }
         ValidationResult validationResult = canBuy(order);
 
-        if (validationResult.status == false) {
-            throw new BuyException(validationResult.message);
+        if (validationResult.getStatus() == false) {
+            throw new BuyException(validationResult.getMessage());
         }
 
         removeCardFromMarket(order.getCardToken());
@@ -110,5 +107,16 @@ public class Market {
 
     public List<CardType> getReserve() {
         return new ArrayList<>(this.reserveCards.keySet());
+    }
+
+    public Integer getRemainingAmount(CardType card) {
+        if (this.cardInCurrent(card)) {
+            return this.currentCards.get(card);
+        }
+        if (this.cardInReserve(card)) {
+            return this.reserveCards.get(card);
+        }
+
+        return 0;
     }
 }

@@ -18,7 +18,7 @@ public class CardComponent extends JButton {
   public final int HEIGHT = 230;
   public final int WIDTH = 150;
 
-  public CardComponent(CardType card) {
+  public CardComponent(CardType card, int remainingAmount) {
     super();
     Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED, MarketConfig.MARKET_BORDER,
         MarketConfig.MARKET_SHADOW);
@@ -44,6 +44,11 @@ public class CardComponent extends JButton {
     power.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     power.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     this.add(power);
+
+    JLabel remainingLabel = new JLabel(String.format("Remaining: %d", remainingAmount));
+    remainingLabel.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
+    remainingLabel.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
+    this.add(remainingLabel);
 
     this.add(new JLabel(scaledIcon));
     this.setHorizontalTextPosition(JButton.CENTER);
