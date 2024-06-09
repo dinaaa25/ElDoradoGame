@@ -38,8 +38,4 @@ public class Card implements Resource {
     public int getPower() {
         return remainingPower();
     }
-
-    public CardType getCardType() {
-        return this.cardType;
-    }
 }
