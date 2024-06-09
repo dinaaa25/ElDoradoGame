@@ -75,7 +75,7 @@ public class MarketCliTest {
   @Test
   public void testDisplayPurchaseResult() {
     marketView.displayPurchaseResult(new Card(CardType.Abenteurerin));
-    assertTrue(new String(outContent.toByteArray()).contains("ABENTURERIN"));
+    assertTrue(new String(outContent.toByteArray()).contains("ABENTEURERIN"));
   }
 
   @Test

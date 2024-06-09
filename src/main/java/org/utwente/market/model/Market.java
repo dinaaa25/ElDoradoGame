@@ -3,6 +3,7 @@ package org.utwente.market.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.*;
 
 import org.utwente.market.exceptions.BuyException;
 import org.utwente.util.ValidationResult;
@@ -91,14 +92,11 @@ public class Market {
     }
 
     public int getRemainingCardAmount() {
-        int result = 0;
-        for (int cardQ : currentCards.values()) {
-            result += cardQ;
-        }
-        for (int cardQ : reserveCards.values()) {
-            result += cardQ;
-        }
-        return result;
+        return Stream.of(currentCards, reserveCards)
+                .flatMap(map -> map.values().stream())
+                .mapToInt(Integer::intValue)
+                .sum();
+
     }
 
     public List<CardType> getCurrent() {
