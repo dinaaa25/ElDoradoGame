@@ -25,4 +25,6 @@ public class GameConfig {
     }
 
     public static final int HEX_SIZE = 50;
+
+    public static final int CAVE_COIN_CHUNK_SIZE = 4;
 }

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+import static org.utwente.game.view.GameConfig.CAVE_COIN_CHUNK_SIZE;
 import static org.utwente.util.ListUtils.splitListIntoChunks;
 
 public class Board {
@@ -383,7 +384,7 @@ public class Board {
 
         public BoardBuilder addCaveCoinTiles() {
             List<CaveCoin> caveCoins = CaveCoinLoader.loadCoins();
-            List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, 4);
+            List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, CAVE_COIN_CHUNK_SIZE);
             List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
 
             Collections.shuffle(caveCoinChunks, new Random());
