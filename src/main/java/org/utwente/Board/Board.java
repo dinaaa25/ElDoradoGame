@@ -19,6 +19,7 @@ import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
 import static org.utwente.game.view.GameConfig.CAVE_COIN_CHUNK_SIZE;
+import static org.utwente.game.view.GameConfig.SEED;
 import static org.utwente.util.ListUtils.splitListIntoChunks;
 
 public class Board {
@@ -74,6 +75,8 @@ public class Board {
         private Path path;
         private boolean flatTop;
         private final List<Blockade> blockades;
+        private final List<Section> availableSections;
+        private final Random random = new Random(SEED);
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
@@ -81,7 +84,6 @@ public class Board {
             this.blockades = new ArrayList<>();
         }
 
-        private List<Section> availableSections;
 
         private static Section getSectionBySectionType(SectionType sectionType) {
             List<Section> sectionList = SectionLoader.loadSections();
@@ -347,7 +349,6 @@ public class Board {
         }
 
         private void attachBoardSection(SectionWithRotationPositionSectionDirection sectionWithData) {
-            List<Section> availableSections = SectionLoader.loadSections();
             Optional<Section> optionalSection = availableSections.stream()
                     .filter(s -> s.getSectionType() == sectionWithData.getSectionType())
                     .findFirst();
@@ -387,8 +388,8 @@ public class Board {
             List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, CAVE_COIN_CHUNK_SIZE);
             List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
 
-            Collections.shuffle(caveCoinChunks, new Random());
-            Collections.shuffle(caveTiles, new Random());
+            Collections.shuffle(caveCoinChunks, random);
+            Collections.shuffle(caveTiles, random);
 
             int numTiles = caveTiles.size();
             int numChunks = caveCoinChunks.size();
