@@ -45,11 +45,6 @@ public class MarketGui extends JFrame implements MarketView {
 
   Market market;
 
-  @Override
-  public Order getOrder() {
-    throw new UnsupportedOperationException("Unimplemented method 'getOrder'");
-  }
-
   private void addSuccessMessage(CardType card) {
     GridBagConstraints c = coord.toGridBagConstraints(4);
 

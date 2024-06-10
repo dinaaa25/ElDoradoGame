@@ -65,12 +65,6 @@ public class MarketCli implements MarketView {
   }
 
   @Override
-  public Order getOrder() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getOrder'");
-  }
-
-  @Override
   public void displayPurchaseResult(Card card) {
     String cardDisplay = CardFormat.formatCard(card.getCardType());
     stream.println(cardDisplay);
