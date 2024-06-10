@@ -16,7 +16,6 @@ public class MarketController {
   public MarketController(MarketView view, Market model) {
     this.view = view;
     this.model = model;
-    this.view.setMarket(model);
     this.view.setOnOrder(new ActionListener() {
 
       @Override
@@ -35,6 +34,7 @@ public class MarketController {
       }
 
     });
+    this.view.setMarket(model);
   }
 
 }

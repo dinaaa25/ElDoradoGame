@@ -110,9 +110,4 @@ public class MarketCli implements MarketView {
     this.exit = true;
   }
 
-  @Override
-  public void setOnInput(ActionListener eventHandler) {
-    this.inputEventHandler = eventHandler;
-  }
-
 }

@@ -15,8 +15,6 @@ public interface MarketView {
 
   void setOnOrder(ActionListener eventHandler);
 
-  void setOnInput(ActionListener eventHandler);
-
   void exit();
 
   void run();

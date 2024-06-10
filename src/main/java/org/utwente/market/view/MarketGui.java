@@ -4,15 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Paint;
-import java.awt.PaintContext;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.ColorModel;
+import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -20,7 +12,6 @@ import javax.swing.border.*;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
-import org.utwente.market.model.Order;
 
 import org.utwente.market.view.gui.CardComponent;
 import org.utwente.market.view.gui.CardHelper;
@@ -29,21 +20,25 @@ import org.utwente.market.view.gui.MarketConfig;
 
 import java.util.*;
 
-public class MarketGui extends JFrame implements MarketView {
-
-  // JFrame
-  static JFrame f;
-
-  // Label to display text
-  static JLabel l;
-
+public class MarketGui implements MarketView {
+  JFrame f;
   JPanel panel;
-
+  JScrollPane scrollPane;
   GridCoordinate coord = new GridCoordinate(0, 0);
-
   ActionListener onOrder;
-
   Market market;
+  boolean missingDrawCards;
+
+  public MarketGui() {
+    panel = new JPanel(new GridBagLayout());
+    panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+    scrollPane = new JScrollPane(panel);
+    addTitle();
+    coord.nextRow();
+    setBackground(panel);
+    setBackground(scrollPane);
+    missingDrawCards = true;
+  }
 
   private void addSuccessMessage(CardType card) {
     GridBagConstraints c = coord.toGridBagConstraints(4);
@@ -71,6 +66,7 @@ public class MarketGui extends JFrame implements MarketView {
 
   @Override
   public void displayPurchaseResult(Card card) {
+    missingDrawCards = false;
     resetCoordinates();
     panel.removeAll();
 
@@ -84,6 +80,18 @@ public class MarketGui extends JFrame implements MarketView {
     coord = new GridCoordinate(0, 0); // Reset coordinates
   }
 
+  private void addCards() {
+    if (market != null) {
+      addCardsToGrid(market.getCurrent());
+
+      coord.nextRow();
+      addReserveText();
+      coord.nextRow();
+
+      addCardsToGrid(market.getReserve());
+    }
+  }
+
   @Override
   public void displayMarket() {
     panel.removeAll(); // Clear existing components
@@ -93,14 +101,7 @@ public class MarketGui extends JFrame implements MarketView {
     addTitle();
     coord.nextRow();
 
-    // Add current market cards
-    addCardsToGrid(market.getCurrent());
-    coord.nextRow();
-
-    // Add reserve section and cards
-    addReserveText();
-    coord.nextRow();
-    addCardsToGrid(market.getReserve());
+    this.addCards();
 
     // Refresh the panel to reflect changes
     panel.revalidate();
@@ -108,14 +109,16 @@ public class MarketGui extends JFrame implements MarketView {
   }
 
   private void addErrorMessage(String errorMessage) {
+    System.out.println("displaying error.");
     GridBagConstraints c = coord.toGridBagConstraints(4);
 
-    l = new JLabel(errorMessage);
+    JLabel l = new JLabel(errorMessage);
     l.setFont(MarketConfig.MARKET_CARD_NAME);
     l.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     l.setBorder(
         BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, MarketConfig.MARKET_ERROR_BG),
             BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
     panel.add(l, c);
     addBackButton();
   }
@@ -123,7 +126,7 @@ public class MarketGui extends JFrame implements MarketView {
   private void addBackButton() {
     this.coord.nextRow();
     GridBagConstraints c = coord.toGridBagConstraints(4);
-    JButton confirm = new JButton("< Go Back");
+    JButton confirm = new JButton("◄ Go Back");
     confirm.addActionListener(new ActionListener() {
 
       @Override
@@ -137,6 +140,7 @@ public class MarketGui extends JFrame implements MarketView {
 
   @Override
   public void displayError(String errorMessage) {
+    missingDrawCards = false;
     resetCoordinates();
     panel.removeAll();
 
@@ -150,6 +154,10 @@ public class MarketGui extends JFrame implements MarketView {
   @Override
   public void setMarket(Market market) {
     this.market = market;
+
+    if (missingDrawCards) {
+      this.addCards();
+    }
   }
 
   @Override
@@ -158,13 +166,8 @@ public class MarketGui extends JFrame implements MarketView {
   }
 
   @Override
-  public void setOnInput(ActionListener eventHandler) {
-    throw new UnsupportedOperationException("Unimplemented method 'setOnInput'");
-  }
-
-  @Override
   public void exit() {
-
+    f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
   }
 
   private void addSubtitle(int width) {
@@ -181,7 +184,7 @@ public class MarketGui extends JFrame implements MarketView {
     GridBagConstraints c = coord.toGridBagConstraints(width);
     coord.nextRow();
 
-    l = new JLabel("Welcome to el Dorado Market.");
+    JLabel l = new JLabel("Welcome to el Dorado Market.");
     l.setFont(MarketConfig.MARKET_TITLE);
     l.setForeground(MarketConfig.MARKET_TEXT_COLOR);
     panel.add(l, c);
@@ -225,18 +228,6 @@ public class MarketGui extends JFrame implements MarketView {
 
   public void run() {
     f = new JFrame("Market");
-    panel = new JPanel(new GridBagLayout());
-    panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-    addTitle();
-    coord.nextRow();
-    addCardsToGrid(market.getCurrent());
-    coord.nextRow();
-    addReserveText();
-    coord.nextRow();
-    addCardsToGrid(market.getReserve());
-    JScrollPane scrollPane = new JScrollPane(panel);
-    setBackground(panel);
-    setBackground(scrollPane);
     f.add(scrollPane);
     f.setSize(1000, 800);
     f.setVisible(true);
