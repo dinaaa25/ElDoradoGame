@@ -1,7 +1,7 @@
 package org.utwente.market.model;
 
 public enum CardType {
-  Kundeschafter(4, 1, PowerType.Machete, false),
+  Kundeschafter(2, 1, PowerType.Machete, false),
   Forscher(1, null, PowerType.Machete, false),
   Entdecker(3, 3, PowerType.Machete, false),
   Pionier(5, 5, PowerType.Machete, false),

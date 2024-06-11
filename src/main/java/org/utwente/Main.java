@@ -9,6 +9,9 @@ import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameGui;
+import org.utwente.market.controller.MarketController;
+import org.utwente.market.model.Market;
+import org.utwente.market.view.MarketGui;
 import org.utwente.player.Player;
 
 import javax.swing.*;
@@ -29,7 +32,8 @@ public class Main extends JPanel {
         Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addCaveCoinTiles().addBlockades().build();
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
-        gameController = new GameController(new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui(), 1);
+        gameController = new GameController(
+                new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui());
         loadImages();
         calculatePreferredSize(board);
     }
@@ -62,16 +66,33 @@ public class Main extends JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Main mainPanel = new Main();
-            GameController gameController = mainPanel.getGameController();
+            Main main = new Main();
+            GameController gameController = main.getGameController();
             JFrame frame = new JFrame(gameController.getGame().getGameName());
             gameController.getGame().placePlayersStart();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            JScrollPane scrollPane = new JScrollPane(mainPanel);
-            frame.add(scrollPane);
+            JPanel borderPanel = new JPanel(new BorderLayout());
 
-            frame.setSize(mainPanel.getPreferredSize());
+            // MVC Board
+            JScrollPane scrollPane = new JScrollPane(main);
+            borderPanel.add(scrollPane, BorderLayout.CENTER);
+
+            // MVC Market:
+            MarketGui marketGui = new MarketGui();
+            Market market = gameController.getGame().getMarket();
+            new MarketController(marketGui, market);
+            JComponent marketComponent = marketGui.getMainComponent();
+            marketComponent.setPreferredSize(new Dimension(600, 150));
+            borderPanel.add(marketComponent, BorderLayout.WEST);
+
+            // MVC Player Cards
+            borderPanel.add(new JLabel("player cards holder here"), BorderLayout.SOUTH);
+
+            frame.add(borderPanel);
+
+            frame.setSize(main.getPreferredSize());
+            frame.setLocation(300, 4000);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });

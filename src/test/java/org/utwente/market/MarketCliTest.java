@@ -1,15 +1,13 @@
 package org.utwente.market;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
-import org.utwente.market.controller.MarketOrderEvent;
+
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketCli;
-import org.utwente.util.EventHandler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

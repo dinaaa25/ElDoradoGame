@@ -7,7 +7,7 @@ import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.market.view.MarketView;
 
-import java.awt.event.*;
+import java.util.function.*;
 
 public class MarketController {
   private final MarketView view;
@@ -16,18 +16,19 @@ public class MarketController {
   public MarketController(MarketView view, Market model) {
     this.view = view;
     this.model = model;
-    this.view.setOnOrder(new ActionListener() {
+
+    this.view.setOnOrder(new Consumer<String>() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void accept(String data) {
         try {
-          Card card = model.buy(new Order(CardType.valueOf(e.getActionCommand()), 3));
+          Card card = model.buy(new Order(CardType.valueOf(data), 3));
           view.displayPurchaseResult(card);
           view.setMarket(model);
         } catch (BuyException exception) {
           view.displayError(exception.getMessage());
         } catch (IllegalArgumentException exception) {
-          view.displayError(String.format("%s is not a card in the game.", e.getActionCommand()));
+          view.displayError(String.format("%s is not a card in the game.", data));
         } catch (NullPointerException exception) {
           view.displayError(exception.getMessage());
         }

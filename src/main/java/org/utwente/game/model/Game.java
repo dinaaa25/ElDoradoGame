@@ -1,9 +1,11 @@
 package org.utwente.game.model;
 
 
+import lombok.Getter;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Board;
 import org.utwente.Tile.Tile;
+import org.utwente.market.model.Market;
 import org.utwente.player.Player;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class Game {
     private Board board;
     private List<Player> players = new ArrayList<>();
     private Player finalWinner;
+    @Getter
+    private final Market market;
     private int currentPlayer;
     private boolean enteredWaitingState = false;
     private int waitingPlayerIndex = 0;
@@ -27,6 +31,7 @@ public class Game {
         this.gameDescription = gameDescription;
         this.board = board;
         this.players = players;
+        this.market = new Market();
     }
 
     public String getGameName() {
