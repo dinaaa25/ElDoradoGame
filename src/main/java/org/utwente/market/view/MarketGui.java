@@ -12,20 +12,22 @@ import javax.swing.border.*;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
-
+import org.utwente.market.model.Order;
+import org.utwente.market.model.OrderEvent;
 import org.utwente.market.view.gui.CardComponent;
 import org.utwente.market.view.gui.CardHelper;
 import org.utwente.market.view.gui.GridCoordinate;
 import org.utwente.market.view.gui.MarketConfig;
 
 import java.util.*;
+import java.util.function.*;
 
 public class MarketGui implements MarketView {
   JFrame f;
   JPanel panel;
   JScrollPane scrollPane;
   GridCoordinate coord = new GridCoordinate(0, 0);
-  ActionListener onOrder;
+  Consumer<String> onOrder;
   Market market;
   boolean missingDrawCards;
 
@@ -161,7 +163,7 @@ public class MarketGui implements MarketView {
   }
 
   @Override
-  public void setOnOrder(ActionListener eventHandler) {
+  public void setOnOrder(Consumer<String> eventHandler) {
     this.onOrder = eventHandler;
   }
 
@@ -214,7 +216,14 @@ public class MarketGui implements MarketView {
     GridBagConstraints c = coord.toGridBagConstraints(1);
 
     cardComponent.setActionCommand(card.name());
-    cardComponent.addActionListener(onOrder);
+    cardComponent.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        onOrder.accept(e.getActionCommand());
+      }
+
+    });
 
     panel.add(cardComponent, c);
   }

@@ -2,7 +2,8 @@ package org.utwente.market.view;
 
 import org.utwente.market.model.Card;
 import org.utwente.market.model.Market;
-import java.awt.event.*;
+import java.util.function.*;
+import org.utwente.market.model.OrderEvent;
 
 public interface MarketView {
   void displayPurchaseResult(Card card);
@@ -13,7 +14,7 @@ public interface MarketView {
 
   void setMarket(Market market);
 
-  void setOnOrder(ActionListener eventHandler);
+  void setOnOrder(Consumer<String> eventHandler);
 
   void exit();
 
