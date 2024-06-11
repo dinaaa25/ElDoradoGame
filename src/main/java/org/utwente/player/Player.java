@@ -1,5 +1,7 @@
 package org.utwente.player;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
 
 import java.util.ArrayList;
@@ -9,6 +11,9 @@ public class Player {
 
     private String name;
     private List<Blockade> blockades;
+    @Getter
+    @Setter
+    private PlayerColor color;
 
     public Player(String name){
         this.name = name;
