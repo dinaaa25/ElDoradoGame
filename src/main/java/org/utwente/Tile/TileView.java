@@ -144,12 +144,25 @@ public class TileView {
         }
     }
 
+    private void drawCaveCoinCount(Graphics2D g2d, int x, int y, Tile tile) {
+        if (tile.getTileType() == TileType.Cave) {
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(GameConfig.TILE_FONT);
+            FontMetrics metrics = g2d.getFontMetrics();
+            String caveCoinCountText = String.valueOf(tile.getCaveCoinCount());
+            int caveCoinCountTextX = (int) (x - HEX_SIZE / 1.3);
+            int caveCoinCountTextY = y - HEX_SIZE / 2 + metrics.getAscent();
+            g2d.drawString(caveCoinCountText, caveCoinCountTextX, caveCoinCountTextY);
+        }
+    }
+
     public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, TileImageLoader tileImageLoader) {
         Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
         setTileTexture(g2d, x, y, tile, tileImageLoader);
         drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
-        drawPower(g2d, x, y, tile);
+//        drawPower(g2d, x, y, tile);
+        drawCaveCoinCount(g2d, x, y, tile);
         drawPlayers(g2d, tile.getPlayers(), x, y);
     }
 }

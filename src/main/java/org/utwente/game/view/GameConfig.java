@@ -5,6 +5,7 @@ import org.utwente.Tile.TileType;
 import java.awt.*;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 public class GameConfig {
     public static final Font TILE_FONT = new Font("Arial", Font.BOLD, 8);
@@ -25,4 +26,8 @@ public class GameConfig {
     }
 
     public static final int HEX_SIZE = 50;
+
+    public static final int CAVE_COIN_CHUNK_SIZE = 4;
+
+    public static final long SEED = 12345L;
 }
