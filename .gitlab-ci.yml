@@ -27,7 +27,6 @@ build:
     - when: always
   tags:
     - SET2024
-    - privileged
 
 test:
   stage: test
@@ -54,7 +53,6 @@ test:
     - when: always
   tags:
     - SET2024
-    - privileged
 
 sigridci:
   stage: report
