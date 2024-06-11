@@ -7,8 +7,10 @@ import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
+import org.utwente.market.model.OrderEvent;
 import org.utwente.util.Ansi;
 import java.awt.event.*;
+import java.util.function.*;
 
 import lombok.Setter;
 import lombok.Getter;
@@ -17,8 +19,7 @@ import lombok.Getter;
 @Setter
 public class MarketCli implements MarketView {
   private PrintStream stream;
-  private ActionListener eventHandler;
-  private ActionListener inputEventHandler;
+  private Consumer<String> eventHandler;
   private Scanner scanner;
   private String orderInput;
   private Order order;
@@ -35,6 +36,7 @@ public class MarketCli implements MarketView {
   }
 
   public void run() {
+    displayMarket();
     while (!exit) {
       String input = scanner.nextLine();
 
@@ -51,7 +53,7 @@ public class MarketCli implements MarketView {
           // to title case:
           String token = String.valueOf(arguments[1].charAt(0)).toUpperCase() +
               arguments[1].substring(1);
-          this.eventHandler.actionPerformed(new ActionEvent(this, 0, token));
+          this.eventHandler.accept(token);
         } catch (Exception e) {
           if (arguments.length >= 2) {
             displayError(String.format("%s is not a card in the game.",
@@ -96,7 +98,7 @@ public class MarketCli implements MarketView {
   }
 
   @Override
-  public void setOnOrder(ActionListener eventHandler) {
+  public void setOnOrder(Consumer<String> eventHandler) {
     this.eventHandler = eventHandler;
   }
 
