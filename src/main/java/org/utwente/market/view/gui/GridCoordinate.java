@@ -3,13 +3,18 @@ package org.utwente.market.view.gui;
 import java.awt.*;
 
 public class GridCoordinate {
-  public final int columns = 4;
+  public final int columns;
   public int y;
   public int x;
 
   public GridCoordinate(int x, int y) {
+    this(x, y, 4);
+  }
+
+  public GridCoordinate(int x, int y, int maxColumns) {
     this.x = x;
     this.y = y;
+    this.columns = maxColumns;
   }
 
   public void nextRow() {

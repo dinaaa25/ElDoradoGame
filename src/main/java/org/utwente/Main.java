@@ -9,6 +9,10 @@ import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameGui;
+import org.utwente.market.controller.MarketController;
+import org.utwente.market.model.Market;
+import org.utwente.market.view.MarketGui;
+import org.utwente.market.view.MarketView;
 import org.utwente.player.Player;
 
 import javax.swing.*;
@@ -69,8 +73,22 @@ public class Main extends JPanel {
             gameController.getGame().placePlayersStart();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+            JPanel borderPanel = new JPanel(new BorderLayout());
+
             JScrollPane scrollPane = new JScrollPane(mainPanel);
-            frame.add(scrollPane);
+
+            borderPanel.add(scrollPane, BorderLayout.CENTER);
+            borderPanel.add(new JLabel("player cards ho here"), BorderLayout.SOUTH);
+
+            // MVC Market:
+            MarketGui marketGui = new MarketGui();
+            Market market = new Market();
+            new MarketController(marketGui, market);
+            JComponent marketComponent = marketGui.getMainComponent();
+            marketComponent.setPreferredSize(new Dimension(600, 150));
+            borderPanel.add(marketComponent, BorderLayout.WEST);
+
+            frame.add(borderPanel);
 
             frame.setSize(mainPanel.getPreferredSize());
             frame.setLocationRelativeTo(null);
