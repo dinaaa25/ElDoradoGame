@@ -16,6 +16,8 @@ import org.utwente.market.view.gui.CardComponent;
 import org.utwente.market.view.gui.CardHelper;
 import org.utwente.market.view.gui.GridCoordinate;
 import org.utwente.market.view.gui.MarketConfig;
+import org.utwente.util.event.EventManager;
+import org.utwente.util.event.EventType;
 
 import java.util.*;
 import java.util.function.*;
@@ -26,7 +28,6 @@ public class MarketGui implements MarketView {
   JScrollPane scrollPane;
   final int maxColumns = 3;
   GridCoordinate coord = new GridCoordinate(0, 0, maxColumns);
-  Consumer<String> onOrder;
   Market market;
   boolean missingDrawCards;
 
@@ -162,11 +163,6 @@ public class MarketGui implements MarketView {
   }
 
   @Override
-  public void setOnOrder(Consumer<String> eventHandler) {
-    this.onOrder = eventHandler;
-  }
-
-  @Override
   public void exit() {
     f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
   }
@@ -219,7 +215,7 @@ public class MarketGui implements MarketView {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        onOrder.accept(e.getActionCommand());
+        EventManager.getInstance().notifying(EventType.BuyCards, e.getActionCommand());
       }
 
     });

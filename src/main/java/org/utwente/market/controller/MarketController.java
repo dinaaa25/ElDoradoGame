@@ -6,6 +6,8 @@ import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.model.Order;
 import org.utwente.market.view.MarketView;
+import org.utwente.util.event.EventManager;
+import org.utwente.util.event.EventType;
 
 import java.util.function.*;
 
@@ -17,8 +19,8 @@ public class MarketController {
     this.view = view;
     this.model = model;
 
-    this.view.setOnOrder(new Consumer<String>() {
-
+    EventManager manager = EventManager.getInstance();
+    manager.subscribe(new Consumer<String>() {
       @Override
       public void accept(String data) {
         try {
@@ -33,8 +35,7 @@ public class MarketController {
           view.displayError(exception.getMessage());
         }
       }
-
-    });
+    }, EventType.BuyCards);
     this.view.setMarket(model);
   }
 
