@@ -63,13 +63,13 @@ public class ObserverPatternTest {
         assertEquals(0, eventManager.getSubscribers().size());
 
         eventManager.subscribe(subscriber1);
-        assertEquals(5, eventManager.getSubscribers().size());
+        assertEquals(EventType.values().length, eventManager.getSubscribers().size());
 
         eventManager.subscribe(subscriber2);
-        assertEquals(10, eventManager.getSubscribers().size());
+        assertEquals(EventType.values().length * 2, eventManager.getSubscribers().size());
 
         eventManager.unsubscribe(subscriber2);
-        assertEquals(5, eventManager.getSubscribers().size());
+        assertEquals(EventType.values().length, eventManager.getSubscribers().size());
 
     }
 
