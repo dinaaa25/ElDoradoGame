@@ -12,7 +12,6 @@ import org.utwente.game.view.GameGui;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
-import org.utwente.market.view.MarketView;
 import org.utwente.player.Player;
 
 import javax.swing.*;
@@ -67,30 +66,33 @@ public class Main extends JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Main mainPanel = new Main();
-            GameController gameController = mainPanel.getGameController();
+            Main main = new Main();
+            GameController gameController = main.getGameController();
             JFrame frame = new JFrame(gameController.getGame().getGameName());
             gameController.getGame().placePlayersStart();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             JPanel borderPanel = new JPanel(new BorderLayout());
 
-            JScrollPane scrollPane = new JScrollPane(mainPanel);
-
+            // MVC Board
+            JScrollPane scrollPane = new JScrollPane(main);
             borderPanel.add(scrollPane, BorderLayout.CENTER);
-            borderPanel.add(new JLabel("player cards ho here"), BorderLayout.SOUTH);
 
             // MVC Market:
             MarketGui marketGui = new MarketGui();
-            Market market = new Market();
+            Market market = gameController.getGame().getMarket();
             new MarketController(marketGui, market);
             JComponent marketComponent = marketGui.getMainComponent();
             marketComponent.setPreferredSize(new Dimension(600, 150));
             borderPanel.add(marketComponent, BorderLayout.WEST);
 
+            // MVC Player Cards
+            borderPanel.add(new JLabel("player cards holder here"), BorderLayout.SOUTH);
+
             frame.add(borderPanel);
 
-            frame.setSize(mainPanel.getPreferredSize());
+            frame.setSize(main.getPreferredSize());
+            frame.setLocation(300, 4000);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
