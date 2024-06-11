@@ -70,7 +70,13 @@ public class ObserverPatternTest {
 
         eventManager.unsubscribe(subscriber2);
         assertEquals(EventType.values().length, eventManager.getSubscribers().size());
+    }
 
+    @Test
+    public void testSingleEventTypeSubscribe() {
+        assertEquals(0, eventManager.getSubscribers().size());
+        eventManager.subscribe(subscriber1, EventType.BuyCards);
+        assertEquals(1, eventManager.getSubscribers().size());
     }
 
     @Test
