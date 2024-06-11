@@ -13,6 +13,6 @@ public class CardTypeSpec {
   }
 
   public CardTypeSpec(CardType type) {
-    this(5, type);
+    this(3, type);
   }
 }

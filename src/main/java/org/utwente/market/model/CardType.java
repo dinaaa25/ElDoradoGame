@@ -1,7 +1,7 @@
 package org.utwente.market.model;
 
 public enum CardType {
-  Kundeshafter(4, 1, PowerType.Machete, false),
+  Kundeschafter(4, 1, PowerType.Machete, false),
   Forscher(1, null, PowerType.Machete, false),
   Entdecker(3, 3, PowerType.Machete, false),
   Pionier(5, 5, PowerType.Machete, false),
@@ -10,12 +10,12 @@ public enum CardType {
   Matrose(1, null, PowerType.Paddle, false),
   Reisende(1, null, PowerType.Coin, false),
   Fotografin(2, 2, PowerType.Coin, false),
-  Schatzruhe(4, 3, PowerType.Coin, true),
+  Schatztruhe(4, 3, PowerType.Coin, true),
   Millionarin(4, 5, PowerType.Coin, false),
   Journalistin(3, 3, PowerType.Coin, false),
   Tausendsassa(1, 2, PowerType.Wild, false),
-  Abenturerin(2, 4, PowerType.Wild, false),
-  Properllerflugzeug(4, 4, PowerType.Wild, true),
+  Abenteurerin(2, 4, PowerType.Wild, false),
+  Propellerflugzeug(4, 4, PowerType.Wild, true),
   Kartograph(2, 4, PowerType.Effect, false),
   Kompass(3, 2, PowerType.Effect, true),
   Wissenschaftlerin(1, 4, PowerType.Effect, true),

@@ -1,6 +1,5 @@
 package org.utwente.game;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.utwente.Tile.Tile;
@@ -85,10 +84,10 @@ public class MoveActionTest {
 
     @Test
     public void testIsCardMatchingTileTrue() {
-        List<CardType> macheteCards = List.of(CardType.Kundeshafter, CardType.Forscher,
+        List<CardType> macheteCards = List.of(CardType.Kundeschafter, CardType.Forscher,
                 CardType.Entdecker, CardType.Pionier, CardType.MachtigeMachete);
 
-        for(CardType macheteCard : macheteCards) {
+        for (CardType macheteCard : macheteCards) {
             Resource card = new Card(macheteCard);
             MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
             assertTrue(move.isCardMatchingTile());
@@ -98,12 +97,12 @@ public class MoveActionTest {
     @Test
     public void testIsCardMatchingTileFalse() {
         List<CardType> macheteCards = List.of(CardType.Kapitan, CardType.Matrose,
-                CardType.Reisende, CardType.Fotografin, CardType.Schatzruhe,
+                CardType.Reisende, CardType.Fotografin, CardType.Schatztruhe,
                 CardType.Millionarin, CardType.Journalistin, CardType.Journalistin,
                 CardType.Kartograph, CardType.Kompass, CardType.Wissenschaftlerin,
                 CardType.Ureinwohner, CardType.Fernsprechgerat, CardType.Reisetagebuch);
 
-        for(CardType macheteCard : macheteCards) {
+        for (CardType macheteCard : macheteCards) {
             Resource card = new Card(macheteCard);
             MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
             assertFalse(move.isCardMatchingTile());

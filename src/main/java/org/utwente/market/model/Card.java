@@ -8,12 +8,12 @@ public class Card implements Resource {
     private CardType cardType;
     private int consumedPower;
 
-
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
     }
 
+    @Override
     public PowerType getType() {
         return this.cardType.powerType;
     }
@@ -27,15 +27,15 @@ public class Card implements Resource {
         return cardType.power - consumedPower;
     }
 
-    public void removePower(int power) {
+    public void removePower(int power) throws CardPowerException {
+        if (power > remainingPower()) {
+            throw new CardPowerException("Not enough power to remove.");
+        }
         this.consumedPower += power;
     }
 
+    @Override
     public int getPower() {
         return remainingPower();
-    }
-
-    public CardType getCardType() {
-        return this.cardType;
     }
 }

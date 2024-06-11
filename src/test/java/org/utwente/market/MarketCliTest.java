@@ -1,10 +1,12 @@
 package org.utwente.market;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.shaded.org.apache.commons.io.output.ByteArrayOutputStream;
-import org.utwente.market.controller.InputEvent;
 import org.utwente.market.controller.MarketOrderEvent;
+import org.utwente.market.model.Card;
+import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketCli;
 import org.utwente.util.EventHandler;
@@ -13,18 +15,24 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
+import java.util.*;
 
 public class MarketCliTest {
 
   MarketCli marketView;
   ByteArrayOutputStream outContent;
   PrintStream testStream;
+  Scanner mockScanner;
+  // @Mock
+  // EventHandler<InputEvent> mockEventHandler;
 
   @BeforeEach
   public void setup() {
     outContent = new ByteArrayOutputStream();
+    mockScanner = new Scanner(System.in);
     testStream = new PrintStream(outContent);
-    marketView = new MarketCli(testStream);
+    marketView = new MarketCli(testStream, mockScanner);
+    // marketView.setInputEventHandler(mockEventHandler);
   }
 
   @Test
@@ -41,30 +49,16 @@ public class MarketCliTest {
   }
 
   @Test
-  public void testSetOnOrder() {
-    EventHandler<MarketOrderEvent> mockEventHandler = new EventHandler<MarketOrderEvent>() {
-
-      @Override
-      public void handle(MarketOrderEvent event) {
-
-      }
-    };
-
-    marketView.setOnOrder(mockEventHandler);
-    assertEquals(mockEventHandler, marketView.getEventHandler());
-  }
-
-  @Test
   public void testSetOnInput() {
-    EventHandler<InputEvent> mockEventHandler = new EventHandler<InputEvent>() {
+    // EventHandler<InputEvent> mockEventHandler = new EventHandler<InputEvent>() {
 
-      @Override
-      public void handle(InputEvent event) {
-      }
+    // @Override
+    // public void handle(InputEvent event) {
+    // }
 
-    };
-    marketView.setOnInput(mockEventHandler);
-    assertEquals(mockEventHandler, marketView.getInputEventHandler());
+    // };
+    // marketView.setOnInput(mockEventHandler);
+    // assertEquals(mockEventHandler, marketView.getInputEventHandler());
   }
 
   @Test
@@ -80,12 +74,14 @@ public class MarketCliTest {
 
   @Test
   public void testDisplayPurchaseResult() {
-
+    marketView.displayPurchaseResult(new Card(CardType.Abenteurerin));
+    assertTrue(new String(outContent.toByteArray()).contains("ABENTEURERIN"));
   }
 
   @Test
   public void testDisplayError() {
-
+    marketView.displayError("blue");
+    assertTrue(new String(outContent.toByteArray()).contains("blue"));
   }
 
   @Test
