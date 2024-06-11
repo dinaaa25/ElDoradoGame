@@ -8,14 +8,9 @@ variables:
 
 build:
   stage: build
-  image: docker:26.1.2-dind
-  services:
-    - name: docker:dind
-      alias: docker
   before_script:
     - apk add --no-cache openjdk17 gradle curl # Install JDK 17
     - chmod +x ./gradlew
-    - docker info
   script:
     - ./gradlew clean test
   artifacts:
@@ -31,16 +26,11 @@ build:
 
 test:
   stage: test
-  image: docker:26.1.2-dind
   dependencies:
     - build
-  services:
-    - name: docker:dind
-      alias: docker
   before_script:
     - apk add --no-cache openjdk17 gradle # gitlab creates clean environment per stage, need to install jdk again here
     - chmod +x ./gradlew
-    - docker info
   script:
     - ./gradlew clean test # run tests
   artifacts:
