@@ -32,6 +32,7 @@ public class ObserverPatternTest {
         subscriber2 = mock(Consumer.class);
         // gameController = new GameController(game, gameView);
         eventManager = EventManager.getInstance();
+        eventManager.resetSubscribers();
     }
 
     @Test
@@ -83,6 +84,15 @@ public class ObserverPatternTest {
     public void unsubscribeToSpecificEvent() {
         eventManager.subscribe(subscriber1, EventType.BuyCards);
         eventManager.unsubscribe(subscriber1, EventType.BuyCards);
+
+        eventManager.notifying(EventType.BuyCards, "buy entdecker");
+        verify(subscriber1, times(0)).accept("buy entdecker");
+    }
+
+    @Test
+    public void testClear() {
+        eventManager.subscribe(subscriber1, EventType.BuyCards);
+        eventManager.resetSubscribers();
 
         eventManager.notifying(EventType.BuyCards, "buy entdecker");
         verify(subscriber1, times(0)).accept("buy entdecker");

@@ -11,6 +11,10 @@ public class EventManager {
 
     private EventManager() {
         this.subscribers = new HashMap<>();
+        setup();
+    }
+
+    private void setup() {
         for (EventType event : EventType.values()) {
             this.subscribers.put(event, new ArrayList<>());
         }
@@ -30,6 +34,7 @@ public class EventManager {
 
     public void resetSubscribers() {
         subscribers.clear();
+        setup();
     }
 
     public void subscribe(Consumer<String> subscriber) {
