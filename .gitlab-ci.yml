@@ -17,11 +17,12 @@ build:
     - chmod +x ./gradlew
     - docker info
   script:
-    - ./gradlew clean assemble # wont run tests
-    - ./gradlew shadowJar # creates a 'fat' jar with dependencies
+    - ./gradlew clean test
   artifacts:
     paths:
-      - build/libs/*.jar
+      - build/reports/tests/test
+    reports:
+      junit: build/test-results/test/TEST-*.xml
     expire_in: 1 week
   rules:
     - when: always
