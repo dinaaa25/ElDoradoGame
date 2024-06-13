@@ -134,12 +134,11 @@ public class TileView {
 
     private void drawPlayers(Graphics2D g2d, Set<Player> players, int x, int y) {
         if (!players.isEmpty()) {
-            int playerYOffset = y - HEX_SIZE / 2;
-            FontMetrics metrics = g2d.getFontMetrics();
+            int playerXOffset = x - ((players.size() - 1) * 25) / 2;
             for (Player player : players) {
                 PlayerController playerController = new PlayerController(player, new PlayerView());
-                playerController.updateView(g2d, x, playerYOffset + metrics.getHeight() / 2 - metrics.getDescent());
-                playerYOffset += metrics.getHeight();
+                playerController.updateView(g2d, playerXOffset, y - HEX_SIZE / 2);
+                playerXOffset += 25;
             }
         }
     }

@@ -7,6 +7,7 @@ import org.utwente.Board.Board;
 import org.utwente.Tile.Tile;
 import org.utwente.market.model.Market;
 import org.utwente.player.Player;
+import org.utwente.player.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +173,7 @@ public class Game {
     public List<Tile> placePlayersStart() {
         List<Tile> startingTiles = board.getStartingTiles();
         for(int index = 0; index < this.players.size(); index++) {
+            players.get(index).setColor(PlayerColor.values()[index]);
             board.placePlayer(startingTiles.get(index), players.get(index));
         }
         return startingTiles;
