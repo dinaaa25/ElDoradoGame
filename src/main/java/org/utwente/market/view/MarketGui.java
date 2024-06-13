@@ -206,7 +206,7 @@ public class MarketGui implements MarketView {
   }
 
   public void addCard(CardType card, GridCoordinate coord) {
-    CardComponent cardComponent = new CardComponent(card, market.getRemainingAmount(card));
+    CardComponent cardComponent = new CardComponent(card, market.getRemainingAmount(card), null);
 
     GridBagConstraints c = coord.toGridBagConstraints(1);
 
