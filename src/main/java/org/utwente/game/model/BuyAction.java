@@ -3,6 +3,7 @@ package org.utwente.game.model;
 
 import org.utwente.market.model.Order;
 import org.utwente.market.model.Resource;
+import org.utwente.player.model.Pile;
 import org.utwente.player.model.Player;
 
 import org.utwente.market.exceptions.BuyException;
@@ -45,6 +46,13 @@ public class BuyAction extends Action {
 
     @Override
     public void discard() {
-
+        player.discardCard(this.boughtCard);
+        for(Resource r : this.resources) {
+            if(r instanceof Card) {
+                player.discardCard((Card) r);
+            } else {
+                // TODO: remove coin from the game coin pile basically
+            }
+        }
     }
 }
