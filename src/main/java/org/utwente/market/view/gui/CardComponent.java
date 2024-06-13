@@ -76,8 +76,7 @@ public class CardComponent extends JButton {
   }
 
   public void addBorder() {
-    Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED, MarketConfig.MARKET_BORDER,
-        MarketConfig.MARKET_SHADOW);
+    Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, MarketConfig.MARKET_BORDER);
     EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10); // Adjust the gap values as needed
     CompoundBorder compoundBorder = BorderFactory.createCompoundBorder(emptyBorder, bevelBorder);
 
