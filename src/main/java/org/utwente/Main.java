@@ -12,7 +12,7 @@ import org.utwente.game.view.GameGui;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 import javax.swing.*;
 import java.awt.*;

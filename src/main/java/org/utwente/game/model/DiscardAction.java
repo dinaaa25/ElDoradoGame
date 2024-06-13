@@ -1,7 +1,7 @@
 package org.utwente.game.model;
 
 import org.utwente.market.model.Resource;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 public class DiscardAction extends Action {
 

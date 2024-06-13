@@ -1,5 +1,7 @@
 package org.utwente.player;
 
+import org.utwente.player.model.Player;
+
 import java.awt.*;
 
 public class PlayerController {

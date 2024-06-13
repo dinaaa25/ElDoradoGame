@@ -8,7 +8,7 @@ import org.utwente.Board.AxialTranslationCalculator;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 import java.awt.*;
 import java.util.*;

@@ -7,6 +7,7 @@ import org.utwente.player.PlayerColor;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.utwente.player.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;

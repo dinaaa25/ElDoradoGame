@@ -10,7 +10,7 @@ import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 import java.util.*;
 import java.util.stream.Collectors;

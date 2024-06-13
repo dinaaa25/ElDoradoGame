@@ -9,7 +9,7 @@ import org.utwente.game.model.MoveAction;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
