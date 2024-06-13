@@ -35,6 +35,14 @@ public class Card implements Resource {
     }
 
     @Override
+    public double getValue() {
+        if(this.cardType.powerType == PowerType.Coin) {
+            return this.getPower();
+        }
+        return 0.5;
+    }
+
+    @Override
     public int getPower() {
         return remainingPower();
     }

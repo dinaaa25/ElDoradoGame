@@ -36,6 +36,11 @@ public class MoveAction extends Action {
         return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
     }
 
+    @Override
+    public void discard() {
+
+    }
+
     public boolean isTileToNeighbour() {
         return tileTo.isNeighbor(tileFrom);
     }
@@ -51,13 +56,13 @@ public class MoveAction extends Action {
     }
 
     public boolean resourceHasEnoughPower() {
-        return tileTo.getPower() <= resource.getPower();
+        return tileTo.getPower() <= this.getResource().getPower();
     }
 
 
     public boolean isCardMatchingTile(){
         // compare not just power but also now whether this card type can be applied to the tile you want to move to
-        return tileTo.getTileType().getPowerTypeList().contains(resource.getType());
+        return tileTo.getTileType().getPowerTypeList().contains(this.getResource().getType());
     }
 
 

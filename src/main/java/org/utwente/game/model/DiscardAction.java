@@ -18,5 +18,10 @@ public class DiscardAction extends Action {
     public boolean validate() {
         return true;
     }
+
+    @Override
+    public void discard() {
+
+    }
 }
 
