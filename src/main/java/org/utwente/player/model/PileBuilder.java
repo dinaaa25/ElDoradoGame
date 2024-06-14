@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class PileBuilder {
   private Pile pile;
+  private Player player;
 
   public PileBuilder() {
     this.pile = new Pile();
@@ -33,17 +34,45 @@ public class PileBuilder {
   }
 
   public PileBuilder setPlayer(Player player) {
-    this.pile.setPlayer(player);
+    this.player = player;
+    this.pile.setPlayer(this.player);
     return this;
   }
 
-  private void clearPile() {
+  public void reset() {
     this.pile = new Pile();
   }
 
-  public Pile build() {
-    Pile temporaryPile = this.pile;
-    clearPile();
-    return temporaryPile;
+  public PileBuilder setType(PileType type) {
+    this.pile.setPileType(type);
+    return this;
+  }
+
+  public Pile buildDiscardPile() {
+    this.reset();
+    this.setType(PileType.Discard);
+    this.pile.setPlayer(this.player);
+    return this.pile;
+  }
+
+  public Pile buildOutOfGamePile() {
+    this.reset();
+    this.setType(PileType.OutOfGame);
+    this.pile.setPlayer(this.player);
+    return this.pile;
+  }
+
+  public Pile buildDrawPile() {
+    this.reset();
+    this.setType(PileType.Draw);
+    this.pile.setPlayer(this.player);
+    return this.pile;
+  }
+
+  public Pile buildStartPile() {
+    this.reset();
+    this.addStartingCards();
+    this.pile.setPlayer(this.player);
+    return this.pile;
   }
 }

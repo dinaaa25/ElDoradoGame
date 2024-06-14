@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Player {
-
+    public static final int DECK_CARDS = 4;
     private String name;
     private List<Blockade> blockades;
     @Getter
@@ -31,10 +31,11 @@ public class Player {
         this.name = name;
         this.blockades = new ArrayList<Blockade>();
         PileBuilder builder = new PileBuilder();
-        this.discardPile = builder.setPlayer(this).build();
-        Pile startPile = builder.setPlayer(this).addStartingCards().build();
-        this.outOfGamePile = builder.setPlayer(this).build();
-        this.playPile = startPile.draw(4);
+        builder.setPlayer(this);
+        this.discardPile = builder.buildDiscardPile();
+        Pile startPile = builder.buildStartPile();
+        this.playPile = startPile.draw(DECK_CARDS);
+        this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
     }
 
