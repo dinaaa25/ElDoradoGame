@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.utwente.player.PlayerColor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -50,16 +51,9 @@ public class Player {
     }
 
     public Blockade getMaxBlockade() {
-        int maxPower = 0;
-        Blockade maxBlockade = null;
-        for (Blockade b : blockades) {
-            int currentPower = b.getPower();
-            if (maxPower < currentPower) {
-                maxPower = currentPower;
-                maxBlockade = b;
-            }
-        }
-        return maxBlockade;
+        return blockades.stream()
+                .max(Comparator.comparingInt(Blockade::getPower))
+                .orElse(null);
     }
 
     @Override
