@@ -37,8 +37,6 @@ public class MarketGui implements MarketView {
     scrollPane = new JScrollPane(panel);
     addTitle();
     coord.nextRow();
-    // setBackground(panel);
-    // setBackground(scrollPane);
     missingDrawCards = true;
   }
 
