@@ -1,6 +1,7 @@
 package org.utwente.player;
 
 import org.utwente.game.view.GameConfig;
+import org.utwente.player.model.Player;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

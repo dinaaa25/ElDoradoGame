@@ -6,8 +6,8 @@ import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Board;
 import org.utwente.Tile.Tile;
 import org.utwente.market.model.Market;
-import org.utwente.player.Player;
 import org.utwente.player.PlayerColor;
+import org.utwente.player.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;

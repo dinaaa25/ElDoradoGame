@@ -12,7 +12,8 @@ import org.utwente.game.view.GameGui;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
+import org.utwente.player.view.gui.PlayerDeck;
 
 import javax.swing.*;
 import java.awt.*;
@@ -87,7 +88,7 @@ public class Main extends JPanel {
             borderPanel.add(marketComponent, BorderLayout.WEST);
 
             // MVC Player Cards
-            borderPanel.add(new JLabel("player cards holder here"), BorderLayout.SOUTH);
+            borderPanel.add(new PlayerDeck(new Player("Stijn")), BorderLayout.SOUTH);
 
             frame.add(borderPanel);
 

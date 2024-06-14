@@ -5,9 +5,9 @@ import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Section.Section;
 import org.utwente.game.view.GameConfig;
-import org.utwente.player.Player;
 import org.utwente.player.PlayerController;
 import org.utwente.player.PlayerView;
+import org.utwente.player.model.Player;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
