@@ -77,6 +77,8 @@ public class PileBuilder {
   }
 
   public Pile build() {
-    return this.pile;
+    Pile temporaryPile = this.pile;
+    this.reset();
+    return temporaryPile;
   }
 }
