@@ -11,7 +11,7 @@ public class PileBuilder {
   private Player player;
 
   public PileBuilder() {
-    this.pile = new Pile();
+    this.reset();
   }
 
   public PileBuilder addCard(CardType cardType, int amount) {
@@ -73,6 +73,10 @@ public class PileBuilder {
     this.reset();
     this.addStartingCards();
     this.pile.setPlayer(this.player);
+    return this.pile;
+  }
+
+  public Pile build() {
     return this.pile;
   }
 }
