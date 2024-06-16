@@ -52,12 +52,19 @@ public class MoveAction extends Action {
         return tileTo.isNeighbor(tileFrom);
     }
 
-    // check TileType of TileTo is of type Mountain
+    /**
+     *  check TileType of TileTo is of type Mountain
+     * @param tile
+     * @return
+     */
     public TileType getTileType(Tile tile) {
         return TileType.Mountain;
     }
 
-    // check if another player is on TileTo
+    /**
+     * check if another player is on TileTo
+     * @return true if destination tile isEmpty() and false if destination tile !isEmpty()
+     */
     public boolean isNoPlayerOnToTile() {
         return tileTo.isEmpty();
     }
@@ -67,8 +74,11 @@ public class MoveAction extends Action {
     }
 
 
+    /**
+     * compare not just power but also now whether this card type can be applied to the tile you want to move to
+     * @return if resource matches to tile
+     */
     public boolean isCardMatchingTile(){
-        // compare not just power but also now whether this card type can be applied to the tile you want to move to
         return tileTo.getTileType().getPowerTypeList().contains(this.getResource().getType());
     }
 
