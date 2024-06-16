@@ -1,9 +1,13 @@
 package org.utwente.game.model;
 
 
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.CardType;
+import org.utwente.market.model.PowerType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 
@@ -34,7 +38,21 @@ public class MoveAction extends Action {
 
     @Override
     public boolean validate() {
+        // especially check native
+        if(checkIfAdjacentCardOrCoin()) {
+            return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile();
+        }
         return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
+    }
+
+    protected boolean isTileToMountain(){
+        return this.tileTo.getTileType() == TileType.Mountain;
+    }
+
+    private boolean checkIfAdjacentCardOrCoin() {
+        return this.getResource() instanceof Card &&
+                ((Card) this.getResource()).getCardType() == CardType.Ureinwohner
+                || ((CaveCoin) this.getResource()).caveCoinType() == CaveCoinType.Adjacent;
     }
 
     @Override

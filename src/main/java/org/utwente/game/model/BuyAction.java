@@ -28,7 +28,11 @@ public class BuyAction extends Action {
     @Override
     public void execute() {
         try {
-            this.boughtCard = this.market.buy(this.order);
+            if (this.checkIfTransmitter()) {
+                this.boughtCard = this.market.buy(this.order.getCardToken());
+            } else {
+                this.boughtCard = this.market.buy(this.order);
+            }
         }catch(BuyException buyException) {
 
         }
@@ -42,8 +46,17 @@ public class BuyAction extends Action {
         return (int) Math.floor(this.resources.stream().map(resource -> resource.getValue()).reduce((x, y) -> x + y).orElse(0.0));
     }
 
+    private boolean checkIfTransmitter() {
+        return this.getResource() instanceof Card && ((Card) this.getResource()).getCardType() == CardType.Fernsprechgerat;
+    }
+
     @Override
     public boolean validate() {
+        // especially check for the transmitter card.
+        if (this.checkIfTransmitter()) {
+            return this.market.isCardAvailable(order.getCardToken());
+        }
+        // otherwise check the money and card.
         return market.canBuy(order).getStatus();
     }
 
