@@ -218,17 +218,14 @@ public class AxialTranslationCalculator {
     public AxialTranslation getTranslation(SectionWithRotationPositionSectionDirection sectionWithData,
             CoordinateBounds coordinateBounds) {
         SectionType sectionType = sectionWithData.getSectionType();
-        AxialTranslation axialTranslation;
 
         if (isRectangleSection(sectionType)) {
-            axialTranslation = getTranslationSmallOPQR(sectionWithData, coordinateBounds);
-            return axialTranslation;
-        } else if (isElDoradoSection(sectionType)) {
-            axialTranslation = getTranslationElDorado(sectionWithData, coordinateBounds);
-            return axialTranslation;
-        } else {
-            axialTranslation = getTranslationNormalSection(sectionWithData, coordinateBounds);
-            return axialTranslation;
+            return getTranslationSmallOPQR(sectionWithData, coordinateBounds);
         }
+
+        if (isElDoradoSection(sectionType)) {
+            return getTranslationElDorado(sectionWithData, coordinateBounds);
+        }
+        return getTranslationNormalSection(sectionWithData, coordinateBounds);
     }
 }
