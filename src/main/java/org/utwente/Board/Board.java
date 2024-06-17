@@ -363,12 +363,8 @@ public class Board {
                 sections.add(section);
             } else {
                 Section lastSection = sections.get(sections.size() - 1);
-                int minQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).min().orElse(0);
-                int maxQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).max().orElse(0);
-                int minR = lastSection.getTiles().stream().mapToInt(Tile::getR).min().orElse(0);
-                int maxR = lastSection.getTiles().stream().mapToInt(Tile::getR).max().orElse(0);
-
-                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionWithData, maxQ, minR, minQ, maxR);
+                CoordinateBounds coordinateBounds = lastSection.getCoordinateBounds();
+                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionWithData, coordinateBounds);
 
                 for (Tile tile : section.getTiles()) {
                     tile.translate(axialTranslation);
