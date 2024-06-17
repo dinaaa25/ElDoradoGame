@@ -1,0 +1,6 @@
+component_depth: 2
+exclude:
+  - "gradlew"
+  - "gradlew.bat"
+languages:
+  - name: java
