@@ -3,9 +3,6 @@ package org.utwente.Board;
 import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 
-import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
-import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
-
 import java.util.*;
 
 public class AxialTranslationCalculator {
@@ -118,46 +115,49 @@ public class AxialTranslationCalculator {
 
     private AxialTranslation getTranslationNormalSection(SectionWithRotationPositionSectionDirection sectionWithData,
                                                          CoordinateBounds coordinateBounds) {
-        SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
+        SectionDirectionType.PointyTopSectionDirection sectionDirection = SectionDirectionType.toPointyTopSectionDirection(sectionWithData.getSectionDirection());
         int placement = sectionWithData.getPlacement();
 
-        int translationQ = 0;
-        int translationR = 0;
-
-        if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
-            translationQ = coordinateBounds.maxQ() + 1 + 3;
-            translationR = coordinateBounds.minR() - 1 + placement;
-            return new AxialTranslation(translationQ, translationR);
-        } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
-            translationQ = coordinateBounds.maxQ() + 1 - placement;
-            translationR = coordinateBounds.maxR() + placement;
-            if (placement == -1) {
-                translationQ -= 2;
-                translationR += 1;
+        return switch (sectionDirection) {
+            case PT_NORTHEAST: {
+                int translationQ = coordinateBounds.maxQ() + 1 + 3;
+                int translationR = coordinateBounds.minR() - 1 + placement;
+                yield new AxialTranslation(translationQ, translationR);
             }
-            return new AxialTranslation(translationQ, translationR);
-        } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
-            translationQ = coordinateBounds.minQ() - placement;
-            translationR = coordinateBounds.maxR() + 3 + 1;
-            return new AxialTranslation(translationQ, translationR);
-        } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
-            translationQ = coordinateBounds.minQ() - 3 - 1;
-            translationR = coordinateBounds.maxR() + 1 - placement;
-            return new AxialTranslation(translationQ, translationR);
-        } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
-            translationQ = coordinateBounds.minQ() - placement;
-            translationR = coordinateBounds.minR() - 1 + placement;
-            if (placement == -1) {
-                translationQ -= 1;
-                translationR += 2;
+            case PT_SOUTHEAST: {
+                int translationQ = coordinateBounds.maxQ() + 1 - placement;
+                int translationR = coordinateBounds.maxR() + placement;
+                if (placement == -1) {
+                    translationQ -= 2;
+                    translationR += 1;
+                }
+                yield new AxialTranslation(translationQ, translationR);
             }
-            return new AxialTranslation(translationQ, translationR);
-        } else if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
-            translationQ = coordinateBounds.maxQ() + placement;
-            translationR = coordinateBounds.minR() - 3 - 1;
-            return new AxialTranslation(translationQ, translationR);
-        }
-        return new AxialTranslation(translationQ, translationR);
+            case PT_SOUTH: {
+                int translationQ = coordinateBounds.minQ() - placement;
+                int translationR = coordinateBounds.maxR() + 3 + 1;
+                yield new AxialTranslation(translationQ, translationR);
+            }
+            case PT_SOUTHWEST: {
+                int translationQ = coordinateBounds.minQ() - 3 - 1;
+                int translationR = coordinateBounds.maxR() + 1 - placement;
+                yield new AxialTranslation(translationQ, translationR);
+            }
+            case PT_NORTHWEST: {
+                int translationQ = coordinateBounds.minQ() - placement;
+                int translationR = coordinateBounds.minR() - 1 + placement;
+                if (placement == -1) {
+                    translationQ -= 1;
+                    translationR += 2;
+                }
+                yield new AxialTranslation(translationQ, translationR);
+            }
+            case PT_NORTH: {
+                int translationQ = coordinateBounds.maxQ() + placement;
+                int translationR = coordinateBounds.minR() - 3 - 1;
+                yield new AxialTranslation(translationQ, translationR);
+            }
+        };
     }
 
     private boolean isRectangleSection(SectionType sectionType) {
