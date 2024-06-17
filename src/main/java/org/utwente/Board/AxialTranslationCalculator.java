@@ -61,88 +61,95 @@ public class AxialTranslationCalculator {
         int translationR = 0;
 
         if (sectionDirection instanceof SectionDirectionType.FlatTopSectionDirection flatTopSectionDirection) {
-            switch (flatTopSectionDirection) {
-                case FT_NORTHEAST: {
+            return switch (flatTopSectionDirection) {
+                case FT_NORTHEAST -> {
                     if (rotation == 0) {
                         translationQ = coordinateBounds.maxQ() + 1;
                         translationR = coordinateBounds.minR() - 1;
                     }
-                    break;
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-                case FT_EAST: {
+                case FT_EAST -> {
                     if (rotation == 1) {
-                        translationQ = coordinateBounds.maxQ()+ 1;
+                        translationQ = coordinateBounds.maxQ() + 1;
                         translationR = (coordinateBounds.minR() + coordinateBounds.maxR()) / 2;
                     }
-                    break;
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-                case FT_SOUTHEAST:
+                case FT_SOUTHEAST -> {
                     if (rotation == 2) {
                         translationQ = (coordinateBounds.minQ() + coordinateBounds.maxQ()) / 2;
                         translationR = coordinateBounds.maxR() + 1;
                     }
-                    break;
-                case FT_SOUTHWEST: {
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+                case FT_SOUTHWEST -> {
                     if (rotation == 3) {
                         translationQ = coordinateBounds.minQ() - 1;
                         translationR = coordinateBounds.maxR() + 1;
                     }
-                    break;
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-                case FT_WEST: {
+                case FT_WEST -> {
                     if (rotation == 4) {
                         translationQ = coordinateBounds.minQ() - 1;
                         translationR = (coordinateBounds.minR() + coordinateBounds.maxR()) / 2;
                     }
-                    break;
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-                case FT_NORTHWEST: {
+                case FT_NORTHWEST -> {
                     if (rotation == 5) {
                         translationQ = (coordinateBounds.minQ() + coordinateBounds.maxQ()) / 2;
                         translationR = coordinateBounds.minR() - 1;
                     }
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-            }
+            };
         } else if (sectionDirection instanceof SectionDirectionType.PointyTopSectionDirection pointyTopSectionDirection) {
-            switch (pointyTopSectionDirection) {
-                case PT_NORTHEAST: {
+            return switch (pointyTopSectionDirection) {
+                case PT_NORTHEAST -> {
                     if (rotation == 0) {
-                        translationQ = coordinateBounds.maxQ()+ 1;
+                        translationQ = coordinateBounds.maxQ() + 1;
                         translationR = coordinateBounds.minR() - 1;
                     }
-                    break;
+                    yield new AxialTranslation(translationQ, translationR);
                 }
-                case PT_SOUTHEAST: {
+                case PT_SOUTHEAST -> {
                     if (rotation == 1) {
-                        translationQ = coordinateBounds.maxQ()+ 1;
+                        translationQ = coordinateBounds.maxQ() + 1;
                         translationR = (coordinateBounds.minQ() + coordinateBounds.maxQ()) / 2;
                     }
-                    break;
-                } case PT_SOUTH: {
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+                case PT_SOUTH -> {
                     if (rotation == 2) {
                         translationQ = (coordinateBounds.minQ() + coordinateBounds.maxQ()) / 2;
-                        translationR = coordinateBounds.maxQ()+ 1;
+                        translationR = coordinateBounds.maxQ() + 1;
                     }
-                    break;
-                } case PT_SOUTHWEST: {
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+                case PT_SOUTHWEST -> {
                     if (rotation == 3) {
                         translationQ = coordinateBounds.minQ() - 1;
                         translationR = coordinateBounds.maxR() + 1;
                     }
-                    break;
-                } case PT_NORTHWEST: {
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+                case PT_NORTHWEST -> {
                     if (rotation == 4) {
                         translationQ = coordinateBounds.minQ() - 1;
                         translationR = (coordinateBounds.minR() + coordinateBounds.maxR()) / 2;
                     }
-                    break;
-                } case PT_NORTH:
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+                case PT_NORTH -> {
                     if (rotation == 5) {
                         translationQ = (coordinateBounds.minQ() + coordinateBounds.maxQ()) / 2;
                         translationR = coordinateBounds.minR() - 1;
                     }
-                    break;
-            }
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            };
         }
         return new AxialTranslation(translationQ, translationR);
     }
