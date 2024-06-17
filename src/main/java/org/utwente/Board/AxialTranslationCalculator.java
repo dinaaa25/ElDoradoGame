@@ -5,6 +5,7 @@ import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+
 import java.util.*;
 
 public class AxialTranslationCalculator {
@@ -13,56 +14,56 @@ public class AxialTranslationCalculator {
     }
 
     private AxialTranslation getTranslationSmallRectangle(SectionWithRotationPositionSectionDirection sectionWithData,
-            CoordinateBounds coordinateBounds) {
-        SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
+                                                          CoordinateBounds coordinateBounds) {
+
+        SectionDirectionType.PointyTopSectionDirection sectionDirection = SectionDirectionType.toPointyTopSectionDirection(sectionWithData.getSectionDirection());
         int rotation = sectionWithData.getRotation();
         int placement = sectionWithData.getPlacement();
 
-        int translationQ = 0;
-        int translationR = 0;
-
-        if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
-            if (rotation == 0 || rotation == 3) {
-                translationQ = coordinateBounds.maxQ() - placement;
-                translationR = coordinateBounds.minR() - 2;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        } else if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
-            if (rotation == 1 || rotation == 4) {
-                translationQ = coordinateBounds.maxQ() + 2;
-                translationR = coordinateBounds.minR() + 1 - placement;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
-            if (rotation == 2 || rotation == 5) {
-                translationQ = coordinateBounds.maxQ() - 1 + placement;
-                translationR = coordinateBounds.maxR() - placement;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
-            if (rotation == 0 || rotation == 3) {
-                translationQ = coordinateBounds.minQ() + 1 - placement;
-                translationR = coordinateBounds.maxR() + 2;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
-            if (rotation == 4 || rotation == 1) {
-                translationQ = coordinateBounds.minQ() - 2;
-                translationR = coordinateBounds.maxR() - 1 + placement;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
-            if (rotation == 5 || rotation == 2) {
-                translationQ = coordinateBounds.minQ() + 1 - placement;
-                translationR = coordinateBounds.minR() + placement;
-                return new AxialTranslation(translationQ, translationR);
-            }
-        }
-        return new AxialTranslation(translationQ, translationR);
+        return switch (sectionDirection) {
+            case PT_NORTH:
+                if (rotation == 0 || rotation == 3) {
+                    int translationQ = coordinateBounds.maxQ() - placement;
+                    int translationR = coordinateBounds.minR() - 2;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            case PT_NORTHEAST:
+                if (rotation == 1 || rotation == 4) {
+                    int translationQ = coordinateBounds.maxQ() + 2;
+                    int translationR = coordinateBounds.minR() + 1 - placement;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            case PT_SOUTHEAST:
+                if (rotation == 2 || rotation == 5) {
+                    int translationQ = coordinateBounds.maxQ() - 1 + placement;
+                    int translationR = coordinateBounds.maxR() - placement;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            case PT_SOUTH:
+                if (rotation == 0 || rotation == 3) {
+                    int translationQ = coordinateBounds.minQ() + 1 - placement;
+                    int translationR = coordinateBounds.maxR() + 2;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            case PT_SOUTHWEST:
+                if (rotation == 4 || rotation == 1) {
+                    int translationQ = coordinateBounds.minQ() - 2;
+                    int translationR = coordinateBounds.maxR() - 1 + placement;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            case PT_NORTHWEST:
+                if (rotation == 5 || rotation == 2) {
+                    int translationQ = coordinateBounds.minQ() + 1 - placement;
+                    int translationR = coordinateBounds.minR() + placement;
+                    yield new AxialTranslation(translationQ, translationR);
+                }
+            default:
+                yield new AxialTranslation(0, 0);
+        };
     }
 
     private AxialTranslation getTranslationElDorado(SectionWithRotationPositionSectionDirection sectionWithData,
-            CoordinateBounds coordinateBounds) {
+                                                    CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int rotation = sectionWithData.getRotation();
 
@@ -164,7 +165,7 @@ public class AxialTranslationCalculator {
     }
 
     private AxialTranslation getTranslationNormalSection(SectionWithRotationPositionSectionDirection sectionWithData,
-            CoordinateBounds coordinateBounds) {
+                                                         CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int placement = sectionWithData.getPlacement();
 
@@ -216,7 +217,7 @@ public class AxialTranslationCalculator {
     }
 
     public AxialTranslation getTranslation(SectionWithRotationPositionSectionDirection sectionWithData,
-            CoordinateBounds coordinateBounds) {
+                                           CoordinateBounds coordinateBounds) {
         SectionType sectionType = sectionWithData.getSectionType();
 
         if (isRectangleSection(sectionType)) {
