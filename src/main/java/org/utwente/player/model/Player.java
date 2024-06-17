@@ -49,6 +49,11 @@ public class Player {
         playPile.remove(card);
     }
 
+    public void removeCardFromGame(Card card) {
+        outOfGamePile.add(card);
+        playPile.remove(card);
+    }
+
     public void addBlockade(Blockade b) {
         this.blockades.add(b);
     }

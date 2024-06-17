@@ -27,12 +27,12 @@ public class DrawAction extends Action {
     @Override
     public boolean validate() {
         Resource resource = this.getResource();
-        if(this.getResource() instanceof Card) {
+        if (this.getResource() instanceof Card) {
             Card card = (Card) resource;
             return List.of(CardType.Kartograph, CardType.Kompass, CardType.Wissenschaftlerin,
                     CardType.Reisende).contains(card.getCardType());
         }
-        if(this.getResource() instanceof CaveCoin) {
+        if (this.getResource() instanceof CaveCoin) {
             CaveCoin caveCoin = (CaveCoin) resource;
             return caveCoin.caveCoinType() == CaveCoinType.Draw;
         }
@@ -41,18 +41,14 @@ public class DrawAction extends Action {
 
     @Override
     public void discard() {
-        if(this.getResource() instanceof Card) {
+        if (this.getResource() instanceof Card) {
             Card card = (Card) this.getResource();
-            if((card.getCardType() == CardType.Kartograph) || (card.getCardType() == CardType.Wissenschaftlerin)) {
-                Pile discardPile = player.getDrawPile();
-                discardPile.add(card);
-                Pile playPile = player.getPlayPile();
-                playPile.remove(card);
+            if ((card.getCardType() == CardType.Kartograph) || (card.getCardType() == CardType.Wissenschaftlerin)) {
+                player.discardCard(card);
             }
-            Pile outOfGamePile = player.getOutOfGamePile();
-            outOfGamePile.add(card);
-            Pile playPile = player.getPlayPile();
-            playPile.remove(card);
+            player.removeCardFromGame(card);
+        } else if (this.getResource() instanceof CaveCoin) {
+            // cave coin discard.
         }
 
     }
