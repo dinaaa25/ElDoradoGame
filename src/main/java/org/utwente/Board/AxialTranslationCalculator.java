@@ -192,11 +192,13 @@ public class AxialTranslationCalculator {
 
         if (sectionType == SectionType.O || sectionType == SectionType.P || sectionType == SectionType.Q || sectionType == SectionType.R) {
             axialTranslation = getTranslationSmallOPQR(sectionWithData, coordinateBounds);
+            return axialTranslation;
         } else if (sectionType == SectionType.ElDorado || sectionType == SectionType.ElDoradoTwo) {
             axialTranslation = getTranslationElDorado(sectionWithData, coordinateBounds);
+            return axialTranslation;
         } else {
             axialTranslation = getTranslationNormalSection(sectionWithData, coordinateBounds);
+            return axialTranslation;
         }
-        return axialTranslation;
     }
 }
