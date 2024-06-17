@@ -12,7 +12,7 @@ public class AxialTranslationCalculator {
     public record AxialTranslation(int q, int r) {
     }
 
-    private AxialTranslation getTranslationSmallOPQR(SectionWithRotationPositionSectionDirection sectionWithData,
+    private AxialTranslation getTranslationSmallRectangle(SectionWithRotationPositionSectionDirection sectionWithData,
             CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int rotation = sectionWithData.getRotation();
@@ -220,12 +220,13 @@ public class AxialTranslationCalculator {
         SectionType sectionType = sectionWithData.getSectionType();
 
         if (isRectangleSection(sectionType)) {
-            return getTranslationSmallOPQR(sectionWithData, coordinateBounds);
+            return getTranslationSmallRectangle(sectionWithData, coordinateBounds);
         }
 
         if (isElDoradoSection(sectionType)) {
             return getTranslationElDorado(sectionWithData, coordinateBounds);
         }
+
         return getTranslationNormalSection(sectionWithData, coordinateBounds);
     }
 }
