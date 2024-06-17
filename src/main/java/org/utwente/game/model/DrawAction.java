@@ -12,8 +12,11 @@ import java.util.List;
 
 public class DrawAction extends Action {
 
-    public DrawAction(Player player, Resource resource) {
+    List<Card> discardList;
+
+    public DrawAction(Player player, Resource resource, List<Card> discardList) {
         super(player, resource);
+        this.discardList = discardList;
     }
 
     @Override
