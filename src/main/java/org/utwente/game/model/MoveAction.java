@@ -1,13 +1,11 @@
 package org.utwente.game.model;
 
-
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
-import org.utwente.market.model.PowerType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 
@@ -39,13 +37,13 @@ public class MoveAction extends Action {
     @Override
     public boolean validate() {
         // especially check native
-        if(checkIfAdjacentCardOrCoin()) {
+        if (checkIfAdjacentCardOrCoin()) {
             return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile();
         }
         return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
     }
 
-    protected boolean isTileToMountain(){
+    protected boolean isTileToMountain() {
         return this.tileTo.getTileType() == TileType.Mountain;
     }
 
@@ -58,8 +56,8 @@ public class MoveAction extends Action {
     @Override
     public void discard() {
         Resource resource = this.getResource();
-        if(resource instanceof Card) {
-            if(resource.getPower() <= 0) {
+        if (resource instanceof Card) {
+            if (resource.getPower() <= 0) {
                 player.discardCard((Card) resource);
             }
         }
@@ -71,17 +69,10 @@ public class MoveAction extends Action {
     }
 
     /**
-     *  check TileType of TileTo is of type Mountain
-     * @param tile
-     * @return
-     */
-    public TileType getTileType(Tile tile) {
-        return TileType.Mountain;
-    }
-
-    /**
      * check if another player is on TileTo
-     * @return true if destination tile isEmpty() and false if destination tile !isEmpty()
+     * 
+     * @return true if destination tile isEmpty() and false if destination tile
+     *         !isEmpty()
      */
     public boolean isNoPlayerOnToTile() {
         return tileTo.isEmpty();
@@ -91,15 +82,14 @@ public class MoveAction extends Action {
         return tileTo.getPower() <= this.getResource().getPower();
     }
 
-
     /**
-     * compare not just power but also now whether this card type can be applied to the tile you want to move to
+     * compare not just power but also now whether this card type can be applied to
+     * the tile you want to move to
+     * 
      * @return if resource matches to tile
      */
-    public boolean isCardMatchingTile(){
+    public boolean isCardMatchingTile() {
         return tileTo.getTileType().getPowerTypeList().contains(this.getResource().getType());
     }
 
-
 }
-
