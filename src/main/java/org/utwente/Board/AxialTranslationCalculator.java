@@ -157,6 +157,7 @@ public class AxialTranslationCalculator {
         if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
             translationQ = coordinateBounds.maxQ() + 1 + 3;
             translationR = coordinateBounds.minR() - 1 + placement;
+            return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
             translationQ = coordinateBounds.maxQ()+ 1 - placement;
             translationR = coordinateBounds.maxR() + placement;
@@ -164,12 +165,15 @@ public class AxialTranslationCalculator {
                 translationQ -= 2;
                 translationR += 1;
             }
+            return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_SOUTH) || sectionDirection.equals(FT_SOUTHWEST)) {
             translationQ = coordinateBounds.minQ() - placement;
             translationR = coordinateBounds.maxR() + 3 + 1;
+            return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_SOUTHWEST) || sectionDirection.equals(FT_WEST)) {
             translationQ = coordinateBounds.minQ() - 3 - 1;
             translationR = coordinateBounds.maxR() + 1 - placement;
+            return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_NORTHWEST) || sectionDirection.equals(FT_NORTHWEST)) {
             translationQ = coordinateBounds.minQ() - placement;
             translationR = coordinateBounds.minR() - 1 + placement;
@@ -177,11 +181,12 @@ public class AxialTranslationCalculator {
                 translationQ -= 1;
                 translationR += 2;
             }
+            return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_NORTH) || sectionDirection.equals(FT_NORTHEAST)) {
             translationQ = coordinateBounds.maxQ() + placement;
             translationR = coordinateBounds.minR() - 3 - 1;
+            return new AxialTranslation(translationQ, translationR);
         }
-
         return new AxialTranslation(translationQ, translationR);
     }
 
