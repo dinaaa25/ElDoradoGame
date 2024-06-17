@@ -5,12 +5,15 @@ import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+import java.util.*;
 
 public class AxialTranslationCalculator {
 
-    public record AxialTranslation(int q, int r) {}
+    public record AxialTranslation(int q, int r) {
+    }
 
-    private AxialTranslation getTranslationSmallOPQR(SectionWithRotationPositionSectionDirection sectionWithData, CoordinateBounds coordinateBounds) {
+    private AxialTranslation getTranslationSmallOPQR(SectionWithRotationPositionSectionDirection sectionWithData,
+            CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int rotation = sectionWithData.getRotation();
         int placement = sectionWithData.getPlacement();
@@ -24,8 +27,7 @@ public class AxialTranslationCalculator {
                 translationR = coordinateBounds.minR() - 2;
                 return new AxialTranslation(translationQ, translationR);
             }
-        }
-        else if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
+        } else if (sectionDirection.equals(PT_NORTHEAST) || sectionDirection.equals(FT_EAST)) {
             if (rotation == 1 || rotation == 4) {
                 translationQ = coordinateBounds.maxQ() + 2;
                 translationR = coordinateBounds.minR() + 1 - placement;
@@ -59,7 +61,8 @@ public class AxialTranslationCalculator {
         return new AxialTranslation(translationQ, translationR);
     }
 
-    private AxialTranslation getTranslationElDorado(SectionWithRotationPositionSectionDirection sectionWithData, CoordinateBounds coordinateBounds) {
+    private AxialTranslation getTranslationElDorado(SectionWithRotationPositionSectionDirection sectionWithData,
+            CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int rotation = sectionWithData.getRotation();
 
@@ -160,7 +163,8 @@ public class AxialTranslationCalculator {
         return new AxialTranslation(translationQ, translationR);
     }
 
-    private AxialTranslation getTranslationNormalSection(SectionWithRotationPositionSectionDirection sectionWithData, CoordinateBounds coordinateBounds) {
+    private AxialTranslation getTranslationNormalSection(SectionWithRotationPositionSectionDirection sectionWithData,
+            CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int placement = sectionWithData.getPlacement();
 
@@ -172,7 +176,7 @@ public class AxialTranslationCalculator {
             translationR = coordinateBounds.minR() - 1 + placement;
             return new AxialTranslation(translationQ, translationR);
         } else if (sectionDirection.equals(PT_SOUTHEAST) || sectionDirection.equals(FT_SOUTHEAST)) {
-            translationQ = coordinateBounds.maxQ()+ 1 - placement;
+            translationQ = coordinateBounds.maxQ() + 1 - placement;
             translationR = coordinateBounds.maxR() + placement;
             if (placement == -1) {
                 translationQ -= 2;
@@ -203,15 +207,23 @@ public class AxialTranslationCalculator {
         return new AxialTranslation(translationQ, translationR);
     }
 
+    private boolean isRectangleSection(SectionType sectionType) {
+        return List.of(SectionType.O, SectionType.P, SectionType.Q, SectionType.R).contains(sectionType);
+    }
 
-    public AxialTranslation getTranslation(SectionWithRotationPositionSectionDirection sectionWithData, CoordinateBounds coordinateBounds) {
+    private boolean isElDoradoSection(SectionType sectionType) {
+        return List.of(SectionType.ElDorado, SectionType.ElDoradoTwo).contains(sectionType);
+    }
+
+    public AxialTranslation getTranslation(SectionWithRotationPositionSectionDirection sectionWithData,
+            CoordinateBounds coordinateBounds) {
         SectionType sectionType = sectionWithData.getSectionType();
         AxialTranslation axialTranslation;
 
-        if (sectionType == SectionType.O || sectionType == SectionType.P || sectionType == SectionType.Q || sectionType == SectionType.R) {
+        if (isRectangleSection(sectionType)) {
             axialTranslation = getTranslationSmallOPQR(sectionWithData, coordinateBounds);
             return axialTranslation;
-        } else if (sectionType == SectionType.ElDorado || sectionType == SectionType.ElDoradoTwo) {
+        } else if (isElDoradoSection(sectionType)) {
             axialTranslation = getTranslationElDorado(sectionWithData, coordinateBounds);
             return axialTranslation;
         } else {
