@@ -8,15 +8,71 @@ import org.utwente.Section.SectionController;
 import org.utwente.Section.SectionView;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileImageLoader;
+import org.utwente.Tile.TileType;
+import org.utwente.Tile.TileView;
 import org.utwente.game.view.GameConfig;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
 import static org.utwente.game.view.GameConfig.PADDING;
 
-public class BoardView {
+public class BoardView extends JPanel {
+    public Board board;
+
+    public BoardView(Board board) {
+        this.board = board;
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JButton b1 = new JButton("one");
+        JButton b2 = new JButton("two");
+        JButton b3 = new JButton("three");
+
+        this.add(b1);
+        this.add(b2);
+        this.add(b3);
+
+//        Insets insets = this.getInsets();
+//        Dimension size = b1.getPreferredSize();
+//        b1.setBounds(25, 25, size.width, size.height);
+//        size = b2.getPreferredSize();
+//        b2.setBounds(60, 20, size.width, size.height);
+//        size = b3.getPreferredSize();
+//        b3.setBounds(500, 15, size.width + 50, size.height + 20);
+//
+//        this.setSize(1000, 1000);
+////    this.setLocation(0, 0);
+        TileImageLoader loader = new TileImageLoader();
+        loader.loadTileImages();
+//
+//        this.add(new JLabel("Test BoardView"));
+        Tile tile1 = new Tile(0, 0, TileType.Machete, 1, null, false);
+//        Tile tile2 = new Tile(0, 1, TileType.Paddle, 1, null, false);
+        TileView tileView = new TileView(tile1, false, loader);
+//        TileView tileView1 = new TileView(tile2, false, loader);
+        this.add(tileView);
+//        this.add(tileView1);
+//
+//        // Debug print to verify tileView coordinates
+//        System.out.println("TileView1 coordinates: (" + tileView.x + ", " + tileView.y + ")");
+//        System.out.println("TileView2 coordinates: (" + tileView1.x + ", " + tileView1.y + ")");
+//
+//        Dimension tileSize = new Dimension(HEX_SIZE, HEX_SIZE);
+//        System.out.println(tileSize);
+//        tileSize = tileView.getPreferredSize();
+//        tileView.setBounds(tileView.x, tileView.y, HEX_SIZE, HEX_SIZE);
+//        tileSize = tileView1.getPreferredSize();
+//        tileView1.setBounds(25, 25, HEX_SIZE + 20, HEX_SIZE + 20);
+//
+//        // Debug print to verify bounds
+//        System.out.println("TileView1 bounds: " + tileView.getBounds());
+//        System.out.println("TileView2 bounds: " + tileView1.getBounds());
+
+//    this.drawBoard(this.board);
+    }
+
     public Dimension calculatePreferredSize(Board board) {
         if (board.getSections().isEmpty() || board.getSections().get(0).getTiles().isEmpty()) {
             return new Dimension(GameConfig.DEFAULT_BOARD_SIZE_X, GameConfig.DEFAULT_BOARD_SIZE_Y);
@@ -35,10 +91,8 @@ public class BoardView {
             }
         }
 
-        SectionView sectionView = new SectionView();
-
-        Point minPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(minQ, minR) : sectionView.pointyTopHexToPixel(minQ, minR);
-        Point maxPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(maxQ, maxR) : sectionView.pointyTopHexToPixel(maxQ, maxR);
+        Point minPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(minQ, minR) : TileView.pointyTopHexToPixel(minQ, minR);
+        Point maxPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(maxQ, maxR) : TileView.pointyTopHexToPixel(maxQ, maxR);
 
         int panelWidth = maxPoint.x - minPoint.x + 2 * PADDING + HEX_SIZE;
         int panelHeight = maxPoint.y - minPoint.y + 2 * PADDING + HEX_SIZE;
@@ -62,9 +116,7 @@ public class BoardView {
             }
         }
 
-        SectionView sectionView = new SectionView();
-
-        Point minPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(minQ, minR) : sectionView.pointyTopHexToPixel(minQ, minR);
+        Point minPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(minQ, minR) : TileView.pointyTopHexToPixel(minQ, minR);
 
         int offsetX = PADDING - minPoint.x;
         int offsetY = PADDING - minPoint.y;
@@ -72,18 +124,25 @@ public class BoardView {
         return new Point(offsetX, offsetY);
     }
 
-    public void drawBoard(Graphics2D g2d, Board board, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
+    public void drawBoard(Board board) {
+        TileImageLoader loader = new TileImageLoader();
+        loader.loadTileImages();
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
         for (Section section : sections) {
-            SectionController sectionController = new SectionController(section, new SectionView());
-            sectionController.updateView(g2d, offsetX, offsetY, flatTop, tileImageLoader);
+            System.out.println("Section drawing");
+            for (Tile tile : section.getTiles()) {
+                System.out.println("Drawing tile");
+                this.add(new TileView(tile,false, loader));
+            }
+//            SectionController sectionController = new SectionController(section, new SectionView());
+//            sectionController.updateView(flatTop, tileImageLoader);
         }
-        int counter = 0;
-        for (Blockade blockade : blockades) {
-            BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
-            blockadeController.updateView(g2d, counter * 60);
-            counter++;
-        }
+//        int counter = 0;
+//        for (Blockade blockade : blockades) {
+//            BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
+//            blockadeController.updateView(g2d, counter * 60);
+//            counter++;
+//        }
     }
 }

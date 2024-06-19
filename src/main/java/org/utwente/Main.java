@@ -46,23 +46,13 @@ public class Main extends JPanel {
     }
 
     public void calculatePreferredSize(Board board) {
-        BoardView boardView = new BoardView();
+        BoardView boardView = new BoardView(board);
         Dimension preferredSize = boardView.calculatePreferredSize(board);
         setPreferredSize(preferredSize);
 
         Point offsets = boardView.calculateOffsets(board);
         offsetX = offsets.x;
         offsetY = offsets.y;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Game game = gameController.getGame();
-        BoardController boardController = new BoardController(game.getBoard(), new BoardView());
-        boardController.updateView(g2d, offsetX, offsetY, game.getBoard().isFlatTop(), tileImageLoader);
     }
 
     public static void main(String[] args) {
@@ -76,7 +66,12 @@ public class Main extends JPanel {
             JPanel borderPanel = new JPanel(new BorderLayout());
 
             // MVC Board
-            JScrollPane scrollPane = new JScrollPane(main);
+            BoardView boardView = new BoardView(gameController.getGame().getBoard());
+//            Insets insets = boardView.getInsets();
+            boardView.setSize(5000, 5000);
+//            boardView.setSize(3000 + insets.left + insets.right,
+//                    10 + insets.top + insets.bottom);
+            JScrollPane scrollPane = new JScrollPane(boardView);
             borderPanel.add(scrollPane, BorderLayout.CENTER);
 
             // MVC Market:
@@ -95,6 +90,7 @@ public class Main extends JPanel {
             frame.setSize(main.getPreferredSize());
             frame.setLocation(300, 4000);
             frame.setLocationRelativeTo(null);
+            frame.pack();
             frame.setVisible(true);
         });
     }

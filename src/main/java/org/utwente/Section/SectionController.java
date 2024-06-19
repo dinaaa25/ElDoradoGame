@@ -21,7 +21,7 @@ public class SectionController {
         return sectionView;
     }
 
-    public void updateView(Graphics2D g2d, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
-        sectionView.drawSection(g2d, section, offsetX, offsetY, flatTop, tileImageLoader);
+    public void updateView(boolean flatTop, TileImageLoader tileImageLoader) {
+        sectionView.drawSection(section, flatTop, tileImageLoader);
     }
 }

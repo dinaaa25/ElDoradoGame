@@ -8,8 +8,13 @@ import org.utwente.game.view.GameConfig;
 import org.utwente.player.PlayerController;
 import org.utwente.player.PlayerView;
 import org.utwente.player.model.Player;
+import org.utwente.util.event.EventManager;
+import org.utwente.util.event.EventType;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
@@ -20,7 +25,30 @@ import java.util.List;
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
 
 
-public class TileView {
+public class TileView extends JButton {
+    public Tile tile;
+    public boolean flatTop;
+    TileImageLoader tileImageLoader;
+    public int x;
+    public int y;
+
+    public TileView(Tile tile, boolean flatTop, TileImageLoader tileImageLoader) {
+        this.tile = tile;
+        this.flatTop = flatTop;
+        this.tileImageLoader = tileImageLoader;
+//        this.x = hexagonToPixel(flatTop, tile).x;
+        this.x = 25;
+//        this.y = hexagonToPixel(flatTop, tile).y;
+        this.y = 25;
+
+        System.out.println("TileView constructor");
+        this.setActionCommand("Temp");
+        this.addActionListener(e -> {
+            System.out.println("Print to the command line");
+            EventManager.getInstance().notifying(EventType.BuyCards, e.getActionCommand());
+        });
+    }
+
     private Point2D.Double[] createHexagonVertices(boolean flatTop, int x, int y) {
         Point2D.Double[] vertices = new Point2D.Double[6];
         for (int i = 0; i < 6; i++) {
@@ -155,13 +183,48 @@ public class TileView {
         }
     }
 
-    public void drawTile(Graphics2D g2d, Tile tile, int x, int y, boolean flatTop, TileImageLoader tileImageLoader) {
+    public static Point flatTopHexToPixel(int q, int r) {
+        int x = (int) (HEX_SIZE * 3.0 / 2.0 * q);
+        int y = (int) (HEX_SIZE * Math.sqrt(3) * (r + q / 2.0));
+        return new Point(x, y);
+    }
+
+    public static Point pointyTopHexToPixel(int q, int r) {
+        int x = (int) (HEX_SIZE * Math.sqrt(3) * (q + r / 2.0));
+        int y = (int) (HEX_SIZE * 3.0 / 2.0 * r);
+        return new Point(x, y);
+    }
+
+    public Point hexagonToPixel(boolean flatTop, Tile tile) {
+        return flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        System.out.println("Draw TileView");
+//        this.setLocation(x, y);
+//        this.setSize(HEX_SIZE, HEX_SIZE);
+//        this.setBounds(x, y, HEX_SIZE, HEX_SIZE);
+        Graphics2D g2d = (Graphics2D) g;
         Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
+
         setTileTexture(g2d, x, y, tile, tileImageLoader);
         drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, x, y, tile);
-//        drawPower(g2d, x, y, tile);
         drawCaveCoinCount(g2d, x, y, tile);
         drawPlayers(g2d, tile.getPlayers(), x, y);
     }
+
+//    public void drawTile(Graphics2D g2d) {
+//        int x = hexagonToPixel(flatTop, tile).x;
+//        int y = hexagonToPixel(flatTop, tile).y;
+//        Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
+//
+//        setTileTexture(g2d, x, y, tile, tileImageLoader);
+//        drawHexagon(tile, hexagon, g2d);
+//        drawCoordinates(g2d, x, y, tile);
+////        drawPower(g2d, x, y, tile);
+//        drawCaveCoinCount(g2d, x, y, tile);
+//        drawPlayers(g2d, tile.getPlayers(), x, y);
+//    }
 }
