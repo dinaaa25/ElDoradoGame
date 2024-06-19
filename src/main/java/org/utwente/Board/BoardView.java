@@ -18,11 +18,10 @@ public class BoardView extends JPanel {
 
     public BoardView(Board board) {
         this.board = board;
-        this.setLayout(null); // Use null layout for custom positioning
-
-        this.setSize(1000, 1000);
-
+        this.setLayout(null);
         this.drawBoard(board);
+        Dimension preferredSize = calculatePreferredSize(board);
+        this.setPreferredSize(preferredSize);
     }
 
     public Dimension calculatePreferredSize(Board board) {
@@ -80,21 +79,23 @@ public class BoardView extends JPanel {
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
 
+        Point offsets = calculateOffsets(board);
+
         for (Section section : sections) {
             for (Tile tile : section.getTiles()) {
                 TileView tileView = new TileView(tile, board.isFlatTop());
                 this.add(tileView);
                 Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
-                tileView.setBounds(tileViewCoords.x, tileViewCoords.y, HEX_SIZE * 2, HEX_SIZE * 2);
+                tileView.setBounds(tileViewCoords.x + offsets.x, tileViewCoords.y + offsets.y, HEX_SIZE * 2, HEX_SIZE * 2);
             }
         }
 
-//         Uncomment the following lines if you need to draw blockades
-//         int counter = 0;
-//         for (Blockade blockade : blockades) {
-//             BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
-//             blockadeController.updateView(g2d, counter * 60);
-//             counter++;
-//         }
+        // Uncomment the following lines if you need to draw blockades
+        // int counter = 0;
+        // for (Blockade blockade : blockades) {
+        //     BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
+        //     blockadeController.updateView(g2d, counter * 60);
+        //     counter++;
+        // }
     }
 }

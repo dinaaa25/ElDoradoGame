@@ -55,9 +55,9 @@ public class Main extends JPanel {
 
             // MVC Board
             BoardView boardView = new BoardView(gameController.getGame().getBoard());
-            boardView.setSize(5000, 5000);
             JScrollPane scrollPane = new JScrollPane(boardView);
             borderPanel.add(scrollPane, BorderLayout.CENTER);
+            scrollPane.getViewport().setViewPosition(new Point(main.getOffsetX(), main.getOffsetY()));
 
             // MVC Market:
             MarketGui marketGui = new MarketGui();
@@ -73,7 +73,6 @@ public class Main extends JPanel {
             frame.add(borderPanel);
 
             frame.setSize(main.getPreferredSize());
-            frame.setLocation(300, 4000);
             frame.setLocationRelativeTo(null);
             frame.pack();
             frame.setVisible(true);
