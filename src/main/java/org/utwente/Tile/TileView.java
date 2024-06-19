@@ -24,7 +24,6 @@ import java.util.List;
 
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
 
-
 public class TileView extends JButton {
     public Tile tile;
     public boolean flatTop;
@@ -36,17 +35,22 @@ public class TileView extends JButton {
         this.tile = tile;
         this.flatTop = flatTop;
         this.tileImageLoader = tileImageLoader;
-//        this.x = hexagonToPixel(flatTop, tile).x;
         this.x = 25;
-//        this.y = hexagonToPixel(flatTop, tile).y;
         this.y = 25;
 
-        System.out.println("TileView constructor");
-        this.setActionCommand("Temp");
+        this.setActionCommand(tile.toString());
         this.addActionListener(e -> {
             System.out.println("Print to the command line");
             EventManager.getInstance().notifying(EventType.BuyCards, e.getActionCommand());
         });
+
+        // Ensure preferred size is set correctly
+        this.setPreferredSize(new Dimension(HEX_SIZE * 2, HEX_SIZE * 2));
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(HEX_SIZE * 2, HEX_SIZE * 2); // Adjust size as needed
     }
 
     private Point2D.Double[] createHexagonVertices(boolean flatTop, int x, int y) {
@@ -201,30 +205,14 @@ public class TileView extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        System.out.println("Draw TileView");
-//        this.setLocation(x, y);
-//        this.setSize(HEX_SIZE, HEX_SIZE);
-//        this.setBounds(x, y, HEX_SIZE, HEX_SIZE);
+//        super.paintComponent(g); // Ensure to call the superclass method
         Graphics2D g2d = (Graphics2D) g;
-        Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
+        Point2D.Double[] hexagon = createHexagonVertices(flatTop, HEX_SIZE, HEX_SIZE);
 
-        setTileTexture(g2d, x, y, tile, tileImageLoader);
+        setTileTexture(g2d, HEX_SIZE, HEX_SIZE, tile, tileImageLoader);
         drawHexagon(tile, hexagon, g2d);
-        drawCoordinates(g2d, x, y, tile);
-        drawCaveCoinCount(g2d, x, y, tile);
-        drawPlayers(g2d, tile.getPlayers(), x, y);
+        drawCoordinates(g2d, HEX_SIZE, HEX_SIZE, tile);
+        drawCaveCoinCount(g2d, HEX_SIZE, HEX_SIZE, tile);
+        drawPlayers(g2d, tile.getPlayers(), HEX_SIZE, HEX_SIZE);
     }
-
-//    public void drawTile(Graphics2D g2d) {
-//        int x = hexagonToPixel(flatTop, tile).x;
-//        int y = hexagonToPixel(flatTop, tile).y;
-//        Point2D.Double[] hexagon = createHexagonVertices(flatTop, x, y);
-//
-//        setTileTexture(g2d, x, y, tile, tileImageLoader);
-//        drawHexagon(tile, hexagon, g2d);
-//        drawCoordinates(g2d, x, y, tile);
-////        drawPower(g2d, x, y, tile);
-//        drawCaveCoinCount(g2d, x, y, tile);
-//        drawPlayers(g2d, tile.getPlayers(), x, y);
-//    }
 }

@@ -24,7 +24,7 @@ public class BoardView extends JPanel {
 
     public BoardView(Board board) {
         this.board = board;
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(null); // Use null layout for custom positioning
 
         JButton b1 = new JButton("one");
         JButton b2 = new JButton("two");
@@ -34,43 +34,39 @@ public class BoardView extends JPanel {
         this.add(b2);
         this.add(b3);
 
-//        Insets insets = this.getInsets();
-//        Dimension size = b1.getPreferredSize();
-//        b1.setBounds(25, 25, size.width, size.height);
-//        size = b2.getPreferredSize();
-//        b2.setBounds(60, 20, size.width, size.height);
-//        size = b3.getPreferredSize();
-//        b3.setBounds(500, 15, size.width + 50, size.height + 20);
-//
-//        this.setSize(1000, 1000);
-////    this.setLocation(0, 0);
+        Insets insets = this.getInsets();
+        Dimension size = b1.getPreferredSize();
+        b1.setBounds(0, 0, size.width, size.height);
+        size = b2.getPreferredSize();
+        b2.setBounds(60, 20, size.width, size.height);
+        size = b3.getPreferredSize();
+        b3.setBounds(500, 15, size.width + 50, size.height + 20);
+
+        this.setSize(1000, 1000);
+
         TileImageLoader loader = new TileImageLoader();
         loader.loadTileImages();
-//
-//        this.add(new JLabel("Test BoardView"));
-        Tile tile1 = new Tile(0, 0, TileType.Machete, 1, null, false);
-//        Tile tile2 = new Tile(0, 1, TileType.Paddle, 1, null, false);
-        TileView tileView = new TileView(tile1, false, loader);
-//        TileView tileView1 = new TileView(tile2, false, loader);
-        this.add(tileView);
-//        this.add(tileView1);
-//
-//        // Debug print to verify tileView coordinates
-//        System.out.println("TileView1 coordinates: (" + tileView.x + ", " + tileView.y + ")");
-//        System.out.println("TileView2 coordinates: (" + tileView1.x + ", " + tileView1.y + ")");
-//
-//        Dimension tileSize = new Dimension(HEX_SIZE, HEX_SIZE);
-//        System.out.println(tileSize);
-//        tileSize = tileView.getPreferredSize();
-//        tileView.setBounds(tileView.x, tileView.y, HEX_SIZE, HEX_SIZE);
-//        tileSize = tileView1.getPreferredSize();
-//        tileView1.setBounds(25, 25, HEX_SIZE + 20, HEX_SIZE + 20);
-//
-//        // Debug print to verify bounds
-//        System.out.println("TileView1 bounds: " + tileView.getBounds());
-//        System.out.println("TileView2 bounds: " + tileView1.getBounds());
 
-//    this.drawBoard(this.board);
+        Tile tile1 = new Tile(0, 0, TileType.Machete, 1, null, false);
+        Tile tile2 = new Tile(0, 1, TileType.Paddle, 1, null, false);
+        TileView tileView = new TileView(tile1, false, loader);
+        TileView tileView2 = new TileView(tile2, false, loader);
+        this.add(tileView);
+        this.add(tileView2);
+
+        // Get pixel coordinates from TileView
+        Point tileViewCoords = tileView.hexagonToPixel(false, tile1);
+        Point tileView2Coords = tileView2.hexagonToPixel(false, tile2);
+
+        // Set bounds for TileView using the pixel coordinates
+        tileView.setBounds(tileViewCoords.x, tileViewCoords.y, HEX_SIZE * 2, HEX_SIZE * 2);
+        tileView2.setBounds(tileView2Coords.x, tileView2Coords.y, HEX_SIZE * 2, HEX_SIZE * 2);
+
+        // Debug print to verify bounds
+        System.out.println("TileView bounds: " + tileView.getBounds());
+        System.out.println("TileView2 bounds: " + tileView2.getBounds());
+
+        this.draw
     }
 
     public Dimension calculatePreferredSize(Board board) {
@@ -133,7 +129,7 @@ public class BoardView extends JPanel {
             System.out.println("Section drawing");
             for (Tile tile : section.getTiles()) {
                 System.out.println("Drawing tile");
-                this.add(new TileView(tile,false, loader));
+                this.add(new TileView(tile, false, loader));
             }
 //            SectionController sectionController = new SectionController(section, new SectionView());
 //            sectionController.updateView(flatTop, tileImageLoader);
