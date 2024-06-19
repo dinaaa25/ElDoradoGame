@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
 import org.utwente.Board.Path;
-import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameGui;
@@ -18,12 +17,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+@Getter
 public class Main extends JPanel {
-    @Getter
     private final GameController gameController;
-    @Getter
     private int offsetX;
-    @Getter
     private int offsetY;
 
     public Main() {
@@ -33,13 +30,7 @@ public class Main extends JPanel {
         Player player2 = new Player("Player 2");
         gameController = new GameController(
                 new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui());
-        loadImages();
         calculatePreferredSize(board);
-    }
-
-    private void loadImages() {
-        TileImageLoader tileImageLoader = new TileImageLoader();
-        tileImageLoader.loadTileImages();
     }
 
     public void calculatePreferredSize(Board board) {

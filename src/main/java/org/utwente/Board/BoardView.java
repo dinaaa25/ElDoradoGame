@@ -3,7 +3,6 @@ package org.utwente.Board;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Section.Section;
 import org.utwente.Tile.Tile;
-import org.utwente.Tile.TileImageLoader;
 import org.utwente.Tile.TileView;
 import org.utwente.game.view.GameConfig;
 
@@ -22,9 +21,6 @@ public class BoardView extends JPanel {
         this.setLayout(null); // Use null layout for custom positioning
 
         this.setSize(1000, 1000);
-
-        TileImageLoader loader = new TileImageLoader();
-        loader.loadTileImages();
 
         this.drawBoard(board);
     }
@@ -81,16 +77,12 @@ public class BoardView extends JPanel {
     }
 
     public void drawBoard(Board board) {
-        TileImageLoader loader = new TileImageLoader();
-        loader.loadTileImages();
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
 
         for (Section section : sections) {
-            System.out.println("Section drawing");
             for (Tile tile : section.getTiles()) {
-                System.out.println("Drawing tile");
-                TileView tileView = new TileView(tile, board.isFlatTop(), loader);
+                TileView tileView = new TileView(tile, board.isFlatTop());
                 this.add(tileView);
                 Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
                 tileView.setBounds(tileViewCoords.x, tileViewCoords.y, HEX_SIZE * 2, HEX_SIZE * 2);

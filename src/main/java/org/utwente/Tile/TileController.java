@@ -2,12 +2,10 @@ package org.utwente.Tile;
 
 import lombok.Getter;
 
-import java.awt.*;
-
 @Getter
 public class TileController {
-    private Tile tile;
-    private TileView tileView;
+    private final Tile tile;
+    private final TileView tileView;
 
     public TileController(Tile tile, TileView tileView) {
         this.tile = tile;

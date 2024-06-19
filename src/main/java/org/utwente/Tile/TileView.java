@@ -25,12 +25,10 @@ import static org.utwente.game.view.GameConfig.HEX_SIZE;
 public class TileView extends JButton {
     public Tile tile;
     public boolean flatTop;
-    TileImageLoader tileImageLoader;
 
-    public TileView(Tile tile, boolean flatTop, TileImageLoader tileImageLoader) {
+    public TileView(Tile tile, boolean flatTop) {
         this.tile = tile;
         this.flatTop = flatTop;
-        this.tileImageLoader = tileImageLoader;
 
         this.setActionCommand(tile.toString());
         this.addActionListener(e -> {
@@ -147,8 +145,8 @@ public class TileView extends JButton {
         g2d.drawString(powerText, powerTextX, powerTextY);
     }
 
-    private void setTileTexture(Graphics2D g2d, Tile tile, TileImageLoader tileImageLoader) {
-        BufferedImage tileImage = tileImageLoader.getTileImage(tile.getTileType(), tile.getPower());
+    private void setTileTexture(Graphics2D g2d, Tile tile) {
+        BufferedImage tileImage = TileImageLoader.getTileImage(tile.getTileType(), tile.getPower());
         if (tileImage != null) {
             TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
@@ -201,7 +199,7 @@ public class TileView extends JButton {
         Graphics2D g2d = (Graphics2D) g;
         Point2D.Double[] hexagon = createHexagonVertices(flatTop);
 
-        setTileTexture(g2d, tile, tileImageLoader);
+        setTileTexture(g2d, tile);
         drawHexagon(tile, hexagon, g2d);
         drawCoordinates(g2d, tile);
         drawCaveCoinCount(g2d, tile);
