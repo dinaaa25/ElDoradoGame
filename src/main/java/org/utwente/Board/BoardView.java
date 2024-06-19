@@ -1,14 +1,9 @@
 package org.utwente.Board;
 
 import org.utwente.Board.Blockade.Blockade;
-import org.utwente.Board.Blockade.BlockadeController;
-import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Section.Section;
-import org.utwente.Section.SectionController;
-import org.utwente.Section.SectionView;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileImageLoader;
-import org.utwente.Tile.TileType;
 import org.utwente.Tile.TileView;
 import org.utwente.game.view.GameConfig;
 
@@ -26,47 +21,12 @@ public class BoardView extends JPanel {
         this.board = board;
         this.setLayout(null); // Use null layout for custom positioning
 
-        JButton b1 = new JButton("one");
-        JButton b2 = new JButton("two");
-        JButton b3 = new JButton("three");
-
-        this.add(b1);
-        this.add(b2);
-        this.add(b3);
-
-        Insets insets = this.getInsets();
-        Dimension size = b1.getPreferredSize();
-        b1.setBounds(0, 0, size.width, size.height);
-        size = b2.getPreferredSize();
-        b2.setBounds(60, 20, size.width, size.height);
-        size = b3.getPreferredSize();
-        b3.setBounds(500, 15, size.width + 50, size.height + 20);
-
         this.setSize(1000, 1000);
 
         TileImageLoader loader = new TileImageLoader();
         loader.loadTileImages();
 
-        Tile tile1 = new Tile(0, 0, TileType.Machete, 1, null, false);
-        Tile tile2 = new Tile(0, 1, TileType.Paddle, 1, null, false);
-        TileView tileView = new TileView(tile1, false, loader);
-        TileView tileView2 = new TileView(tile2, false, loader);
-        this.add(tileView);
-        this.add(tileView2);
-
-        // Get pixel coordinates from TileView
-        Point tileViewCoords = tileView.hexagonToPixel(false, tile1);
-        Point tileView2Coords = tileView2.hexagonToPixel(false, tile2);
-
-        // Set bounds for TileView using the pixel coordinates
-        tileView.setBounds(tileViewCoords.x, tileViewCoords.y, HEX_SIZE * 2, HEX_SIZE * 2);
-        tileView2.setBounds(tileView2Coords.x, tileView2Coords.y, HEX_SIZE * 2, HEX_SIZE * 2);
-
-        // Debug print to verify bounds
-        System.out.println("TileView bounds: " + tileView.getBounds());
-        System.out.println("TileView2 bounds: " + tileView2.getBounds());
-
-        this.draw
+        this.drawBoard(board);
     }
 
     public Dimension calculatePreferredSize(Board board) {
@@ -125,20 +85,24 @@ public class BoardView extends JPanel {
         loader.loadTileImages();
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
+
         for (Section section : sections) {
             System.out.println("Section drawing");
             for (Tile tile : section.getTiles()) {
                 System.out.println("Drawing tile");
-                this.add(new TileView(tile, false, loader));
+                TileView tileView = new TileView(tile, board.isFlatTop(), loader);
+                this.add(tileView);
+                Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
+                tileView.setBounds(tileViewCoords.x, tileViewCoords.y, HEX_SIZE * 2, HEX_SIZE * 2);
             }
-//            SectionController sectionController = new SectionController(section, new SectionView());
-//            sectionController.updateView(flatTop, tileImageLoader);
         }
-//        int counter = 0;
-//        for (Blockade blockade : blockades) {
-//            BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
-//            blockadeController.updateView(g2d, counter * 60);
-//            counter++;
-//        }
+
+//         Uncomment the following lines if you need to draw blockades
+//         int counter = 0;
+//         for (Blockade blockade : blockades) {
+//             BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
+//             blockadeController.updateView(g2d, counter * 60);
+//             counter++;
+//         }
     }
 }

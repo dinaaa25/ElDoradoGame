@@ -2,7 +2,6 @@ package org.utwente;
 
 import lombok.Getter;
 import org.utwente.Board.Board;
-import org.utwente.Board.BoardController;
 import org.utwente.Board.BoardView;
 import org.utwente.Board.Path;
 import org.utwente.Tile.TileImageLoader;
@@ -22,7 +21,6 @@ import java.util.List;
 public class Main extends JPanel {
     @Getter
     private final GameController gameController;
-    private TileImageLoader tileImageLoader;
     @Getter
     private int offsetX;
     @Getter
@@ -42,7 +40,6 @@ public class Main extends JPanel {
     private void loadImages() {
         TileImageLoader tileImageLoader = new TileImageLoader();
         tileImageLoader.loadTileImages();
-        this.tileImageLoader = tileImageLoader;
     }
 
     public void calculatePreferredSize(Board board) {
@@ -67,10 +64,7 @@ public class Main extends JPanel {
 
             // MVC Board
             BoardView boardView = new BoardView(gameController.getGame().getBoard());
-//            Insets insets = boardView.getInsets();
             boardView.setSize(5000, 5000);
-//            boardView.setSize(3000 + insets.left + insets.right,
-//                    10 + insets.top + insets.bottom);
             JScrollPane scrollPane = new JScrollPane(boardView);
             borderPanel.add(scrollPane, BorderLayout.CENTER);
 
