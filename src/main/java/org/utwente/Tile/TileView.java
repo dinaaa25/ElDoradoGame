@@ -30,11 +30,8 @@ public class TileView extends JButton {
         this.tile = tile;
         this.flatTop = flatTop;
 
-        this.setActionCommand(tile.toString());
-        this.addActionListener(e -> {
-            System.out.println("Print to the command line");
-            EventManager.getInstance().notifying(EventType.ClickTile, e.getActionCommand());
-        });
+        this.setActionCommand(tile.getQ() + ":" + tile.getR());
+        this.addActionListener(e -> EventManager.getInstance().notifying(EventType.ClickTile, e.getActionCommand()));
 
         this.setPreferredSize(new Dimension(HEX_SIZE * 2, HEX_SIZE * 2));
     }
@@ -133,16 +130,6 @@ public class TileView extends JButton {
         int textX = HEX_SIZE - metrics.stringWidth(text) / 2;
         int textY = HEX_SIZE + metrics.getHeight() / 2 - metrics.getDescent() + HEX_SIZE / 2;
         g2d.drawString(text, textX, textY);
-    }
-
-    private void drawPower(Graphics2D g2d, int x, int y, Tile tile) {
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(GameConfig.TILE_FONT);
-        FontMetrics metrics = g2d.getFontMetrics();
-        String powerText = String.valueOf(tile.getPower());
-        int powerTextX = (int) (x - HEX_SIZE / 1.3);
-        int powerTextY = y - HEX_SIZE / 2 + metrics.getAscent();
-        g2d.drawString(powerText, powerTextX, powerTextY);
     }
 
     private void setTileTexture(Graphics2D g2d, Tile tile) {
