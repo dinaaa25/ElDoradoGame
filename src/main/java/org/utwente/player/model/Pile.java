@@ -60,9 +60,12 @@ public class Pile {
     }
 
     this.shuffle();
+    List<Card> drawnCards = new ArrayList<>();
     int drawAmount = Math.min(cardAmount, this.cards.size());
-    List<Card> drawnCards = this.cards.subList(0, drawAmount);
-    this.cards.subList(0, drawAmount).clear();
+    for (int i = 0; i < drawAmount; i++) {
+      drawnCards.add(this.cards.get(i));
+      this.cards.remove(i);
+    }
     return new Pile(drawnCards, this.player, this.pileType);
   }
 

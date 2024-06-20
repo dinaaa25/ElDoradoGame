@@ -2,10 +2,8 @@ package org.utwente;
 
 import lombok.Getter;
 import org.utwente.Board.Board;
-import org.utwente.Board.BoardController;
 import org.utwente.Board.BoardView;
 import org.utwente.Board.Path;
-import org.utwente.Tile.TileImageLoader;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameGui;
@@ -19,13 +17,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+@Getter
 public class Main extends JPanel {
-    @Getter
     private final GameController gameController;
-    private TileImageLoader tileImageLoader;
-    @Getter
     private int offsetX;
-    @Getter
     private int offsetY;
 
     public Main() {
@@ -35,34 +30,17 @@ public class Main extends JPanel {
         Player player2 = new Player("Player 2");
         gameController = new GameController(
                 new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui());
-        loadImages();
         calculatePreferredSize(board);
     }
 
-    private void loadImages() {
-        TileImageLoader tileImageLoader = new TileImageLoader();
-        tileImageLoader.loadTileImages();
-        this.tileImageLoader = tileImageLoader;
-    }
-
     public void calculatePreferredSize(Board board) {
-        BoardView boardView = new BoardView();
+        BoardView boardView = new BoardView(board);
         Dimension preferredSize = boardView.calculatePreferredSize(board);
         setPreferredSize(preferredSize);
 
         Point offsets = boardView.calculateOffsets(board);
         offsetX = offsets.x;
         offsetY = offsets.y;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Game game = gameController.getGame();
-        BoardController boardController = new BoardController(game.getBoard(), new BoardView());
-        boardController.updateView(g2d, offsetX, offsetY, game.getBoard().isFlatTop(), tileImageLoader);
     }
 
     public static void main(String[] args) {
@@ -76,8 +54,10 @@ public class Main extends JPanel {
             JPanel borderPanel = new JPanel(new BorderLayout());
 
             // MVC Board
-            JScrollPane scrollPane = new JScrollPane(main);
+            BoardView boardView = new BoardView(gameController.getGame().getBoard());
+            JScrollPane scrollPane = new JScrollPane(boardView);
             borderPanel.add(scrollPane, BorderLayout.CENTER);
+            scrollPane.getViewport().setViewPosition(new Point(main.getOffsetX(), main.getOffsetY()));
 
             // MVC Market:
             MarketGui marketGui = new MarketGui();
@@ -93,8 +73,8 @@ public class Main extends JPanel {
             frame.add(borderPanel);
 
             frame.setSize(main.getPreferredSize());
-            frame.setLocation(300, 4000);
             frame.setLocationRelativeTo(null);
+            frame.pack();
             frame.setVisible(true);
         });
     }
