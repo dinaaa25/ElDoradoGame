@@ -2,10 +2,12 @@ package org.utwente.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.model.Game;
 import org.utwente.game.view.GameCLI;
+import org.utwente.market.controller.BuyEvent;
+import org.utwente.market.model.CardType;
+import org.utwente.util.event.Event;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 import java.util.function.*;
@@ -19,8 +21,8 @@ public class ObserverPatternTest {
     GameController gameController;
 
     GameCLI gameView;
-    Consumer<Object> subscriber1;
-    Consumer<Object> subscriber2;
+    Consumer<Event> subscriber1;
+    Consumer<Event> subscriber2;
 
     EventManager eventManager;
 
@@ -45,17 +47,17 @@ public class ObserverPatternTest {
         eventManager.subscribe(subscriber1);
         eventManager.subscribe(subscriber2);
 
-        eventManager.notifying(EventType.StartGame);
+        eventManager.notifying(EventType.StartGame, new Event() {});
 
-        verify(subscriber1).accept("");
-        verify(subscriber2).accept("");
+        verify(subscriber1).accept(any(Event.class));
+        verify(subscriber2).accept(any(Event.class));
 
         eventManager.unsubscribe(subscriber1);
 
-        eventManager.notifying(EventType.EndGame);
+        eventManager.notifying(EventType.EndGame, new Event() {});
 
-        verify(subscriber1, times(1)).accept("");
-        verify(subscriber2, times(2)).accept("");
+        verify(subscriber1, times(1)).accept(any(Event.class));
+        verify(subscriber2, times(2)).accept(any(Event.class));
     }
 
     @Test
@@ -82,8 +84,8 @@ public class ObserverPatternTest {
     @Test
     public void subscribeToSpecificEvent() {
         eventManager.subscribe(subscriber1, EventType.BuyCards);
-        eventManager.notifying(EventType.BuyCards, "buy entdecker");
-        verify(subscriber1).accept("buy entdecker");
+        eventManager.notifying(EventType.BuyCards, new BuyEvent(CardType.Entdecker));
+        verify(subscriber1).accept(any(BuyEvent.class));
     }
 
     @Test
@@ -91,8 +93,8 @@ public class ObserverPatternTest {
         eventManager.subscribe(subscriber1, EventType.BuyCards);
         eventManager.unsubscribe(subscriber1, EventType.BuyCards);
 
-        eventManager.notifying(EventType.BuyCards, "buy entdecker");
-        verify(subscriber1, times(0)).accept("buy entdecker");
+        eventManager.notifying(EventType.BuyCards, new BuyEvent(CardType.Entdecker));
+        verify(subscriber1, times(0)).accept(any(BuyEvent.class));
     }
 
     @Test
@@ -100,8 +102,7 @@ public class ObserverPatternTest {
         eventManager.subscribe(subscriber1, EventType.BuyCards);
         eventManager.resetSubscribers();
 
-        eventManager.notifying(EventType.BuyCards, "buy entdecker");
-        verify(subscriber1, times(0)).accept("buy entdecker");
+        eventManager.notifying(EventType.BuyCards, new BuyEvent(CardType.Entdecker));
+        verify(subscriber1, times(0)).accept(any(BuyEvent.class));
     }
-
 }
