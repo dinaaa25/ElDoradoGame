@@ -18,9 +18,7 @@ public class GameCLI implements GameView {
     EventManager eventManager;
     private PrintStream stream;
 
-    public GameCLI(Game game, EventManager eventManager) {
-        this.game = game;
-        this.eventManager = eventManager;
+    public GameCLI() {
     }
 
     public void start() {

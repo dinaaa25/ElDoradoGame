@@ -10,8 +10,10 @@ import org.utwente.Board.Path;
 import org.utwente.game.model.Configuration;
 import org.utwente.game.model.Game;
 import org.utwente.game.controller.GameController;
+import org.utwente.game.view.GameCLI;
 import org.utwente.game.view.GameFrame;
 import org.utwente.game.view.GameGui;
+import org.utwente.game.view.GameView;
 import org.utwente.player.model.Player;
 
 import ch.qos.logback.classic.Level;
@@ -37,18 +39,19 @@ public class Main {
         Configuration config = Configuration.getInstance();
         setLoggingLevel(config.loggingLevel);
 
-        GameGui gui = new GameGui();
-        GameController gameController = new GameController(gui);
+        GameView view;
 
-        JFrame frame = new JFrame("El Dorado");
+        if (config.gui) {
+            view = new GameGui();
+        } else {
+            view = new GameCLI();
+        }
+
+        GameController gameController = new GameController(view);
         gameController.getGame().placePlayersStart();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.add(gui);
-
-        // frame.setSize(main.getPreferredSize());
-        frame.setLocationRelativeTo(null);
-        frame.pack();
-        frame.setVisible(true);
+        if (config.gui) {
+            (new GameFrame((GameGui) view)).display();
+        }
     }
 }
