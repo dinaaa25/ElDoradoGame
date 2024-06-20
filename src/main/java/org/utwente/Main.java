@@ -35,8 +35,9 @@ public class Main extends JPanel {
         Board board = boardBuilder.selectPath(Path.HillsOfGold).buildPath().addCaveCoinTiles().addBlockades().build();
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
+        Game game = new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2));
         gameController = new GameController(
-                new Game("ElDorado", "Welcome to El Dorado Game", board, List.of(player1, player2)), new GameGui());
+                game, new GameGui(game));
         calculatePreferredSize(board);
     }
 
@@ -66,30 +67,16 @@ public class Main extends JPanel {
 
         Main main = new Main();
         GameController gameController = main.getGameController();
+
         JFrame frame = new JFrame(gameController.getGame().getGameName());
         gameController.getGame().placePlayersStart();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel borderPanel = new JPanel(new BorderLayout());
+        GameGui gui = new GameGui(gameController.getGame());
+        gui.setOffsetX(main.getOffsetX());
+        gui.setOffsetY(main.getOffsetY());
 
-        // MVC Board
-        BoardView boardView = new BoardView(gameController.getGame().getBoard());
-        JScrollPane scrollPane = new JScrollPane(boardView);
-        borderPanel.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.getViewport().setViewPosition(new Point(main.getOffsetX(), main.getOffsetY()));
-
-        // MVC Market:
-        MarketGui marketGui = new MarketGui();
-        Market market = gameController.getGame().getMarket();
-        new MarketController(marketGui, market);
-        JComponent marketComponent = marketGui.getMainComponent();
-        marketComponent.setPreferredSize(new Dimension(600, 150));
-        borderPanel.add(marketComponent, BorderLayout.WEST);
-
-        // MVC Player Cards
-        borderPanel.add(new PlayerDeck(new Player("Stijn")), BorderLayout.SOUTH);
-
-        frame.add(borderPanel);
+        frame.add(gui);
 
         frame.setSize(main.getPreferredSize());
         frame.setLocationRelativeTo(null);
