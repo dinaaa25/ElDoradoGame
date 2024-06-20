@@ -3,6 +3,7 @@ package org.utwente.market.view;
 import java.util.Scanner;
 import java.io.*;
 
+import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Market;
@@ -10,8 +11,6 @@ import org.utwente.market.model.Order;
 import org.utwente.util.Ansi;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
-
-import java.util.function.*;
 
 import lombok.Setter;
 import lombok.Getter;
@@ -53,7 +52,7 @@ public class MarketCli implements MarketView {
           // to title case:
           String token = String.valueOf(arguments[1].charAt(0)).toUpperCase() +
               arguments[1].substring(1);
-          EventManager.getInstance().notifying(EventType.BuyCards, token);
+          EventManager.getInstance().notifying(EventType.BuyCards, new BuyEvent(CardType.valueOf(token)));
         } catch (Exception e) {
           if (arguments.length >= 2) {
             displayError(String.format("%s is not a card in the game.",

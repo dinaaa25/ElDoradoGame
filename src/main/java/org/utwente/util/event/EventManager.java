@@ -7,7 +7,7 @@ import java.util.*;
 public class EventManager {
 
     private static EventManager instance;
-    private Map<EventType, List<Consumer<Object>>> subscribers;
+    private Map<EventType, List<Consumer<Event>>> subscribers;
 
     private EventManager() {
         this.subscribers = new HashMap<>();
@@ -21,7 +21,7 @@ public class EventManager {
     }
 
     public List<EventType> getEventTypes() {
-        return this.subscribers.keySet().stream().toList();
+        return new ArrayList<>(this.subscribers.keySet());
     }
 
     public static EventManager getInstance() {
@@ -37,44 +37,43 @@ public class EventManager {
         setup();
     }
 
-    public void subscribe(Consumer<Object> subscriber) {
-        for (List<Consumer<Object>> list : subscribers.values()) {
+    public void subscribe(Consumer<Event> subscriber) {
+        for (List<Consumer<Event>> list : subscribers.values()) {
             list.add(subscriber);
         }
     }
 
-    public void subscribe(Consumer<Object> subscriber, EventType event) {
-        List<Consumer<Object>> eventConsumers = subscribers.get(event);
+    public void subscribe(Consumer<Event> subscriber, EventType event) {
+        List<Consumer<Event>> eventConsumers = subscribers.get(event);
         eventConsumers.add(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void unsubscribe(Consumer<Object> subscriber) {
-        for (List<Consumer<Object>> list : subscribers.values()) {
+    public void unsubscribe(Consumer<Event> subscriber) {
+        for (List<Consumer<Event>> list : subscribers.values()) {
             list.remove(subscriber);
         }
     }
 
-    public void unsubscribe(Consumer<Object> subscriber, EventType event) {
-        List<Consumer<Object>> eventConsumers = subscribers.get(event);
+    public void unsubscribe(Consumer<Event> subscriber, EventType event) {
+        List<Consumer<Event>> eventConsumers = subscribers.get(event);
         eventConsumers.remove(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void notifying(EventType event, Object data) {
-        List<Consumer<Object>> eventSubscribers = subscribers.get(event);
+    public void notifying(EventType event, Event data) {
+        List<Consumer<Event>> eventSubscribers = subscribers.get(event);
 
-        for (Consumer<Object> subscriber : eventSubscribers) {
+        for (Consumer<Event> subscriber : eventSubscribers) {
             subscriber.accept(data);
         }
     }
 
     public void notifying(EventType event) {
-        this.notifying(event, "");
+        this.notifying(event, new Event() {});
     }
 
-    public List<Consumer<Object>> getSubscribers() {
-        return this.subscribers.values().stream().flatMap(subList -> subList.stream()).toList();
+    public List<Consumer<Event>> getSubscribers() {
+        return this.subscribers.values().stream().flatMap(List::stream).toList();
     }
-
 }
