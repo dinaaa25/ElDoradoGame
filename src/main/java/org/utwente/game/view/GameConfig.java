@@ -5,7 +5,6 @@ import org.utwente.Tile.TileType;
 import java.awt.*;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Random;
 
 public class GameConfig {
     public static final Font TILE_FONT = new Font("Arial", Font.BOLD, 8);

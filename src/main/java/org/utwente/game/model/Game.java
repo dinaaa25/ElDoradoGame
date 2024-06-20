@@ -38,6 +38,10 @@ public class Game {
         this.market = new Market();
     }
 
+    public Game() {
+        this.market = new Market();
+    }
+
     public Player getCurrentPlayer() {
         return this.players.get(currentPlayer);
     }

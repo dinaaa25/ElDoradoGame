@@ -3,9 +3,14 @@ package org.utwente.game.view;
 import org.utwente.game.model.Game;
 import org.utwente.util.event.EventManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 
+@Getter
+@Setter
 public class GameCLI implements GameView {
     Scanner scanner = new Scanner(System.in);
     Game game;
@@ -38,5 +43,4 @@ public class GameCLI implements GameView {
     public void showMessage(String message) {
         System.out.println(message);
     }
-
 }
