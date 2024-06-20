@@ -78,8 +78,7 @@ public class EventManager {
     }
 
     public void notifying(EventType event) {
-        this.notifying(event, new Event() {
-        });
+        this.notifying(event, new EmptyEvent());
     }
 
     public List<Consumer<Event>> getSubscribers() {

@@ -1,6 +1,7 @@
 package org.utwente.game.view;
 
 import org.utwente.game.model.Game;
+import org.utwente.player.model.Player;
 import org.utwente.util.event.EventManager;
 
 import lombok.Getter;
@@ -63,5 +64,17 @@ public class GameCLI implements GameView {
     public void setGameStage() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setGameStage'");
+    }
+
+    @Override
+    public void setCurrentPlayer() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPlayer'");
+    }
+
+    @Override
+    public void setCurrentPhase() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPhase'");
     }
 }

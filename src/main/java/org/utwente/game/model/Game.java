@@ -36,10 +36,12 @@ public class Game {
         this.board = board;
         this.players = players;
         this.market = new Market();
+        this.phase = new Phase();
     }
 
     public Game() {
         this.market = new Market();
+        this.phase = new Phase();
     }
 
     public Player getCurrentPlayer() {
@@ -77,7 +79,7 @@ public class Game {
 
     public int nextPlayer() {
         checkWaitingForWinTurn();
-        if (currentPlayer < this.players.size()) {
+        if (currentPlayer < this.players.size() - 1) {
             currentPlayer = currentPlayer + 1;
             return currentPlayer;
         }
@@ -169,5 +171,9 @@ public class Game {
                 }
             }
         }
+    }
+
+    public void nextPhase() {
+        this.phase.next();
     }
 }

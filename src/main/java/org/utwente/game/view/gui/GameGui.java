@@ -25,6 +25,7 @@ public class GameGui extends JPanel implements GameView {
     Game game;
     int offsetX;
     int offsetY;
+    PlayerDeck playerDeck;
 
     public GameGui() {
         super();
@@ -85,7 +86,8 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addPlayerSection() {
-        this.add(new PlayerDeck(new Player("Stijn")), BorderLayout.SOUTH);
+        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase().getCurrentPhase());
+        this.add(this.playerDeck, BorderLayout.SOUTH);
     }
 
     @Override
@@ -130,6 +132,21 @@ public class GameGui extends JPanel implements GameView {
 
         this.revalidate();
         this.repaint();
+    }
+
+    @Override
+    public void setCurrentPlayer() {
+        this.remove(playerDeck);
+        this.addPlayerSection();
+        this.revalidate();
+        this.repaint();
+    }
+
+    @Override
+    public void setCurrentPhase() {
+        // set the current phase.
+        // reuse setCurrentPlayer for now to redraw.
+        this.setCurrentPlayer();
     }
 
 }

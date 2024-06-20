@@ -32,6 +32,18 @@ public class GameController {
         eventManager.subscribe(this::onGameStart, EventType.StartGame);
         eventManager.subscribe(this::onPlayersAdded, EventType.AddPlayers);
         eventManager.subscribe(this::onPickBoard, EventType.PickBoard);
+        eventManager.subscribe(this::onNextTurn, EventType.NextTurn);
+        eventManager.subscribe(this::onNextPhase, EventType.NextPhase);
+    }
+
+    void onNextPhase(Event event) {
+        game.nextPhase();
+        gameView.setCurrentPhase();
+    }
+
+    void onNextTurn(Event event) {
+        game.nextPlayer();
+        gameView.setCurrentPlayer();
     }
 
     /**

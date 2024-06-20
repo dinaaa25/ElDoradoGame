@@ -14,6 +14,7 @@ import org.utwente.util.event.PickBoardEvent;
 public class BoardForm extends JPanel {
 
   public BoardForm() {
+    this.setLayout(new GridLayout(3, 1));
     var label = new JLabel("Select a Board for the Game.");
     this.add(label);
     final JComboBox<String> pathComboBox = new JComboBox<String>(

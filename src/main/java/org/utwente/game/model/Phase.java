@@ -14,6 +14,12 @@ public class Phase {
   private boolean moveThoughPlayers;
 
   public Phase() {
+    this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
+    this.playedCards = new Stack<>();
+    moveThoughPlayers = false;
+  }
 
+  public void next() {
+    this.currentPhase = currentPhase.next();
   }
 }

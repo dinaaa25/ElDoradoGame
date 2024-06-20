@@ -9,4 +9,6 @@ public enum EventType {
   ClickTile,
   AddPlayers,
   PickBoard,
+  NextTurn,
+  NextPhase
 }
