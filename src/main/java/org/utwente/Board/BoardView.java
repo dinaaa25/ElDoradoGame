@@ -1,22 +1,29 @@
 package org.utwente.Board;
 
 import org.utwente.Board.Blockade.Blockade;
-import org.utwente.Board.Blockade.BlockadeController;
-import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Section.Section;
-import org.utwente.Section.SectionController;
-import org.utwente.Section.SectionView;
 import org.utwente.Tile.Tile;
-import org.utwente.Tile.TileImageLoader;
+import org.utwente.Tile.TileView;
 import org.utwente.game.view.GameConfig;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
 import static org.utwente.game.view.GameConfig.PADDING;
 
-public class BoardView {
+public class BoardView extends JPanel {
+    public Board board;
+
+    public BoardView(Board board) {
+        this.board = board;
+        this.setLayout(null);
+        this.drawBoard(board);
+        Dimension preferredSize = calculatePreferredSize(board);
+        this.setPreferredSize(preferredSize);
+    }
+
     public Dimension calculatePreferredSize(Board board) {
         if (board.getSections().isEmpty() || board.getSections().get(0).getTiles().isEmpty()) {
             return new Dimension(GameConfig.DEFAULT_BOARD_SIZE_X, GameConfig.DEFAULT_BOARD_SIZE_Y);
@@ -35,10 +42,8 @@ public class BoardView {
             }
         }
 
-        SectionView sectionView = new SectionView();
-
-        Point minPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(minQ, minR) : sectionView.pointyTopHexToPixel(minQ, minR);
-        Point maxPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(maxQ, maxR) : sectionView.pointyTopHexToPixel(maxQ, maxR);
+        Point minPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(minQ, minR) : TileView.pointyTopHexToPixel(minQ, minR);
+        Point maxPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(maxQ, maxR) : TileView.pointyTopHexToPixel(maxQ, maxR);
 
         int panelWidth = maxPoint.x - minPoint.x + 2 * PADDING + HEX_SIZE;
         int panelHeight = maxPoint.y - minPoint.y + 2 * PADDING + HEX_SIZE;
@@ -62,9 +67,7 @@ public class BoardView {
             }
         }
 
-        SectionView sectionView = new SectionView();
-
-        Point minPoint = board.isFlatTop() ? sectionView.flatTopHexToPixel(minQ, minR) : sectionView.pointyTopHexToPixel(minQ, minR);
+        Point minPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(minQ, minR) : TileView.pointyTopHexToPixel(minQ, minR);
 
         int offsetX = PADDING - minPoint.x;
         int offsetY = PADDING - minPoint.y;
@@ -72,18 +75,27 @@ public class BoardView {
         return new Point(offsetX, offsetY);
     }
 
-    public void drawBoard(Graphics2D g2d, Board board, int offsetX, int offsetY, boolean flatTop, TileImageLoader tileImageLoader) {
+    public void drawBoard(Board board) {
         List<Section> sections = board.getSections();
         List<Blockade> blockades = board.getBlockades();
+
+        Point offsets = calculateOffsets(board);
+
         for (Section section : sections) {
-            SectionController sectionController = new SectionController(section, new SectionView());
-            sectionController.updateView(g2d, offsetX, offsetY, flatTop, tileImageLoader);
+            for (Tile tile : section.getTiles()) {
+                TileView tileView = new TileView(tile, board.isFlatTop());
+                this.add(tileView);
+                Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
+                tileView.setBounds(tileViewCoords.x + offsets.x, tileViewCoords.y + offsets.y, HEX_SIZE * 2, HEX_SIZE * 2);
+            }
         }
-        int counter = 0;
-        for (Blockade blockade : blockades) {
-            BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
-            blockadeController.updateView(g2d, counter * 60);
-            counter++;
-        }
+
+        // Uncomment the following lines if you need to draw blockades
+        // int counter = 0;
+        // for (Blockade blockade : blockades) {
+        //     BlockadeController blockadeController = new BlockadeController(blockade, new BlockadeView());
+        //     blockadeController.updateView(g2d, counter * 60);
+        //     counter++;
+        // }
     }
 }

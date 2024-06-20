@@ -6,10 +6,22 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class TileImageLoader {
+    static TileImageLoader instance;
 
     private final Map<TileType, Map<Integer, BufferedImage>> tileImages = new EnumMap<>(TileType.class);
 
-    public void loadTileImages() {
+    private TileImageLoader() {
+        loadTileImages();
+    }
+
+    public static TileImageLoader getInstance() {
+        if (instance == null) {
+            instance = new TileImageLoader();
+        }
+        return instance;
+    }
+
+    private void loadTileImages() {
         for (TileType tileType : TileType.values()) {
             Map<Integer, BufferedImage> imagesForTileType = new HashMap<>();
             for (int power : tileType.getPowerRange().getRange()) {

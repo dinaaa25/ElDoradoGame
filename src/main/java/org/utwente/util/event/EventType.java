@@ -5,5 +5,6 @@ public enum EventType {
   EndGame,
   PlayCards,
   BuyCards,
-  DiscardCards
+  DiscardCards,
+  ClickTile
 }
