@@ -30,6 +30,10 @@ public class GameGui extends JPanel implements GameView {
         super();
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public void calculatePreferredSize(Board board) {
         if (board != null) {
             BoardView boardView = new BoardView(board);
@@ -100,7 +104,7 @@ public class GameGui extends JPanel implements GameView {
 
         this.setupPlayerForm();
 
-        this.invalidate();
+        this.revalidate();
         this.repaint();
     }
 
@@ -114,7 +118,7 @@ public class GameGui extends JPanel implements GameView {
 
         this.setupBoardForm();
 
-        this.invalidate();
+        this.revalidate();
         this.repaint();
     }
 
@@ -124,7 +128,7 @@ public class GameGui extends JPanel implements GameView {
 
         this.setupGame();
 
-        this.invalidate();
+        this.revalidate();
         this.repaint();
     }
 
