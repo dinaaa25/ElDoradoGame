@@ -18,6 +18,7 @@ import org.utwente.market.view.gui.GridCoordinate;
 import org.utwente.market.view.gui.MarketConfig;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+import org.utwente.market.controller.BuyEvent;
 
 import java.util.*;
 import java.util.function.*;
@@ -45,7 +46,7 @@ public class MarketGui implements MarketView {
 
     ImageIcon scaledIcon = CardHelper.getImageIcon(card, new Dimension(140, 200));
     JLabel label = new JLabel(
-        scaledIcon, SwingConstants.CENTER);
+            scaledIcon, SwingConstants.CENTER);
 
     coord.nextRow();
     c = coord.toGridBagConstraints(maxColumns);
@@ -55,7 +56,7 @@ public class MarketGui implements MarketView {
     c = coord.toGridBagConstraints(maxColumns);
 
     JLabel msg = new JLabel(
-        "Congratulations on successfully purchasing: " + card.name(), SwingConstants.CENTER);
+            "Congratulations on successfully purchasing: " + card.name(), SwingConstants.CENTER);
     msg.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
     msg.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     msg.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
@@ -116,8 +117,8 @@ public class MarketGui implements MarketView {
     l.setFont(MarketConfig.MARKET_CARD_NAME);
     l.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     l.setBorder(
-        BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, MarketConfig.MARKET_ERROR_BG),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, MarketConfig.MARKET_ERROR_BG),
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
     panel.add(l, c);
     addBackButton();
@@ -213,7 +214,7 @@ public class MarketGui implements MarketView {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        EventManager.getInstance().notifying(EventType.BuyCards, e.getActionCommand());
+        EventManager.getInstance().notifying(EventType.BuyCards, new BuyEvent(CardType.valueOf(e.getActionCommand())));
       }
 
     });
