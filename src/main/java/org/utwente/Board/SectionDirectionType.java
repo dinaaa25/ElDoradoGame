@@ -28,12 +28,12 @@ public enum SectionDirectionType {
 
         public static PointyTopSectionDirection fromFlatTopDirection(FlatTopSectionDirection flatTopSectionDirection) {
             return switch (flatTopSectionDirection) {
-                case FT_NORTHEAST -> PointyTopSectionDirection.PT_NORTHEAST;
-                case FT_EAST -> PointyTopSectionDirection.PT_SOUTHEAST;
-                case FT_SOUTHEAST -> PointyTopSectionDirection.PT_SOUTH;
-                case FT_SOUTHWEST -> PointyTopSectionDirection.PT_SOUTHWEST;
-                case FT_WEST -> PointyTopSectionDirection.PT_NORTHWEST;
-                case FT_NORTHWEST -> PointyTopSectionDirection.PT_NORTH;
+                case FT_NORTHEAST -> PointyTopSectionDirection.PT_NORTH;
+                case FT_EAST -> PointyTopSectionDirection.PT_NORTHEAST;
+                case FT_SOUTHEAST -> PointyTopSectionDirection.PT_SOUTHEAST;
+                case FT_SOUTHWEST -> PointyTopSectionDirection.PT_SOUTH;
+                case FT_WEST -> PointyTopSectionDirection.PT_SOUTHWEST;
+                case FT_NORTHWEST -> PointyTopSectionDirection.PT_NORTHWEST;
             };
         }
     }
@@ -44,7 +44,7 @@ public enum SectionDirectionType {
         PT_SOUTHEAST,
         PT_SOUTH,
         PT_SOUTHWEST,
-        PT_NORTHWEST;
+        PT_NORTHWEST
     }
 
     public static PointyTopSectionDirection toPointyTopSectionDirection(SectionDirection sectionDirection) {
