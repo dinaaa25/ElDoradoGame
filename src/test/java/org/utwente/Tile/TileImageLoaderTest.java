@@ -12,7 +12,7 @@ public class TileImageLoaderTest {
     public void testLoadImage() {
         for (TileType tileType : TileType.values()) {
             for (int power : tileType.getPowerRange().getRange()) {
-                BufferedImage image = TileImageLoader.getTileImage(tileType, power);
+                BufferedImage image = TileImageLoader.getInstance().getTileImage(tileType, power);
                 assertNotNull(image, "Image should not be null for " + tileType + " with power " + power);
             }
         }

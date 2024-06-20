@@ -6,25 +6,21 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 public class TileImageLoader {
+    static TileImageLoader instance;
 
-    private static final Map<TileType, Map<Integer, BufferedImage>> tileImages = new EnumMap<>(TileType.class);
+    private final Map<TileType, Map<Integer, BufferedImage>> tileImages = new EnumMap<>(TileType.class);
 
-    // Private constructor to prevent instantiation
     private TileImageLoader() {
         loadTileImages();
     }
 
-    // Inner static helper class responsible for holding the Singleton instance
-    private static class SingletonHelper {
-        private static final TileImageLoader INSTANCE = new TileImageLoader();
-    }
-
-    // Public method to provide access to the Singleton instance
     public static TileImageLoader getInstance() {
-        return SingletonHelper.INSTANCE;
+        if (instance == null) {
+            instance = new TileImageLoader();
+        }
+        return instance;
     }
 
-    // Method to load tile images
     private void loadTileImages() {
         for (TileType tileType : TileType.values()) {
             Map<Integer, BufferedImage> imagesForTileType = new HashMap<>();
@@ -41,9 +37,7 @@ public class TileImageLoader {
         }
     }
 
-    // Method to get a tile image
-    public static BufferedImage getTileImage(TileType tileType, int power) {
-        getInstance();
+    public BufferedImage getTileImage(TileType tileType, int power) {
         return tileImages.getOrDefault(tileType, new HashMap<>()).get(power);
     }
 }
