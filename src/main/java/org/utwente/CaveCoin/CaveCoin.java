@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.PowerType;
 import org.utwente.market.model.Resource;
+import java.util.*;
 
 public class CaveCoin implements Resource {
     int power;
@@ -14,7 +15,7 @@ public class CaveCoin implements Resource {
 
     @JsonCreator
     public CaveCoin(@JsonProperty("power") int power,
-                    @JsonProperty("caveCoinType") CaveCoinType caveCoinType) {
+            @JsonProperty("caveCoinType") CaveCoinType caveCoinType) {
         this.power = power;
         this.caveCoinType = caveCoinType;
     }
@@ -32,11 +33,19 @@ public class CaveCoin implements Resource {
         return this.remainingPower();
     }
 
+    private Map<CaveCoinType, PowerType> getPowerMap() {
+        Map<CaveCoinType, PowerType> map = new HashMap<>();
+        map.put(CaveCoinType.Coin, PowerType.Coin);
+        map.put(CaveCoinType.Paddle, PowerType.Paddle);
+        map.put(CaveCoinType.Machete, PowerType.Machete);
 
+        return map;
+    }
 
     @Override
     public PowerType getType() {
-        return null;
+        Map<CaveCoinType, PowerType> map = getPowerMap();
+        return map.containsKey(this.caveCoinType) ? map.get(this.caveCoinType) : PowerType.Effect;
     }
 
     @Override
