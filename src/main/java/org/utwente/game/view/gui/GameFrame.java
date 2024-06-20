@@ -1,4 +1,4 @@
-package org.utwente.game.view;
+package org.utwente.game.view.gui;
 
 import javax.swing.*;
 

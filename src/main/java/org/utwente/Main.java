@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.utwente.game.model.Configuration;
 import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameCLI;
-import org.utwente.game.view.GameFrame;
-import org.utwente.game.view.GameGui;
 import org.utwente.game.view.GameView;
+import org.utwente.game.view.gui.GameFrame;
+import org.utwente.game.view.gui.GameGui;
 
 import ch.qos.logback.classic.Level;
 
@@ -40,7 +40,6 @@ public class Main {
         }
 
         GameController gameController = new GameController(view);
-        gameController.getGame().placePlayersStart();
 
         if (config.gui) {
             (new GameFrame((GameGui) view)).display();

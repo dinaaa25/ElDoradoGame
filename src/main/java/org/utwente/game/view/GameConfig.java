@@ -13,6 +13,12 @@ public class GameConfig {
     public static final int DEFAULT_BOARD_SIZE_Y = 800;
     public static final int PADDING = 50;
 
+    // game title page
+    public static final Font GAME_TITLE = new Font("Sans", Font.BOLD, 24);
+    public static final Color GAME_TITLE_COLOR = new Color(41, 37, 36);
+    // buttons:
+    public static final Color GAME_TITLE_BUTTON = new Color(250, 250, 249);
+
     public static final Map<TileType, Color> TILE_COLORS = new EnumMap<>(TileType.class);
     static {
         TILE_COLORS.put(TileType.Machete, new Color(101, 140, 35));

@@ -78,7 +78,6 @@ public class EventManager {
     }
 
     public void notifying(EventType event) {
-        logger.info(String.format("Event(%s) | (No Details)", event.toString()));
         this.notifying(event, new Event() {
         });
     }

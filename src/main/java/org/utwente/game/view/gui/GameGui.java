@@ -1,4 +1,4 @@
-package org.utwente.game.view;
+package org.utwente.game.view.gui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
 import org.utwente.game.model.Game;
+import org.utwente.game.view.GameView;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
@@ -29,11 +30,6 @@ public class GameGui extends JPanel implements GameView {
         super();
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-        setup();
-    }
-
     public void calculatePreferredSize(Board board) {
         if (board != null) {
             BoardView boardView = new BoardView(board);
@@ -46,7 +42,7 @@ public class GameGui extends JPanel implements GameView {
         }
     }
 
-    public void setup() {
+    public void setupGame() {
         calculatePreferredSize(this.game.getBoard());
         this.setLayout(new BorderLayout());
         this.addBoard();
@@ -54,9 +50,15 @@ public class GameGui extends JPanel implements GameView {
         this.addPlayerSection();
     }
 
+    public void startScreen() {
+
+    }
+
+    public void setupPlayerForm() {
+        this.add(new PlayerForm(), BorderLayout.CENTER);
+    }
+
     public void addBoard() {
-        System.out.println(this.game);
-        System.out.println(this.game.getBoard());
         if (this.game != null && this.game.getBoard() != null) {
             logger.info("Adding board");
             BoardView boardView = new BoardView(this.game.getBoard());
@@ -85,6 +87,45 @@ public class GameGui extends JPanel implements GameView {
     @Override
     public void showMessage(String message) {
 
+    }
+
+    @Override
+    public void setStageStart() {
+        this.add(new GameStart(), BorderLayout.CENTER);
+    }
+
+    @Override
+    public void setPlayerSetup() {
+        this.removeAll();
+
+        this.setupPlayerForm();
+
+        this.invalidate();
+        this.repaint();
+    }
+
+    void setupBoardForm() {
+        this.add(new BoardForm());
+    }
+
+    @Override
+    public void setBoardSetup() {
+        this.removeAll();
+
+        this.setupBoardForm();
+
+        this.invalidate();
+        this.repaint();
+    }
+
+    @Override
+    public void setGameStage() {
+        this.removeAll();
+
+        this.setupGame();
+
+        this.invalidate();
+        this.repaint();
     }
 
 }

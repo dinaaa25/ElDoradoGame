@@ -41,4 +41,27 @@ public class GameCLI implements GameView {
     public void showMessage(String message) {
         System.out.println(message);
     }
+
+    @Override
+    public void setStageStart() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStageStart'");
+    }
+
+    @Override
+    public void setPlayerSetup() {
+
+    }
+
+    @Override
+    public void setBoardSetup() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setBoardSetup'");
+    }
+
+    @Override
+    public void setGameStage() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setGameStage'");
+    }
 }
