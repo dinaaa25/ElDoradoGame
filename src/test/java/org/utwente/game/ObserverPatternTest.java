@@ -19,8 +19,8 @@ public class ObserverPatternTest {
     GameController gameController;
 
     GameCLI gameView;
-    Consumer<String> subscriber1;
-    Consumer<String> subscriber2;
+    Consumer<Object> subscriber1;
+    Consumer<Object> subscriber2;
 
     EventManager eventManager;
 

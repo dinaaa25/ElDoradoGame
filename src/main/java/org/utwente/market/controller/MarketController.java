@@ -20,11 +20,12 @@ public class MarketController {
     this.model = model;
 
     EventManager manager = EventManager.getInstance();
-    manager.subscribe(new Consumer<String>() {
+    manager.subscribe(new Consumer<Object>() {
       @Override
-      public void accept(String data) {
+      public void accept(Object data) {
         try {
-          Card card = model.buy(new Order(CardType.valueOf(data), 3));
+          String eventData = (String) data;
+          Card card = model.buy(new Order(CardType.valueOf(eventData), 3));
           view.displayPurchaseResult(card);
           view.setMarket(model);
         } catch (BuyException exception) {

@@ -7,7 +7,7 @@ import java.util.*;
 public class EventManager {
 
     private static EventManager instance;
-    private Map<EventType, List<Consumer<String>>> subscribers;
+    private Map<EventType, List<Consumer<Object>>> subscribers;
 
     private EventManager() {
         this.subscribers = new HashMap<>();
@@ -37,34 +37,34 @@ public class EventManager {
         setup();
     }
 
-    public void subscribe(Consumer<String> subscriber) {
-        for (List<Consumer<String>> list : subscribers.values()) {
+    public void subscribe(Consumer<Object> subscriber) {
+        for (List<Consumer<Object>> list : subscribers.values()) {
             list.add(subscriber);
         }
     }
 
-    public void subscribe(Consumer<String> subscriber, EventType event) {
-        List<Consumer<String>> eventConsumers = subscribers.get(event);
+    public void subscribe(Consumer<Object> subscriber, EventType event) {
+        List<Consumer<Object>> eventConsumers = subscribers.get(event);
         eventConsumers.add(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void unsubscribe(Consumer<String> subscriber) {
-        for (List<Consumer<String>> list : subscribers.values()) {
+    public void unsubscribe(Consumer<Object> subscriber) {
+        for (List<Consumer<Object>> list : subscribers.values()) {
             list.remove(subscriber);
         }
     }
 
-    public void unsubscribe(Consumer<String> subscriber, EventType event) {
-        List<Consumer<String>> eventConsumers = subscribers.get(event);
+    public void unsubscribe(Consumer<Object> subscriber, EventType event) {
+        List<Consumer<Object>> eventConsumers = subscribers.get(event);
         eventConsumers.remove(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void notifying(EventType event, String data) {
-        List<Consumer<String>> eventSubscribers = subscribers.get(event);
+    public void notifying(EventType event, Object data) {
+        List<Consumer<Object>> eventSubscribers = subscribers.get(event);
 
-        for (Consumer<String> subscriber : eventSubscribers) {
+        for (Consumer<Object> subscriber : eventSubscribers) {
             subscriber.accept(data);
         }
     }
@@ -73,7 +73,7 @@ public class EventManager {
         this.notifying(event, "");
     }
 
-    public List<Consumer<String>> getSubscribers() {
+    public List<Consumer<Object>> getSubscribers() {
         return this.subscribers.values().stream().flatMap(subList -> subList.stream()).toList();
     }
 
