@@ -1,7 +1,9 @@
 package org.utwente.CaveCoin;
 
+import lombok.Getter;
 import org.utwente.Tile.PowerRange;
 
+@Getter
 public enum CaveCoinType {
     Machete(new PowerRange(1, 3)),
     Paddle(new PowerRange(1, 2)),
@@ -23,4 +25,5 @@ public enum CaveCoinType {
     CaveCoinType() {
         this.powerRange = new PowerRange(1);
     }
+
 }
