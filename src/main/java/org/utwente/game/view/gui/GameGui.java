@@ -111,7 +111,7 @@ public class GameGui extends JPanel implements GameView {
     }
 
     void setupBoardForm() {
-        this.add(new BoardForm());
+        this.add(new BoardForm(), BorderLayout.CENTER);
     }
 
     @Override
