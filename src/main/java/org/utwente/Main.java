@@ -38,7 +38,7 @@ public class Main {
         }
 
         // required to run the constructor of the GameController
-        GameController gameController = new GameController(view);
+        new GameController(view);
 
         if (config.gui) {
             assert view instanceof GameGui;
