@@ -1,6 +1,5 @@
 package org.utwente.CaveCoin;
 
-import org.utwente.Tile.Tile;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 
@@ -76,22 +75,6 @@ public class CaveCoinView extends JButton {
             g2d.setColor(Color.PINK);
         }
     }
-
-//    public static Point flatTopHexToPixel(int q, int r) {
-//        int x = (int) (HEX_SIZE * 3.0 / 2.0 * q);
-//        int y = (int) (HEX_SIZE * Math.sqrt(3) * (r + q / 2.0));
-//        return new Point(x, y);
-//    }
-//
-//    public static Point pointyTopHexToPixel(int q, int r) {
-//        int x = (int) (HEX_SIZE * Math.sqrt(3) * (q + r / 2.0));
-//        int y = (int) (HEX_SIZE * 3.0 / 2.0 * r);
-//        return new Point(x, y);
-//    }
-//
-//    public Point hexagonToPixel(boolean flatTop, Tile tile) {
-//        return flatTop ? flatTopHexToPixel(tile.getQ(), tile.getR()) : pointyTopHexToPixel(tile.getQ(), tile.getR());
-//    }
 
     @Override
     protected void paintComponent(Graphics g) {
