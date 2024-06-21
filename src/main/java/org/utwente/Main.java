@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import org.slf4j.LoggerFactory;
 import org.utwente.game.model.Configuration;
+import org.utwente.game.controller.GameController;
 import org.utwente.game.view.GameCLI;
 import org.utwente.game.view.GameView;
 import org.utwente.game.view.gui.GameFrame;
@@ -35,6 +36,9 @@ public class Main {
         } else {
             view = new GameCLI();
         }
+
+        // required to run the constructor of the GameController
+        new GameController(view);
 
         if (config.gui) {
             assert view instanceof GameGui;
