@@ -14,4 +14,9 @@ public class BuyEvent extends Event {
   public BuyEvent(CardType cardType) {
     this.cardType = cardType;
   }
+
+  @Override
+  public String toString() {
+    return String.format("BuyEvent[cardType=%s]", cardType.toString());
+  }
 }
