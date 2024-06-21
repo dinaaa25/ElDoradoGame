@@ -16,14 +16,14 @@ public class PlayerDeck extends JPanel {
   public PlayerDeck(Player player, PhaseType phase) {
     super(new BorderLayout());
     phaseType = phase;
-    addPlayerName(player);
+    addPlayerRow(player);
     addDiscardPile();
     addDeck(player);
     addDrawPile();
     this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
   }
 
-  public void addPlayerName(Player player) {
+  public void addPlayerRow(Player player) {
     JPanel playerRow = new JPanel();
     playerRow.setLayout(new FlowLayout());
     JLabel name = new JLabel(String.format("Current Player: %s", player.getName()));
