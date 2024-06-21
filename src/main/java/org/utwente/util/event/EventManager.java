@@ -69,11 +69,17 @@ public class EventManager {
     }
 
     public void notifying(EventType event, Event data) {
-        logger.info(String.format("Event(%s) | Data: %s", event.toString(), data.toString()));
-        List<Consumer<Event>> eventSubscribers = subscribers.get(event);
+        if (data instanceof EmptyEvent) {
+            logger.info(String.format("Event(%s)", event.toString()));
+        } else {
+            logger.info(String.format("Event(%s) | Data: %s", event.toString(), data.toString()));
+        }
 
-        for (Consumer<Event> subscriber : eventSubscribers) {
-            subscriber.accept(data);
+        List<Consumer<Event>> eventSubscribers = subscribers.get(event);
+        if (eventSubscribers != null) {
+            for (Consumer<Event> subscriber : eventSubscribers) {
+                subscriber.accept(data);
+            }
         }
     }
 
