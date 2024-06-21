@@ -16,15 +16,9 @@ public class AddPlayersEvent extends Event {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("AddPlayersEvent(");
-    for (String playerName : playerNames) {
-      builder.append(playerName);
-      builder.append(",");
-    }
-    builder.append(")");
-
-    return builder.toString();
+    return "AddPlayersEvent{" +
+            "playerNames=" + playerNames +
+            '}';
   }
 
 }
