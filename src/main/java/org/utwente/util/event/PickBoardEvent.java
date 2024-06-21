@@ -13,4 +13,11 @@ public class PickBoardEvent extends Event {
   public PickBoardEvent(Path path) {
     this.path = path;
   }
+
+  @Override
+  public String toString() {
+    return "PickBoardEvent{" +
+            "path=" + path +
+            '}';
+  }
 }
