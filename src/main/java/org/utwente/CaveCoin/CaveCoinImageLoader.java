@@ -4,14 +4,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class CaveCoinImageLoader {
     private static CaveCoinImageLoader instance;
 
-    private final Map<CaveCoinType, BufferedImage> caveCoinImages = new EnumMap<>(CaveCoinType.class);
-    private BufferedImage defaultImage;
+    private final Map<CaveCoinType, Map<Integer, BufferedImage>> caveCoinImages = new EnumMap<>(CaveCoinType.class);
 
     private CaveCoinImageLoader() {
         loadTileImages();
@@ -26,24 +26,21 @@ public class CaveCoinImageLoader {
 
     private void loadTileImages() {
         for (CaveCoinType caveCoinType : CaveCoinType.values()) {
-            String imagePath = String.format("/images/cavecoins/%s.png", caveCoinType.name());
-            try {
-                BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource(imagePath)));
-                caveCoinImages.put(caveCoinType, image);
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
+            Map<Integer, BufferedImage> imagesForCaveCoinType = new HashMap<>();
+            for (int power : caveCoinType.getPowerRange().getRange()) {
+                String imagePath = String.format("/images/cavecoins/%s-%d.png", caveCoinType.name(), power);
+                try {
+                    BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource(imagePath)));
+                    imagesForCaveCoinType.put(power, image);
+                } catch (IOException | NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-
-        try {
-            defaultImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/tiles/Cave-0.png")));
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            defaultImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+            caveCoinImages.put(caveCoinType, imagesForCaveCoinType);
         }
     }
 
-    public BufferedImage getCaveCoinImage(CaveCoinType tileType) {
-        return caveCoinImages.getOrDefault(tileType, defaultImage);
+    public BufferedImage getCaveCoinImage(CaveCoinType caveCoinType, int power) {
+        return caveCoinImages.getOrDefault(caveCoinType, new HashMap<>()).get(power);
     }
 }
