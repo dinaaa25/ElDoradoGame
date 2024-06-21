@@ -6,6 +6,8 @@ import javax.swing.*;
 import org.slf4j.LoggerFactory;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
+import org.utwente.Tile.Tile;
+import org.utwente.Tile.TileView;
 import org.utwente.game.model.Game;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.MarketController;
@@ -64,14 +66,18 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addBoard() {
-        if (this.game != null && this.game.getBoard() != null) {
-            logger.info("Adding board");
-            BoardView boardView = new BoardView(this.game.getBoard());
-            JScrollPane scrollPane = new JScrollPane(boardView);
-            this.add(scrollPane, BorderLayout.CENTER);
-            logger.info(String.format("offset x: %d, offset y: %d", offsetX, offsetY));
-            scrollPane.getViewport().setViewPosition(new Point(offsetX, offsetY));
-        }
+        if (game == null || game.getBoard() == null) return;
+        BoardView boardView = new BoardView(game.getBoard());
+        JScrollPane scrollPane = new JScrollPane(boardView);
+        this.add(scrollPane, BorderLayout.CENTER);
+        scrollPane.getViewport().setViewPosition(getViewportPosition(game.getBoard(), boardView));
+    }
+
+    private Point getViewportPosition(Board board, BoardView boardView) {
+        TileView firstTile = new TileView(board.getStartingTiles().getFirst(), board.isFlatTop());
+        Point offsets = boardView.calculateOffsets(board);
+        Point tileOffset = firstTile.hexagonToPixel(board.isFlatTop(), board.getStartingTiles().getFirst());
+        return new Point(offsets.x + tileOffset.x, offsets.y + tileOffset.y);
     }
 
     public void addMarket() {
