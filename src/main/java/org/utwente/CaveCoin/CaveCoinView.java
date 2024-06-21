@@ -7,7 +7,7 @@ import org.utwente.util.images.ImageRepository;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static org.utwente.game.view.GameConfig.HEX_SIZE;
+import static org.utwente.game.view.GameConfig.CAVECOIN_SIZE;
 
 public class CaveCoinView extends HexButton {
     public CaveCoin caveCoin;
@@ -26,7 +26,7 @@ public class CaveCoinView extends HexButton {
                 caveCoin.power());
         if (caveCoinImage != null) {
             TexturePaint texturePaint = new TexturePaint(caveCoinImage,
-                    new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
+                    new Rectangle(0, 0, 2 * CAVECOIN_SIZE, 2 * CAVECOIN_SIZE));
             g2d.setPaint(texturePaint);
         } else {
             g2d.setColor(Color.PINK);

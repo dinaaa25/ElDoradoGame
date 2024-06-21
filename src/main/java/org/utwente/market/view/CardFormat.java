@@ -78,7 +78,7 @@ public class CardFormat {
   public static String formatDeck(CardType[] cards) {
     StringBuilder result = new StringBuilder();
     List<String[]> cardLinesList = new ArrayList<>();
-    int cardsPerRow = 4; // Number of cards per row
+    int cardsPerRow = 4; // Number of resources per row
     int numRows = cardHeight; // Number of rows in each card
 
     for (CardType card : cards) {
@@ -86,11 +86,11 @@ public class CardFormat {
       cardLinesList.add(formattedCard.split("\n"));
     }
 
-    // Iterate over the cards in groups of cardsPerRow
+    // Iterate over the resources in groups of cardsPerRow
     for (int k = 0; k < cards.length; k += cardsPerRow) {
       for (int j = 0; j < cardHeight; j++) {
 
-        // Iterate over the cards in the current row
+        // Iterate over the resources in the current row
         for (int i = k; i < k + cardsPerRow && i < cards.length; i++) {
           // Append the line of the current card to the result
           result.append(" ");

@@ -12,4 +12,11 @@ public class CaveCoinClickEvent extends Event {
     public CaveCoinClickEvent(CaveCoin caveCoin) {
         this.caveCoin = caveCoin;
     }
+
+    @Override
+    public String toString() {
+        return "CaveCoinClickEvent{" +
+                "caveCoin=" + caveCoin +
+                '}';
+    }
 }

@@ -2,7 +2,6 @@ package org.utwente.CaveCoin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.PowerType;
 import org.utwente.market.model.Resource;
@@ -24,7 +23,7 @@ public class CaveCoin implements Resource {
 
     @JsonCreator
     public CaveCoin(@JsonProperty("power") int power,
-            @JsonProperty("caveCoinType") CaveCoinType caveCoinType) {
+            @JsonProperty("getCaveCoinType") CaveCoinType caveCoinType) {
         this.power = power;
         this.caveCoinType = caveCoinType;
     }
@@ -65,5 +64,14 @@ public class CaveCoin implements Resource {
             throw new CardPowerException("Not enough power to remove.");
         }
         this.removedPower += toBeRemoved;
+    }
+
+    @Override
+    public String toString() {
+        return "CaveCoin{" +
+                "power=" + power +
+                ", removedPower=" + removedPower +
+                ", caveCoinType=" + caveCoinType +
+                '}';
     }
 }

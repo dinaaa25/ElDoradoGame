@@ -1,13 +1,19 @@
 package org.utwente.player.view.gui;
 
-import java.awt.*;
 
 import javax.swing.*;
 
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinLoader;
+import org.utwente.CaveCoin.PlayCaveCoins;
 import org.utwente.game.model.PhaseType;
 import org.utwente.player.model.Player;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 public class PlayerDeck extends JPanel {
   int col = 0;
@@ -57,6 +63,16 @@ public class PlayerDeck extends JPanel {
 
   private void addDeck(Player player) {
     this.add(new PlayCards(player.getPlayPile()), BorderLayout.CENTER);
+
+    // TODO this is just to show the Coins in the PlayerDeck, we can remove this to have to obtain the CaveCoins
+    //  through the game dynamically
+    List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
+    Collections.shuffle(caveCoinList);
+    caveCoinList = caveCoinList.subList(0, 7);
+    for (CaveCoin cc : caveCoinList) {
+      player.getCaveCoinPile().add(cc);
+    }
+    this.add(new PlayCaveCoins(player.getCaveCoinPile()), BorderLayout.SOUTH);
   }
 
 }

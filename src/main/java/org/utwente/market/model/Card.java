@@ -20,7 +20,7 @@ public class Card implements Resource {
 
     /**
      * computes power without already utilized power from card.
-     * 
+     *
      * @return power of the card as a number.
      */
     public int remainingPower() {
@@ -47,12 +47,11 @@ public class Card implements Resource {
         return remainingPower();
     }
 
-    public CardType getCardType() {
-        return this.cardType;
-    }
-
     @Override
     public String toString() {
-        return String.format("Card[cardType=%s, consumedPower=%d]", this.cardType, this.consumedPower);
+        return "Card{" +
+                "cardType=" + cardType +
+                ", consumedPower=" + consumedPower +
+                '}';
     }
 }

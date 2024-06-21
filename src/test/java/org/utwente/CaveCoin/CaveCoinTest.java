@@ -23,7 +23,7 @@ public class CaveCoinTest {
     @Test
     void testDistributionOfMacheteCoins() {
         List<CaveCoin> macheteCoins = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Machete)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Machete)
                 .toList();
         assertEquals(7, macheteCoins.size());
 
@@ -40,7 +40,7 @@ public class CaveCoinTest {
     @Test
     void testDistributionOfPaddleCoins() {
         List<CaveCoin> paddleCoins = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Paddle)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Paddle)
                 .toList();
         assertEquals(5, paddleCoins.size());
 
@@ -54,7 +54,7 @@ public class CaveCoinTest {
     @Test
     void testDistributionOfCoinCoins() {
         List<CaveCoin> coinCoins = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Coin)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Coin)
                 .toList();
         assertEquals(5, coinCoins.size());
 
@@ -68,7 +68,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfDrawCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Draw)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Draw)
                 .count();
         assertEquals(4, count, "There should be 4 Draw coins");
     }
@@ -76,7 +76,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfRemoveCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Remove)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Remove)
                 .count();
         assertEquals(4, count, "There should be 4 Remove coins");
     }
@@ -84,7 +84,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfReplaceCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Replace)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Replace)
                 .count();
         assertEquals(3, count, "There should be 3 Replace coins");
     }
@@ -92,7 +92,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfDontRemoveCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.DontRemove)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.DontRemove)
                 .count();
         assertEquals(2, count, "There should be 2 DontRemove coins");
     }
@@ -100,7 +100,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfPassThroughCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.PassThrough)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.PassThrough)
                 .count();
         assertEquals(2, count, "There should be 2 PassThrough coins");
     }
@@ -108,7 +108,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfAdjacentCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Adjacent)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Adjacent)
                 .count();
         assertEquals(2, count, "There should be 2 Adjacent coins");
     }
@@ -116,7 +116,7 @@ public class CaveCoinTest {
     @Test
     void testAmountOfSymbolCoins() {
         long count = caveCoins.stream()
-                .filter(coin -> coin.caveCoinType() == CaveCoinType.Symbol)
+                .filter(coin -> coin.getCaveCoinType() == CaveCoinType.Symbol)
                 .count();
         assertEquals(2, count, "There should be 2 Symbol coins");
     }

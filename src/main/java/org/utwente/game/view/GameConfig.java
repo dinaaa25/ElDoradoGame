@@ -30,7 +30,9 @@ public class GameConfig {
         TILE_COLORS.put(TileType.ElDorado, new Color(166, 128, 72));
     }
 
-    public static final int HEX_SIZE = 50;
+    public static final int TILE_SIZE = 50;
+
+    public static final int CAVECOIN_SIZE = 25;
 
     public static final int CAVE_COIN_CHUNK_SIZE = 4;
 

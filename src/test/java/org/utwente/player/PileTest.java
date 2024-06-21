@@ -29,29 +29,29 @@ public class PileTest {
   public void testAdd() {
     Card card = new Card(CardType.Fotografin);
     pile.add(card);
-    assertTrue(pile.getCards().contains(card));
+    assertTrue(pile.getResources().contains(card));
   }
 
   @Test
   public void testRemove() {
     Card card = new Card(CardType.Fotografin);
     pile.add(card);
-    assertTrue(pile.getCards().contains(card));
+    assertTrue(pile.getResources().contains(card));
     pile.remove(card);
-    assertFalse(pile.getCards().contains(card));
+    assertFalse(pile.getResources().contains(card));
   }
 
   @Test
   public void testUnion() {
     Pile otherPile = builder.addCard(CardType.Kompass).build();
-    assertEquals(1, otherPile.getCards().size());
+    assertEquals(1, otherPile.getResources().size());
     Pile thirdPile = null;
 
     thirdPile = otherPile.union(pile);
 
     assertNotNull(thirdPile);
-    assertEquals(2, thirdPile.getCards().size());
-    List<CardType> cardTypes = thirdPile.getCards().stream().map(e -> e.getCardType()).toList();
+    assertEquals(2, thirdPile.getResources().size());
+    List<CardType> cardTypes = thirdPile.getResources().stream().map(e -> e.getCardType()).toList();
     assertTrue(cardTypes.contains(CardType.Kompass));
     assertTrue(cardTypes.contains(CardType.Entdecker));
   }
@@ -79,13 +79,13 @@ public class PileTest {
   @Test
   public void testShuffle() {
     pile.shuffle();
-    assertEquals(1, pile.getCards().size());
+    assertEquals(1, pile.getResources().size());
   }
 
   @Test
   public void testSetCards() {
-    pile.setCards(List.of(new Card(CardType.Entdecker), new Card(CardType.Kompass)));
-    assertEquals(2, pile.getCards().size());
+    pile.setResources(List.of(new Card(CardType.Entdecker), new Card(CardType.Kompass)));
+    assertEquals(2, pile.getResources().size());
   }
 
   @Test
