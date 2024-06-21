@@ -17,9 +17,11 @@ public class CaveCoinViewTest {
             JPanel gridPanel = new JPanel(new GridLayout(gridSize, gridSize));
 
             for (CaveCoinType type : caveCoinTypes) {
-                CaveCoin caveCoin = new CaveCoin(1, type);
-                CaveCoinView caveCoinView = new CaveCoinView(caveCoin);
-                gridPanel.add(caveCoinView);
+                for (int power : type.getPowerRange().getRange()) {
+                    CaveCoin caveCoin = new CaveCoin(power, type);
+                    CaveCoinView caveCoinView = new CaveCoinView(caveCoin);
+                    gridPanel.add(caveCoinView);
+                }
             }
 
             frame.add(gridPanel, BorderLayout.CENTER);

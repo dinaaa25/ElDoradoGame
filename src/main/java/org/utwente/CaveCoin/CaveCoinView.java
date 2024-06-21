@@ -68,7 +68,7 @@ public class CaveCoinView extends JButton {
     }
 
     private void setTileTexture(Graphics2D g2d) {
-        BufferedImage caveCoinImage = CaveCoinImageLoader.getInstance().getCaveCoinImage(caveCoin.caveCoinType());
+        BufferedImage caveCoinImage = CaveCoinImageLoader.getInstance().getCaveCoinImage(caveCoin.caveCoinType(), caveCoin.power());
         if (caveCoinImage != null) {
             TexturePaint texturePaint = new TexturePaint(caveCoinImage, new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
