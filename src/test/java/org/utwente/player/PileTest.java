@@ -51,7 +51,10 @@ public class PileTest {
 
     assertNotNull(thirdPile);
     assertEquals(2, thirdPile.getResources().size());
-    List<CardType> cardTypes = thirdPile.getResources().stream().map(e -> e.getCardType()).toList();
+    List<CardType> cardTypes = thirdPile.getResources().stream()
+            .filter(e -> e instanceof Card)
+            .map(e -> ((Card) e).getCardType())
+            .toList();
     assertTrue(cardTypes.contains(CardType.Kompass));
     assertTrue(cardTypes.contains(CardType.Entdecker));
   }
