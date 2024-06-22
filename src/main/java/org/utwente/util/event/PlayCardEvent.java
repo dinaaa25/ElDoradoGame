@@ -10,5 +10,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PlayCardEvent extends Event {
-  Card card;
+    Card card;
+
+    @Override
+    public String toString() {
+        return "PlayCardEvent{" +
+                "card=" + card +
+                '}';
+    }
 }

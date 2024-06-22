@@ -2,7 +2,6 @@ package org.utwente.market.view.gui;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -15,6 +14,9 @@ import javax.swing.ImageIcon;
 
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
+import org.utwente.util.event.EventManager;
+import org.utwente.util.event.EventType;
+import org.utwente.util.event.PlayCardEvent;
 
 public class CardComponent extends JButton {
   public static final int HEIGHT = 230;
@@ -39,6 +41,9 @@ public class CardComponent extends JButton {
       addRemaining(remainingPower, false);
     }
     addPicture();
+
+    this.addActionListener(
+            e -> EventManager.getInstance().notifying(EventType.PlayCards, new PlayCardEvent(new Card(cardType))));
   }
 
   public void setup() {
