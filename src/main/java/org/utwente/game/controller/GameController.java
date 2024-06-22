@@ -79,12 +79,14 @@ public class GameController {
         if (event instanceof TileClickEvent) {
             var data = (TileClickEvent) event;
             game.getPhase().setSelectedTile(data.getTile());
+            this.gameView.redraw();
         }
     }
 
     void onNextPhase(Event event) {
         game.nextPhase();
         gameView.setCurrentPhase();
+        gameView.redraw();
     }
 
     void onNextTurn(Event event) {

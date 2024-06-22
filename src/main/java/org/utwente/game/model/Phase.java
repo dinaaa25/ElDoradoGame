@@ -25,4 +25,14 @@ public class Phase {
   public void next() {
     this.currentPhase = currentPhase.next();
   }
+
+  @Override
+  public String toString() {
+    return "Phase{" +
+            "currentPhase=" + currentPhase +
+            ", playedCards=" + playedCards +
+            ", moveThoughPlayers=" + moveThoughPlayers +
+            ", selectedTile=" + selectedTile +
+            '}';
+  }
 }

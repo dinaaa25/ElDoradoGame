@@ -6,14 +6,12 @@ import javax.swing.*;
 import org.slf4j.LoggerFactory;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
-import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileView;
 import org.utwente.game.model.Game;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
-import org.utwente.player.model.Player;
 import org.utwente.player.view.gui.PlayerDeck;
 import ch.qos.logback.classic.Logger;
 
@@ -28,6 +26,7 @@ public class GameGui extends JPanel implements GameView {
     int offsetX;
     int offsetY;
     PlayerDeck playerDeck;
+    JScrollPane boardViewScrollPane;
 
     public GameGui() {
         super();
@@ -67,10 +66,11 @@ public class GameGui extends JPanel implements GameView {
 
     public void addBoard() {
         if (game == null || game.getBoard() == null) return;
-        BoardView boardView = new BoardView(game.getBoard());
-        JScrollPane scrollPane = new JScrollPane(boardView);
-        this.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.getViewport().setViewPosition(getViewportPosition(game.getBoard(), boardView));
+        System.out.println("adding board with phase: " + game.getPhase());
+        BoardView boardView = new BoardView(game.getBoard(), this.game.getPhase());
+        boardViewScrollPane = new JScrollPane(boardView);
+        this.add(boardViewScrollPane, BorderLayout.CENTER);
+        boardViewScrollPane.getViewport().setViewPosition(getViewportPosition(game.getBoard(), boardView));
     }
 
     private Point getViewportPosition(Board board, BoardView boardView) {
@@ -158,6 +158,8 @@ public class GameGui extends JPanel implements GameView {
     @Override
     public void redraw() {
         this.remove(playerDeck);
+        this.remove(boardViewScrollPane);
+        this.addBoard();
         this.addPlayerSection();
         this.revalidate();
         this.repaint();

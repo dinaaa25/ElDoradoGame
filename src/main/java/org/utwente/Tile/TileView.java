@@ -25,8 +25,15 @@ import static org.utwente.game.view.GameConfig.TILE_SIZE;
 
 public class TileView extends HexButton {
 
+    public boolean selected = false;
+
     public TileView(Tile tile, boolean flatTop) {
+        this(tile, flatTop, false);
+    }
+
+    public TileView(Tile tile, boolean flatTop, boolean selected) {
         super(flatTop, tile, TILE_SIZE);
+        this.selected = selected;
 
         this.addActionListener(
                 e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
@@ -40,6 +47,7 @@ public class TileView extends HexButton {
 
         BasicStroke basicStroke = new BasicStroke((2));
         BasicStroke thickStroke = new BasicStroke(8);
+        BasicStroke selectedStroke = new BasicStroke(6);
 
         java.util.List<Integer> edges = Objects.requireNonNullElse(
                 Optional.ofNullable(tile.getBlockade())
@@ -60,8 +68,13 @@ public class TileView extends HexButton {
                 g2d.setColor(blockadeView.getBlockadeColor(tile.getBlockade().getTileType()));
                 g2d.setStroke(new BasicStroke(14));
             } else {
-                g2d.setStroke(basicStroke);
-                g2d.setColor(Color.BLACK);
+                if (selected) {
+                    g2d.setStroke(selectedStroke);
+                    g2d.setColor(Color.RED);
+                } else {
+                    g2d.setStroke(basicStroke);
+                    g2d.setColor(Color.BLACK);
+                }
             }
 
             g2d.draw(new Line2D.Double(start, end));
