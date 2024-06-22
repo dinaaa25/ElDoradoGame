@@ -5,6 +5,7 @@ import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
@@ -32,15 +33,22 @@ public class MoveAction extends Action {
     public void execute() {
         tileTo.placePlayer(this.player);
         tileFrom.removePlayer(this.player);
+        try {
+            resources.getFirst().removePower(tileTo.getPower());
+        } catch (CardPowerException e) {
+            // TODO implement UI error display
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public boolean validate() {
         // especially check native
         if (checkIfAdjacentCardOrCoin()) {
-            return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile();
+            return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile() && isSingleResource();
         }
-        return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile();
+        return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile() && isSingleResource();
     }
 
     protected boolean isTileToMountain() {
@@ -55,6 +63,10 @@ public class MoveAction extends Action {
             return ((CaveCoin) resource).caveCoinType() == CaveCoinType.Adjacent;
         }
         return false;
+    }
+
+    private boolean isSingleResource() {
+        return this.resources.size() == 1;
     }
 
     @Override
