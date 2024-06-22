@@ -21,7 +21,6 @@ import org.utwente.util.event.EventType;
 import org.utwente.market.controller.BuyEvent;
 
 import java.util.*;
-import java.util.function.*;
 
 public class MarketGui implements MarketView {
   JFrame f;
@@ -204,17 +203,16 @@ public class MarketGui implements MarketView {
     panel.setBackground(new Color(24, 24, 27));
   }
 
-  public void addCard(CardType card, GridCoordinate coord) {
-    CardComponent cardComponent = new CardComponent(card, market.getRemainingAmount(card), null);
-
+  public void addCard(CardType cardType, GridCoordinate coord) {
+    CardComponent cardComponent = new CardComponent(new Card(cardType), market.getRemainingAmount(cardType), null);
     GridBagConstraints c = coord.toGridBagConstraints(1);
 
-    cardComponent.setActionCommand(card.name());
+    cardComponent.setActionCommand(cardType.name());
     cardComponent.addActionListener(new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        EventManager.getInstance().notifying(EventType.BuyCards, new BuyEvent(CardType.valueOf(e.getActionCommand())));
+        EventManager.getInstance().notifying(EventType.BuyCards, new BuyEvent(cardType));
       }
 
     });

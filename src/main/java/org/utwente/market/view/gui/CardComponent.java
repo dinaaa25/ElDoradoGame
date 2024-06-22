@@ -13,7 +13,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
 import org.utwente.market.model.Card;
-import org.utwente.market.model.CardType;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 import org.utwente.util.event.PlayCardEvent;
@@ -21,15 +20,15 @@ import org.utwente.util.event.PlayCardEvent;
 public class CardComponent extends JButton {
   public static final int HEIGHT = 230;
   public static final int WIDTH = 150;
-  private CardType cardType;
+  private final Card card;
 
   public CardComponent(Card card) {
-    this(card.getCardType(), null, card.remainingPower());
+    this(card, null, card.remainingPower());
   }
 
-  public CardComponent(CardType card, Integer remainingAmount, Integer remainingPower) {
+  public CardComponent(Card card, Integer remainingAmount, Integer remainingPower) {
     super();
-    this.cardType = card;
+    this.card = card;
     setup();
     addBorder();
     addName();
@@ -43,7 +42,7 @@ public class CardComponent extends JButton {
     addPicture();
 
     this.addActionListener(
-            e -> EventManager.getInstance().notifying(EventType.PlayCards, new PlayCardEvent(new Card(cardType))));
+            e -> EventManager.getInstance().notifying(EventType.PlayCards, new PlayCardEvent(card)));
   }
 
   public void setup() {
@@ -54,19 +53,19 @@ public class CardComponent extends JButton {
   }
 
   public void addPicture() {
-    ImageIcon scaledIcon = CardHelper.getImageIcon(cardType, new Dimension(WIDTH, HEIGHT - 30));
+    ImageIcon scaledIcon = CardHelper.getImageIcon(card.getCardType(), new Dimension(WIDTH, HEIGHT - 30));
     this.add(new JLabel(scaledIcon));
   }
 
   public void addPrice() {
-    JLabel price = new JLabel(String.format("Price: %d coins", cardType.purchaseValue));
+    JLabel price = new JLabel(String.format("Price: %d coins", card.getCardType().purchaseValue));
     price.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     price.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     this.add(price);
   }
 
   public void addPower() {
-    JLabel power = new JLabel(String.format("Power: %d", cardType.power));
+    JLabel power = new JLabel(String.format("Power: %d", card.getCardType().power));
     power.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     power.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     this.add(power);
@@ -89,7 +88,7 @@ public class CardComponent extends JButton {
   }
 
   public void addName() {
-    JLabel name = new JLabel(this.cardType.name());
+    JLabel name = new JLabel(this.card.getCardType().name());
     name.setFont(MarketConfig.MARKET_CARD_NAME);
     name.setForeground(MarketConfig.MARKET_TEXT_COLOR);
     this.add(name);
