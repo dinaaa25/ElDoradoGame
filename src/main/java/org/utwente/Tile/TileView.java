@@ -131,7 +131,7 @@ public class TileView extends JButton {
     }
 
     private void setTileTexture(Graphics2D g2d, Tile tile) {
-        BufferedImage tileImage = TileImageLoader.getInstance().getTileImage(tile.getTileType(), tile.getPower());
+        BufferedImage tileImage = TileImageLoader.getInstance().getImage(tile.getTileType(), tile.getPower());
         if (tileImage != null) {
             TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
             g2d.setPaint(texturePaint);
