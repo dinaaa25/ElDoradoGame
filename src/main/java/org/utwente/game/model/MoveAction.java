@@ -24,12 +24,18 @@ public class MoveAction extends Action {
         return this.tileTo;
     }
 
+    public MoveAction(Player player, Resource resource, Tile from, Tile to) {
+        this(player, resource, from, to, new Phase());
+    }
+
     public MoveAction(Player player, Resource resource, Tile from, Tile to, Phase phase) {
         super(player, resource);
         this.tileFrom = from;
         this.tileTo = to;
         this.phase = phase;
     }
+
+
 
     @Override
     public void execute() {
