@@ -77,4 +77,10 @@ public class GameCLI implements GameView {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setCurrentPhase'");
     }
+
+    @Override
+    public void redrawBoard() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'redrawBoard'");
+    }
 }

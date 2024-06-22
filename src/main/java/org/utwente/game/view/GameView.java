@@ -21,4 +21,6 @@ public interface GameView {
 
     void setCurrentPhase();
 
+    void redrawBoard();
+
 }

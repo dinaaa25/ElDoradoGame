@@ -46,6 +46,7 @@ public class GameController {
             MoveAction action = new MoveAction(this.game.getCurrentPlayer(), data.getCard(), findCurrentTileOfPlayer(this.game.getCurrentPlayer()),
                     this.game.getPhase().getSelectedTile());
             action.validateExecute();
+            gameView.redrawBoard();
         }
     }
 

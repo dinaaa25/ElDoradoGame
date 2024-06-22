@@ -155,4 +155,9 @@ public class GameGui extends JPanel implements GameView {
         this.setCurrentPlayer();
     }
 
+    public void redrawBoard() {
+        this.revalidate();
+        this.repaint();
+    }
+
 }
