@@ -3,6 +3,8 @@ package org.utwente.game.controller;
 import lombok.Getter;
 
 import org.utwente.Board.Board;
+import org.utwente.Section.Section;
+import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.Game;
 import org.utwente.game.model.MoveAction;
@@ -41,9 +43,22 @@ public class GameController {
     void onPlayerCardClick(Event event) {
         if (event instanceof PlayCardEvent) {
             var data = (PlayCardEvent) event;
-            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), data.getCard(), null,
+            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), data.getCard(), findCurrentTileOfPlayer(this.game.getCurrentPlayer()),
                     this.game.getPhase().getSelectedTile());
+            action.validateExecute();
         }
+    }
+
+    Tile findCurrentTileOfPlayer(Player player) {
+        Board board = this.game.getBoard();
+        for (Section section : board.getSections()) {
+            for (Tile tile : section.getTiles()) {
+                if (tile.getPlayers().contains(player)) {
+                    return tile;
+                }
+            }
+        }
+        return null;
     }
 
     void onTileClick(Event event) {
