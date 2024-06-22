@@ -12,6 +12,15 @@ public class CaveCoin implements Resource {
     int power;
     int removedPower = 0;
     CaveCoinType caveCoinType;
+    private static final Map<CaveCoinType, PowerType> POWER_MAP;
+
+    static {
+        Map<CaveCoinType, PowerType> map = new HashMap<>();
+        map.put(CaveCoinType.Coin, PowerType.Coin);
+        map.put(CaveCoinType.Paddle, PowerType.Paddle);
+        map.put(CaveCoinType.Machete, PowerType.Machete);
+        POWER_MAP = Collections.unmodifiableMap(map);
+    }
 
     @JsonCreator
     public CaveCoin(@JsonProperty("power") int power,
@@ -33,19 +42,9 @@ public class CaveCoin implements Resource {
         return this.remainingPower();
     }
 
-    private Map<CaveCoinType, PowerType> getPowerMap() {
-        Map<CaveCoinType, PowerType> map = new HashMap<>();
-        map.put(CaveCoinType.Coin, PowerType.Coin);
-        map.put(CaveCoinType.Paddle, PowerType.Paddle);
-        map.put(CaveCoinType.Machete, PowerType.Machete);
-
-        return map;
-    }
-
     @Override
     public PowerType getType() {
-        Map<CaveCoinType, PowerType> map = getPowerMap();
-        return map.containsKey(this.caveCoinType) ? map.get(this.caveCoinType) : PowerType.Effect;
+        return POWER_MAP.getOrDefault(this.caveCoinType, PowerType.Effect);
     }
 
     @Override
