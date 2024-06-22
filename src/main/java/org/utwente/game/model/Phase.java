@@ -1,6 +1,8 @@
 package org.utwente.game.model;
 
 import java.util.*;
+
+import org.utwente.Tile.Tile;
 import org.utwente.market.model.Card;
 
 import lombok.Getter;
@@ -12,6 +14,7 @@ public class Phase {
   private PhaseType currentPhase;
   private Stack<Card> playedCards;
   private boolean moveThoughPlayers;
+  private Tile selectedTile;
 
   public Phase() {
     this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;

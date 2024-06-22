@@ -3,8 +3,9 @@ package org.utwente.game.controller;
 import lombok.Getter;
 
 import org.utwente.Board.Board;
-import org.utwente.Board.Path;
+import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.Game;
+import org.utwente.game.model.MoveAction;
 import org.utwente.game.view.GameView;
 import org.utwente.player.model.Player;
 import org.utwente.util.event.AddPlayersEvent;
@@ -12,8 +13,7 @@ import org.utwente.util.event.Event;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 import org.utwente.util.event.PickBoardEvent;
-
-import java.util.*;
+import org.utwente.util.event.PlayCardEvent;
 
 @Getter
 public class GameController {
@@ -34,6 +34,23 @@ public class GameController {
         eventManager.subscribe(this::onPickBoard, EventType.PickBoard);
         eventManager.subscribe(this::onNextTurn, EventType.NextTurn);
         eventManager.subscribe(this::onNextPhase, EventType.NextPhase);
+        eventManager.subscribe(this::onTileClick, EventType.ClickTile);
+        eventManager.subscribe(this::onPlayerCardClick, EventType.PlayCards);
+    }
+
+    void onPlayerCardClick(Event event) {
+        if (event instanceof PlayCardEvent) {
+            var data = (PlayCardEvent) event;
+            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), data.getCard(), null,
+                    this.game.getPhase().getSelectedTile());
+        }
+    }
+
+    void onTileClick(Event event) {
+        if (event instanceof TileClickEvent) {
+            var data = (TileClickEvent) event;
+            game.getPhase().setSelectedTile(data.getTile());
+        }
     }
 
     void onNextPhase(Event event) {
