@@ -48,9 +48,13 @@ public class MoveAction extends Action {
     }
 
     private boolean checkIfAdjacentCardOrCoin() {
-        return this.getResource() instanceof Card &&
-                ((Card) this.getResource()).getCardType() == CardType.Ureinwohner
-                || ((CaveCoin) this.getResource()).caveCoinType() == CaveCoinType.Adjacent;
+        Object resource = this.getResource();
+        if (resource instanceof Card) {
+            return ((Card) resource).getCardType() == CardType.Ureinwohner;
+        } else if (resource instanceof CaveCoin) {
+            return ((CaveCoin) resource).caveCoinType() == CaveCoinType.Adjacent;
+        }
+        return false;
     }
 
     @Override
