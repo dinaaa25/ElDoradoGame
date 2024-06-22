@@ -16,6 +16,7 @@ import org.utwente.util.event.EventType;
 import org.utwente.util.event.PickBoardEvent;
 import org.utwente.util.event.PlayCardEvent;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Getter
@@ -50,14 +51,24 @@ public class GameController {
         }
     }
 
-    void onMakeMove(Event event) {
-        Card selectedCard = this.game.getCurrentPlayer().getPlayPile().getCards().stream()
+    Card getCurrentlySelectedCard() {
+        return this.game.getCurrentPlayer().getPlayPile().getCards().stream()
                 .filter(Card::isSelected)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
+    }
+
+    void onMakeMove(Event event) {
+        Card selectedCard = getCurrentlySelectedCard();
         MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
         action.validateExecute();
+        removeSemiUsedCards(event);
         this.gameView.redraw();
+    }
+
+    void removeSemiUsedCards(Event event) {
+        List<Card> currentPlayerCards = this.game.getCurrentPlayer().getPlayPile().getCards();
+        currentPlayerCards.removeIf(card -> card.getConsumedPower() != 0 && !card.isSelected());
     }
 
     void onTileClick(Event event) {
