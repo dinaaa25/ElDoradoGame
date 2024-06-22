@@ -14,6 +14,7 @@ public class MoveAction extends Action {
 
     private Tile tileFrom;
     private Tile tileTo;
+    private Phase phase;
 
     public Tile getTileFrom() {
         return this.tileFrom;
@@ -23,21 +24,35 @@ public class MoveAction extends Action {
         return this.tileTo;
     }
 
-    public MoveAction(Player player, Resource resource, Tile from, Tile to) {
+    public MoveAction(Player player, Resource resource, Tile from, Tile to, Phase phase) {
         super(player, resource);
         this.tileFrom = from;
         this.tileTo = to;
+        this.phase = phase;
     }
 
     @Override
     public void execute() {
-        tileTo.placePlayer(this.player);
-        tileFrom.removePlayer(this.player);
-        try {
-            resources.getFirst().removePower(tileTo.getPower());
-        } catch (CardPowerException e) {
-            // TODO implement UI error display
-            throw new RuntimeException(e);
+        phase.addPlayedResource(this.getResource());
+        if (checkIfScientistCard()) {
+            phase.setCurrentPhase(PhaseType.SCIENTIST_PHASE);
+            // TODO set game to ScientistPhase
+            // TODO instruct user through selecting the right things
+            // TODO go back to Move Phase
+            try {
+                resources.getFirst().removePower(CardType.Wissenschaftlerin.power);
+            } catch (CardPowerException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            tileTo.placePlayer(this.player);
+            tileFrom.removePlayer(this.player);
+            try {
+                resources.getFirst().removePower(tileTo.getPower());
+            } catch (CardPowerException e) {
+                // TODO implement UI error display
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -48,7 +63,14 @@ public class MoveAction extends Action {
         if (checkIfAdjacentCardOrCoin()) {
             return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile() && isSingleResource();
         }
-        return isTileToNeighbour() && resourceHasEnoughPower() && isCardMatchingTile() && isNoPlayerOnToTile() && isSingleResource();
+        if (checkIfScientistCard()) {
+            return isSingleResource();
+        }
+        return defaultValidate();
+    }
+
+    private boolean defaultValidate() {
+        return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile() && isSingleResource() && resourceHasEnoughPower() && isCardMatchingTile();
     }
 
     protected boolean isTileToMountain() {
@@ -56,11 +78,18 @@ public class MoveAction extends Action {
     }
 
     private boolean checkIfAdjacentCardOrCoin() {
-        Object resource = this.getResource();
-        if (resource instanceof Card) {
-            return ((Card) resource).getCardType() == CardType.Ureinwohner;
-        } else if (resource instanceof CaveCoin) {
-            return ((CaveCoin) resource).caveCoinType() == CaveCoinType.Adjacent;
+        return checkIfCardOrCaveCoinType(CardType.Ureinwohner, CaveCoinType.Adjacent);
+    }
+
+    private boolean checkIfScientistCard() {
+        return checkIfCardOrCaveCoinType(CardType.Wissenschaftlerin, null);
+    }
+
+    private boolean checkIfCardOrCaveCoinType(CardType cardType, CaveCoinType caveCoinType) {
+        if (this.getResource() instanceof Card card) {
+            return cardType != null && card.getCardType() == cardType;
+        } else if (this.getResource() instanceof CaveCoin caveCoin) {
+            return caveCoinType != null && caveCoin.caveCoinType() == caveCoinType;
         }
         return false;
     }
@@ -86,9 +115,9 @@ public class MoveAction extends Action {
 
     /**
      * check if another player is on TileTo
-     * 
+     *
      * @return true if destination tile isEmpty() and false if destination tile
-     *         !isEmpty()
+     * !isEmpty()
      */
     public boolean isNoPlayerOnToTile() {
         return tileTo.isEmpty();
@@ -101,7 +130,7 @@ public class MoveAction extends Action {
     /**
      * compare not just power but also now whether this card type can be applied to
      * the tile you want to move to
-     * 
+     *
      * @return if resource matches to tile
      */
     public boolean isCardMatchingTile() {

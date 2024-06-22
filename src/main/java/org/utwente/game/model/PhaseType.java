@@ -3,7 +3,8 @@ package org.utwente.game.model;
 public enum PhaseType {
   BUYING_AND_PLAYING_PHASE(0),
   DISCARD_PHASE(1),
-  DRAW_PHASE(2);
+  DRAW_PHASE(2),
+  SCIENTIST_PHASE(3);
 
   private final int i;
 

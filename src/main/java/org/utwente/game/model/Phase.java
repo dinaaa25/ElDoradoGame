@@ -3,22 +3,22 @@ package org.utwente.game.model;
 import java.util.*;
 
 import org.utwente.Tile.Tile;
-import org.utwente.market.model.Card;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.utwente.market.model.Resource;
 
 @Getter
 @Setter
 public class Phase {
   private PhaseType currentPhase;
-  private Stack<Card> playedCards;
+  private Stack<Resource> playedResources;
   private boolean moveThoughPlayers;
   private Tile selectedTile;
 
   public Phase() {
     this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
-    this.playedCards = new Stack<>();
+    this.playedResources = new Stack<>();
     moveThoughPlayers = false;
   }
 
@@ -26,11 +26,15 @@ public class Phase {
     this.currentPhase = currentPhase.next();
   }
 
+  public void addPlayedResource(Resource resource) {
+    this.playedResources.push(resource);
+  }
+
   @Override
   public String toString() {
     return "Phase{" +
             "currentPhase=" + currentPhase +
-            ", playedCards=" + playedCards +
+            ", playedResources=" + playedResources +
             ", moveThoughPlayers=" + moveThoughPlayers +
             ", selectedTile=" + selectedTile +
             '}';
