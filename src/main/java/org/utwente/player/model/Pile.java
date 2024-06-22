@@ -37,6 +37,10 @@ public class Pile {
     return new Pile(newList, player, this.pileType);
   }
 
+  public void addAll(Pile other) {
+    this.cards.addAll(other.getCards());
+  }
+
   public boolean remove(Card card) {
     return cards.remove(card);
   }
@@ -50,6 +54,11 @@ public class Pile {
   }
 
   public Pile draw(int cardAmount) {
+    if (cardAmount > this.cards.size() && pileType == PileType.Draw) {
+      Pile discardPile = player.getDiscardPile();
+      this.cards.addAll(discardPile.getCards());
+    }
+
     this.shuffle();
     List<Card> drawnCards = new ArrayList<>();
     int drawAmount = Math.min(cardAmount, this.cards.size());

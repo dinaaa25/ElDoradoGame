@@ -7,6 +7,7 @@ import org.utwente.player.PlayerColor;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.utwente.market.model.Card;
 import org.utwente.player.PlayerColor;
 
 import java.util.ArrayList;
@@ -41,6 +42,16 @@ public class Player {
 
     public String getName() {
         return this.name;
+    }
+
+    public void discardCard(Card card) {
+        discardPile.add(card);
+        playPile.remove(card);
+    }
+
+    public void removeCardFromGame(Card card) {
+        outOfGamePile.add(card);
+        playPile.remove(card);
     }
 
     public void addBlockade(Blockade b) {

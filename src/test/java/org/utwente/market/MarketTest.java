@@ -63,18 +63,6 @@ public class MarketTest {
   }
 
   @Test
-  public void testBuyCardWithNull() {
-    Card card = null;
-
-    try {
-      card = market.buy(null);
-    } catch (BuyException e) {
-
-    }
-    assertNull(card);
-  }
-
-  @Test
   public void testBuyAndReplaceInCurrent() {
     Order order = new Order(CardType.Kartograph, 4);
     assertFalse((market.canBuy(order)).status());

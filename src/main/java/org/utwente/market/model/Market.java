@@ -42,22 +42,43 @@ public class Market {
         return new ValidationResult(true, null);
     }
 
+    public boolean isCardAvailable(CardType cardType) {
+        return cardInCurrent(cardType) || cardInReserve(cardType);
+    }
+
     public boolean reserveIsOpen() {
         return Market.CURRENT_FULL_SIZE > this.currentCardsSpec.size();
     }
 
+    /**
+     * buy card via order which includes card type and money you have
+     * @param order
+     * @return
+     * @throws BuyException
+     */
     public Card buy(Order order) throws BuyException {
         if (order == null) {
             throw new BuyException("Order is empty");
         }
         ValidationResult validationResult = canBuy(order);
 
-        if (validationResult.getStatus() == false) {
+        if (!validationResult.getStatus()) {
             throw new BuyException(validationResult.getMessage());
         }
 
-        removeCardFromMarket(order.getCardToken());
-        return new Card(order.getCardToken());
+        return buy(order.getCardToken());
+    }
+
+    /**
+     * buy card via specifying only the card type
+     * you do not need any money since you use the transmitter card as resource to buy anything
+     * @param type
+     * @return
+     * @throws BuyException
+     */
+    public Card buy(CardType type) throws BuyException {
+        removeCardFromMarket(type);
+        return new Card(type);
     }
 
     public boolean cardInReserve(CardType type) {

@@ -27,11 +27,19 @@ public class Card implements Resource {
         return cardType.power - consumedPower;
     }
 
-    public void removePower(int power) throws CardPowerException {
-        if (power > remainingPower()) {
+    public void removePower(int toBeRemoved) throws CardPowerException {
+        if (toBeRemoved > remainingPower()) {
             throw new CardPowerException("Not enough power to remove.");
         }
-        this.consumedPower += power;
+        this.consumedPower += toBeRemoved;
+    }
+
+    @Override
+    public double getValue() {
+        if(this.cardType.powerType == PowerType.Coin) {
+            return this.getPower();
+        }
+        return 0.5;
     }
 
     @Override
