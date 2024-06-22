@@ -70,13 +70,13 @@ public class GameGui extends JPanel implements GameView {
         BoardView boardView = new BoardView(game.getBoard(), this.game.getPhase());
         boardViewScrollPane = new JScrollPane(boardView);
         this.add(boardViewScrollPane, BorderLayout.CENTER);
-        boardViewScrollPane.getViewport().setViewPosition(getViewportPosition(game.getBoard(), boardView));
+        boardViewScrollPane.getViewport().setViewPosition(getViewportPosition(boardView));
     }
 
-    private Point getViewportPosition(Board board, BoardView boardView) {
-        TileView firstTile = new TileView(board.getStartingTiles().getFirst(), board.isFlatTop());
-        Point offsets = boardView.calculateOffsets(board);
-        Point tileOffset = firstTile.hexagonToPixel(board.isFlatTop(), board.getStartingTiles().getFirst());
+    private Point getViewportPosition(BoardView boardView) {
+        TileView firstTile = new TileView(game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), game.getBoard().isFlatTop(), false);
+        Point offsets = boardView.calculateOffsets(game.getBoard());
+        Point tileOffset = firstTile.hexagonToPixel(game.getBoard().isFlatTop(), game.getBoard().getStartingTiles().getFirst());
         return new Point(offsets.x + tileOffset.x, offsets.y + tileOffset.y);
     }
 

@@ -3,8 +3,6 @@ package org.utwente.game.controller;
 import lombok.Getter;
 
 import org.utwente.Board.Board;
-import org.utwente.Section.Section;
-import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.Game;
 import org.utwente.game.model.MoveAction;
@@ -58,21 +56,9 @@ public class GameController {
                 .filter(Card::isSelected)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
-        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, findCurrentTileOfPlayer(this.game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
+        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
         action.validateExecute();
         this.gameView.redraw();
-    }
-
-    Tile findCurrentTileOfPlayer(Player player) {
-        Board board = this.game.getBoard();
-        for (Section section : board.getSections()) {
-            for (Tile tile : section.getTiles()) {
-                if (tile.getPlayers().contains(player)) {
-                    return tile;
-                }
-            }
-        }
-        return null;
     }
 
     void onTileClick(Event event) {

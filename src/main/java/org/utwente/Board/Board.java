@@ -49,6 +49,17 @@ public class Board {
         return allBoardTiles;
     }
 
+    public Tile getTileOfPlayer(Player player) {
+        for (Section section : sections) {
+            for (Tile tile : section.getTiles()) {
+                if (tile.getPlayers().contains(player)) {
+                    return tile;
+                }
+            }
+        }
+        return new Tile(0, 0, TileType.Machete, 0, new ArrayList<>(), false);
+    }
+
     public List<Section> getSections() {
         return sections;
     }
