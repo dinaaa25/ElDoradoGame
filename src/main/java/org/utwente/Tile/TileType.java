@@ -9,7 +9,7 @@ import java.util.List;
 public enum TileType {
 
     Machete(List.of(PowerType.Machete, PowerType.Wild), new PowerRange(1, 3)),
-    Paddle(List.of(PowerType.Paddle, PowerType.Wild), new PowerRange(1, 3)),
+    Paddle(List.of(PowerType.Paddle, PowerType.Wild), new PowerRange(1, 4)),
     Coin(List.of(PowerType.Coin, PowerType.Wild), new PowerRange(1, 4)),
     Basecamp(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect), new PowerRange(1, 3)),
     Discard(List.of(PowerType.Machete, PowerType.Paddle, PowerType.Coin, PowerType.Wild, PowerType.Effect), new PowerRange(1, 3)),

@@ -6,5 +6,9 @@ public enum EventType {
   PlayCards,
   BuyCards,
   DiscardCards,
-  ClickTile
+  ClickTile,
+  AddPlayers,
+  PickBoard,
+  NextTurn,
+  NextPhase
 }

@@ -30,8 +30,8 @@ public class TileView extends JButton {
         this.tile = tile;
         this.flatTop = flatTop;
 
-        this.setActionCommand(tile.getQ() + ":" + tile.getR());
-        this.addActionListener(e -> EventManager.getInstance().notifying(EventType.ClickTile, e.getActionCommand()));
+        this.addActionListener(
+                e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
 
         this.setPreferredSize(new Dimension(HEX_SIZE * 2, HEX_SIZE * 2));
     }
@@ -47,8 +47,7 @@ public class TileView extends JButton {
             double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
             vertices[i] = new Point2D.Double(
                     HEX_SIZE + HEX_SIZE * Math.cos(angle),
-                    HEX_SIZE + HEX_SIZE * Math.sin(angle)
-            );
+                    HEX_SIZE + HEX_SIZE * Math.sin(angle));
         }
         return vertices;
     }
@@ -100,8 +99,7 @@ public class TileView extends JButton {
                         .map(Section::getDirectionType)
                         .map(this::getEdgesForSectionDirection)
                         .orElse(null),
-                Collections.emptyList()
-        );
+                Collections.emptyList());
 
         for (int i = 0; i < vertices.length; i++) {
             g2d.setStroke(basicStroke);
@@ -147,7 +145,7 @@ public class TileView extends JButton {
             int playerXOffset = HEX_SIZE - ((players.size() - 1) * 25) / 2;
             for (Player player : players) {
                 PlayerController playerController = new PlayerController(player, new PlayerView());
-                playerController.updateView(g2d, playerXOffset,HEX_SIZE / 2);
+                playerController.updateView(g2d, playerXOffset, HEX_SIZE / 2);
                 playerXOffset += 25;
             }
         }

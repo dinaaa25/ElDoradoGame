@@ -1,11 +1,17 @@
 package org.utwente.game.view;
 
 import org.utwente.game.model.Game;
+import org.utwente.player.model.Player;
 import org.utwente.util.event.EventManager;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.PrintStream;
 import java.util.Scanner;
 
+@Getter
+@Setter
 public class GameCLI implements GameView {
     Scanner scanner = new Scanner(System.in);
     Game game;
@@ -13,9 +19,7 @@ public class GameCLI implements GameView {
     EventManager eventManager;
     private PrintStream stream;
 
-    public GameCLI(Game game, EventManager eventManager) {
-        this.game = game;
-        this.eventManager = eventManager;
+    public GameCLI() {
     }
 
     public void start() {
@@ -39,4 +43,38 @@ public class GameCLI implements GameView {
         System.out.println(message);
     }
 
+    @Override
+    public void setStageStart() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStageStart'");
+    }
+
+    @Override
+    public void setPlayerSetup() {
+
+    }
+
+    @Override
+    public void setBoardSetup() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setBoardSetup'");
+    }
+
+    @Override
+    public void setGameStage() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setGameStage'");
+    }
+
+    @Override
+    public void setCurrentPlayer() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPlayer'");
+    }
+
+    @Override
+    public void setCurrentPhase() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCurrentPhase'");
+    }
 }

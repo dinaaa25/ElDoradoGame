@@ -2,12 +2,15 @@ package org.utwente.util.event;
 
 import java.util.function.Consumer;
 import java.util.*;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 
 // Publisher
 public class EventManager {
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(EventManager.class);
 
     private static EventManager instance;
-    private Map<EventType, List<Consumer<String>>> subscribers;
+    private Map<EventType, List<Consumer<Event>>> subscribers;
 
     private EventManager() {
         this.subscribers = new HashMap<>();
@@ -21,7 +24,7 @@ public class EventManager {
     }
 
     public List<EventType> getEventTypes() {
-        return this.subscribers.keySet().stream().toList();
+        return new ArrayList<>(this.subscribers.keySet());
     }
 
     public static EventManager getInstance() {
@@ -37,44 +40,54 @@ public class EventManager {
         setup();
     }
 
-    public void subscribe(Consumer<String> subscriber) {
-        for (List<Consumer<String>> list : subscribers.values()) {
+    public void subscribe(Consumer<Event> subscriber) {
+        logger.info("added subscriber for all events");
+        for (List<Consumer<Event>> list : subscribers.values()) {
             list.add(subscriber);
         }
     }
 
-    public void subscribe(Consumer<String> subscriber, EventType event) {
-        List<Consumer<String>> eventConsumers = subscribers.get(event);
+    public void subscribe(Consumer<Event> subscriber, EventType event) {
+        logger.info(String.format("added subscriber for %s", event.toString()));
+        List<Consumer<Event>> eventConsumers = subscribers.get(event);
         eventConsumers.add(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void unsubscribe(Consumer<String> subscriber) {
-        for (List<Consumer<String>> list : subscribers.values()) {
+    public void unsubscribe(Consumer<Event> subscriber) {
+        logger.info("unsubscribed subscriber for all events");
+        for (List<Consumer<Event>> list : subscribers.values()) {
             list.remove(subscriber);
         }
     }
 
-    public void unsubscribe(Consumer<String> subscriber, EventType event) {
-        List<Consumer<String>> eventConsumers = subscribers.get(event);
+    public void unsubscribe(Consumer<Event> subscriber, EventType event) {
+        logger.info(String.format("unsubscribed subscriber for %s", event.toString()));
+        List<Consumer<Event>> eventConsumers = subscribers.get(event);
         eventConsumers.remove(subscriber);
         subscribers.put(event, eventConsumers);
     }
 
-    public void notifying(EventType event, String data) {
-        List<Consumer<String>> eventSubscribers = subscribers.get(event);
+    public void notifying(EventType event, Event data) {
+        if (data instanceof EmptyEvent) {
+            logger.info(String.format("Event(%s)", event.toString()));
+        } else {
+            logger.info(String.format("Event(%s) | Data: %s", event.toString(), data.toString()));
+        }
 
-        for (Consumer<String> subscriber : eventSubscribers) {
-            subscriber.accept(data);
+        List<Consumer<Event>> eventSubscribers = subscribers.get(event);
+        if (eventSubscribers != null) {
+            for (Consumer<Event> subscriber : eventSubscribers) {
+                subscriber.accept(data);
+            }
         }
     }
 
     public void notifying(EventType event) {
-        this.notifying(event, "");
+        this.notifying(event, new EmptyEvent());
     }
 
-    public List<Consumer<String>> getSubscribers() {
-        return this.subscribers.values().stream().flatMap(subList -> subList.stream()).toList();
+    public List<Consumer<Event>> getSubscribers() {
+        return this.subscribers.values().stream().flatMap(List::stream).toList();
     }
-
 }

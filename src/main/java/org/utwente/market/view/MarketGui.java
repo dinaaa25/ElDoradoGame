@@ -18,6 +18,7 @@ import org.utwente.market.view.gui.GridCoordinate;
 import org.utwente.market.view.gui.MarketConfig;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+import org.utwente.market.controller.BuyEvent;
 
 import java.util.*;
 import java.util.function.*;
@@ -213,7 +214,7 @@ public class MarketGui implements MarketView {
 
       @Override
       public void actionPerformed(ActionEvent e) {
-        EventManager.getInstance().notifying(EventType.BuyCards, e.getActionCommand());
+        EventManager.getInstance().notifying(EventType.BuyCards, new BuyEvent(CardType.valueOf(e.getActionCommand())));
       }
 
     });
