@@ -43,8 +43,7 @@ public class GameController {
     }
 
     void onPlayerCardClick(Event event) {
-        if (event instanceof PlayCardEvent) {
-            var data = (PlayCardEvent) event;
+        if (event instanceof PlayCardEvent data) {
             Card card = data.getCard();
             card.switchSelected();
             gameView.redraw();
@@ -62,8 +61,7 @@ public class GameController {
     }
 
     void onTileClick(Event event) {
-        if (event instanceof TileClickEvent) {
-            var data = (TileClickEvent) event;
+        if (event instanceof TileClickEvent data) {
             game.getPhase().setSelectedTile(data.getTile());
             this.gameView.redraw();
         }
