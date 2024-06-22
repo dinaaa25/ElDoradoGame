@@ -1,16 +1,11 @@
 package org.utwente.market.view.gui;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Dimension;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 
 import org.utwente.market.model.Card;
 import org.utwente.util.event.EventManager;
@@ -80,7 +75,7 @@ public class CardComponent extends JButton {
   }
 
   public void addBorder() {
-    Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, MarketConfig.MARKET_BORDER);
+    Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, card.isSelected() ? MarketConfig.SELECTED_MARKET_BORDER : MarketConfig.MARKET_BORDER);
     EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10); // Adjust the gap values as needed
     CompoundBorder compoundBorder = BorderFactory.createCompoundBorder(emptyBorder, bevelBorder);
 

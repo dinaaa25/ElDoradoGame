@@ -155,7 +155,10 @@ public class GameGui extends JPanel implements GameView {
         this.setCurrentPlayer();
     }
 
-    public void redrawBoard() {
+    @Override
+    public void redraw() {
+        this.remove(playerDeck);
+        this.addPlayerSection();
         this.revalidate();
         this.repaint();
     }

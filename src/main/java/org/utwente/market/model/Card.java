@@ -7,10 +7,15 @@ import lombok.*;
 public class Card implements Resource {
     private CardType cardType;
     private int consumedPower;
+    private boolean selected = false;
 
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
+    }
+
+    public void switchSelected() {
+        this.selected = !this.selected;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class Card implements Resource {
 
     @Override
     public double getValue() {
-        if(this.cardType.powerType == PowerType.Coin) {
+        if (this.cardType.powerType == PowerType.Coin) {
             return this.getPower();
         }
         return 0.5;
@@ -52,6 +57,7 @@ public class Card implements Resource {
         return "Card{" +
                 "cardType=" + cardType +
                 ", consumedPower=" + consumedPower +
+                ", selected=" + selected +
                 '}';
     }
 }

@@ -9,6 +9,7 @@ import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.Game;
 import org.utwente.game.model.MoveAction;
 import org.utwente.game.view.GameView;
+import org.utwente.market.model.Card;
 import org.utwente.player.model.Player;
 import org.utwente.util.event.AddPlayersEvent;
 import org.utwente.util.event.Event;
@@ -16,6 +17,8 @@ import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 import org.utwente.util.event.PickBoardEvent;
 import org.utwente.util.event.PlayCardEvent;
+
+import java.util.NoSuchElementException;
 
 @Getter
 public class GameController {
@@ -38,16 +41,26 @@ public class GameController {
         eventManager.subscribe(this::onNextPhase, EventType.NextPhase);
         eventManager.subscribe(this::onTileClick, EventType.ClickTile);
         eventManager.subscribe(this::onPlayerCardClick, EventType.PlayCards);
+        eventManager.subscribe(this::onMakeMove, EventType.MakeMove);
     }
 
     void onPlayerCardClick(Event event) {
         if (event instanceof PlayCardEvent) {
             var data = (PlayCardEvent) event;
-            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), data.getCard(), findCurrentTileOfPlayer(this.game.getCurrentPlayer()),
-                    this.game.getPhase().getSelectedTile());
-            action.validateExecute();
-            gameView.redrawBoard();
+            Card card = data.getCard();
+            card.switchSelected();
+            gameView.redraw();
         }
+    }
+
+    void onMakeMove(Event event) {
+        Card selectedCard = this.game.getCurrentPlayer().getPlayPile().getCards().stream()
+                .filter(Card::isSelected)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("No selected card found"));
+        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, findCurrentTileOfPlayer(this.game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
+        action.validateExecute();
+        this.gameView.redraw();
     }
 
     Tile findCurrentTileOfPlayer(Player player) {

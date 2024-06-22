@@ -79,8 +79,8 @@ public class GameCLI implements GameView {
     }
 
     @Override
-    public void redrawBoard() {
+    public void redraw() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'redrawBoard'");
+        throw new UnsupportedOperationException("Unimplemented method 'redraw'");
     }
 }

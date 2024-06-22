@@ -32,6 +32,11 @@ public class PlayerDeck extends JPanel {
   public void addPlayerRow(Player player) {
     JPanel playerRow = new JPanel();
     playerRow.setLayout(new FlowLayout());
+
+    JButton makeMoveButton = new JButton("Make Move");
+    makeMoveButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
+    playerRow.add(makeMoveButton);
+
     JLabel name = new JLabel(String.format("Current Player: %s", player.getName()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
     name.setFont(PlayerConfig.NAME_FONT);

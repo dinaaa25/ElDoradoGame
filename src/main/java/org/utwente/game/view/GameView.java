@@ -1,7 +1,6 @@
 package org.utwente.game.view;
 
 import org.utwente.game.model.Game;
-import org.utwente.player.model.Player;
 
 public interface GameView {
 
@@ -21,6 +20,6 @@ public interface GameView {
 
     void setCurrentPhase();
 
-    void redrawBoard();
+    void redraw();
 
 }

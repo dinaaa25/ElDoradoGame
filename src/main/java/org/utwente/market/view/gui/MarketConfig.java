@@ -16,5 +16,6 @@ public class MarketConfig {
   public static final Color MARKET_ERROR_BG = new Color(252, 165, 165);
   public static final Color MARKET_SHADOW = new Color(168, 162, 158);
   public static final Color MARKET_BORDER = new Color(214, 211, 209);
+  public static final Color SELECTED_MARKET_BORDER = new Color(63, 113, 55);
 
 }
