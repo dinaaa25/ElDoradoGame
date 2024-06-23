@@ -6,8 +6,10 @@ import org.utwente.Board.Board;
 import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.Game;
 import org.utwente.game.model.MoveAction;
+import org.utwente.game.model.Phase;
 import org.utwente.game.view.GameView;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.event.AddPlayersEvent;
 import org.utwente.util.event.Event;
@@ -18,6 +20,7 @@ import org.utwente.util.event.PlayCardEvent;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
 @Getter
 public class GameController {
@@ -46,13 +49,21 @@ public class GameController {
     void onPlayerCardClick(Event event) {
         if (event instanceof PlayCardEvent data) {
             Card card = data.getCard();
+            Stack<Resource> resources = game.getPhase().getSelectedResources();
+            if (resources.contains(card)) {
+                resources.remove(card);
+            } else {
+                resources.add(card);
+            }
             card.switchSelected();
             gameView.redraw();
         }
     }
 
     Card getCurrentlySelectedCard() {
-        return this.game.getCurrentPlayer().getPlayPile().getCards().stream()
+        return this.game.getPhase().getSelectedResources().stream()
+                .filter(resource -> resource instanceof Card)
+                .map(resource -> (Card) resource)
                 .filter(Card::isSelected)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
@@ -62,13 +73,18 @@ public class GameController {
         Card selectedCard = getCurrentlySelectedCard();
         MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(), game.getPhase());
         action.validateExecute();
-        removeSemiUsedCards(event);
+        removeSemiUsedResources(event);
         this.gameView.redraw();
     }
 
-    void removeSemiUsedCards(Event event) {
-        List<Card> currentPlayerCards = this.game.getCurrentPlayer().getPlayPile().getCards();
-        currentPlayerCards.removeIf(card -> card.getConsumedPower() != 0 && !card.isSelected());
+    void removeSemiUsedResources(Event event) {
+        List<Resource> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
+        currentResources.removeIf(resource -> resource.getConsumedPower() != 0 && !isResourceSelected(resource));
+    }
+
+    boolean isResourceSelected(Resource resource) {
+        Phase phase = game.getPhase();
+        return phase.getSelectedResources().contains(resource);
     }
 
     void onTileClick(Event event) {

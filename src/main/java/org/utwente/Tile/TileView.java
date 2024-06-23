@@ -24,7 +24,8 @@ import java.util.Optional;
 import static org.utwente.game.view.GameConfig.TILE_SIZE;
 
 public class TileView extends HexButton {
-
+    public Tile tile;
+    public boolean flatTop;
     public boolean selected = false;
 
     public TileView(Tile tile, boolean flatTop) {
@@ -33,8 +34,9 @@ public class TileView extends HexButton {
 
     public TileView(Tile tile, boolean flatTop, boolean selected) {
         super(flatTop, tile, TILE_SIZE);
+        this.tile = tile;
+        this.flatTop = flatTop;
         this.selected = selected;
-
         this.addActionListener(
                 e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
     }

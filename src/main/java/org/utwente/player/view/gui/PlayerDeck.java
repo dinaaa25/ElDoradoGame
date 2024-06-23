@@ -71,12 +71,12 @@ public class PlayerDeck extends JPanel {
 
     // TODO this is just to show the Coins in the PlayerDeck, we can remove this to have to obtain the CaveCoins
     //  through the game dynamically
-    List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
-    Collections.shuffle(caveCoinList);
-    caveCoinList = caveCoinList.subList(0, 7);
-    for (CaveCoin cc : caveCoinList) {
-      player.getCaveCoinPile().add(cc);
-    }
+//    List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
+//    Collections.shuffle(caveCoinList);
+//    caveCoinList = caveCoinList.subList(0, 7);
+//    for (CaveCoin cc : caveCoinList) {
+//      player.getCaveCoinPile().add(cc);
+//    }
     this.add(new PlayCaveCoins(player.getCaveCoinPile()), BorderLayout.SOUTH);
   }
 

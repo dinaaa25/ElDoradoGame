@@ -11,10 +11,10 @@ import org.utwente.market.model.Resource;
 
 import java.util.*;
 
+@Getter
 public class CaveCoin implements Resource {
     int power;
-    int removedPower = 0;
-    @Getter
+    private int consumedPower = 0;
     CaveCoinType caveCoinType;
     private static final Map<CaveCoinType, PowerType> POWER_MAP;
 
@@ -28,7 +28,7 @@ public class CaveCoin implements Resource {
 
     @JsonCreator
     public CaveCoin(@JsonProperty("power") int power,
-            @JsonProperty("getCaveCoinType") CaveCoinType caveCoinType) {
+            @JsonProperty("caveCoinType") CaveCoinType caveCoinType) {
         this.power = power;
         this.caveCoinType = caveCoinType;
     }
@@ -60,7 +60,7 @@ public class CaveCoin implements Resource {
     }
 
     public int remainingPower() {
-        return power - removedPower;
+        return power - consumedPower;
     }
 
     @Override
@@ -68,14 +68,14 @@ public class CaveCoin implements Resource {
         if (toBeRemoved > remainingPower()) {
             throw new CardPowerException("Not enough power to remove.");
         }
-        this.removedPower += toBeRemoved;
+        this.consumedPower += toBeRemoved;
     }
 
     @Override
     public String toString() {
         return "CaveCoin{" +
                 "power=" + power +
-                ", removedPower=" + removedPower +
+                ", consumedPower=" + consumedPower +
                 ", caveCoinType=" + caveCoinType +
                 '}';
     }

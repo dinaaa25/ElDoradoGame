@@ -13,12 +13,14 @@ import org.utwente.market.model.Resource;
 public class Phase {
   private PhaseType currentPhase;
   private Stack<Resource> playedResources;
+  private Stack<Resource> selectedResources;
   private boolean moveThoughPlayers;
   private Tile selectedTile;
 
   public Phase() {
     this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
     this.playedResources = new Stack<>();
+    this.selectedResources = new Stack<>();
     moveThoughPlayers = false;
   }
 
@@ -35,6 +37,7 @@ public class Phase {
     return "Phase{" +
             "currentPhase=" + currentPhase +
             ", playedResources=" + playedResources +
+            ", selectedResources=" + selectedResources +
             ", moveThoughPlayers=" + moveThoughPlayers +
             ", selectedTile=" + selectedTile +
             '}';

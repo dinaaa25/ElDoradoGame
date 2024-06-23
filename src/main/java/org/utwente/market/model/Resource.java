@@ -6,5 +6,6 @@ public interface Resource {
     public PowerType getType();
     public double getValue();
     public void removePower(int toBeRemoved) throws CardPowerException;
+    public int getConsumedPower();
 
 }
