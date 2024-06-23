@@ -54,7 +54,7 @@ public class MoveAction extends Action {
         }
 
         try {
-            resources.getFirst().removePower(tileTo.getPower());
+            resources.getFirst().removePower(getMovePower());
         } catch (CardPowerException e) {
             // TODO implement UI error display
             throw new RuntimeException(e);
@@ -67,6 +67,22 @@ public class MoveAction extends Action {
         }
 
         movePlayer();
+    }
+
+    private int getMovePower() {
+        if (tileFrom.isBlockadeTile()) {
+            return tileFrom.getBlockade().getPower();
+        }
+
+        return tileTo.getPower();
+    }
+
+    private TileType getMoveTileType() {
+        if (tileFrom.isBlockadeTile()) {
+            return tileFrom.getBlockade().getTileType();
+        }
+
+        return tileTo.getTileType();
     }
 
     private boolean moveIsThroughBlockade() {
@@ -154,7 +170,7 @@ public class MoveAction extends Action {
     }
 
     public boolean resourceHasEnoughPower() {
-        return tileTo.getPower() <= this.getResource().getPower();
+        return this.getMovePower() <= this.getResource().getPower();
     }
 
     /**
@@ -164,7 +180,7 @@ public class MoveAction extends Action {
      * @return if resource matches to tile
      */
     public boolean isCardMatchingTile() {
-        return tileTo.getTileType().getPowerTypeList().contains(this.getResource().getType());
+        return getMoveTileType().getPowerTypeList().contains(this.getResource().getType());
     }
 
 }
