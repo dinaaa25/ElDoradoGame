@@ -2,9 +2,10 @@ package org.utwente.CaveCoin;
 
 import lombok.Getter;
 import org.utwente.Tile.PowerRange;
+import org.utwente.util.ImageLoadable;
 
 @Getter
-public enum CaveCoinType {
+public enum CaveCoinType implements ImageLoadable {
     Machete(new PowerRange(1, 3)),
     Paddle(new PowerRange(1, 2)),
     Coin(new PowerRange(1, 2)),

@@ -1,6 +1,8 @@
-package org.utwente.util;
+package org.utwente.util.images;
 
 import javax.imageio.ImageIO;
+import org.utwente.util.ImageLoadable;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.EnumMap;
@@ -39,4 +41,3 @@ public abstract class ImageLoader<T extends Enum<T> & ImageLoadable> {
         return images.getOrDefault(type, new HashMap<>()).get(power);
     }
 }
-
