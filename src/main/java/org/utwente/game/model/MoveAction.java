@@ -1,5 +1,6 @@
 package org.utwente.game.model;
 
+import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.Tile;
@@ -49,17 +50,32 @@ public class MoveAction extends Action {
             } catch (CardPowerException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            tileTo.placePlayer(this.player);
-            tileFrom.removePlayer(this.player);
-            try {
-                resources.getFirst().removePower(tileTo.getPower());
-            } catch (CardPowerException e) {
-                // TODO implement UI error display
-                throw new RuntimeException(e);
-            }
+            return;
         }
 
+        try {
+            resources.getFirst().removePower(tileTo.getPower());
+        } catch (CardPowerException e) {
+            // TODO implement UI error display
+            throw new RuntimeException(e);
+        }
+
+        if (moveIsThroughBlockade()) {
+            Blockade blockade = tileFrom.earnBlockade();
+            player.addBlockade(blockade);
+            return;
+        }
+
+        movePlayer();
+    }
+
+    private boolean moveIsThroughBlockade() {
+        return this.tileFrom.isBlockadeTile();
+    }
+
+    private void movePlayer() {
+        tileTo.placePlayer(this.player);
+        tileFrom.removePlayer(this.player);
     }
 
     @Override

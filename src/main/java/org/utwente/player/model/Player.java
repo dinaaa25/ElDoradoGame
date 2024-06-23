@@ -42,6 +42,7 @@ public class Player {
     }
 
     public void discardCard(Card card) {
+        card.setSelected(false);
         discardPile.add(card);
         playPile.remove(card);
     }

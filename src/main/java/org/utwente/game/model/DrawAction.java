@@ -6,7 +6,6 @@ import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.CardPile;
-import org.utwente.player.model.Pile;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 
