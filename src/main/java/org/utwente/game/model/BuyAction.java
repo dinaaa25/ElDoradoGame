@@ -3,7 +3,7 @@ package org.utwente.game.model;
 import org.utwente.market.model.Order;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
-
+import org.utwente.util.ValidationResult;
 import org.utwente.market.exceptions.BuyException;
 import org.utwente.market.model.*;
 
@@ -50,13 +50,15 @@ public class BuyAction extends Action {
     }
 
     @Override
-    public boolean validate() {
+    public ValidationResult validate() {
         // especially check for the transmitter card.
         if (this.checkIfTransmitter()) {
-            return this.market.isCardAvailable(order.getCardToken());
+            boolean isCardAvailable = this.market.isCardAvailable(order.getCardToken());
+            return new ValidationResult(isCardAvailable,
+                    isCardAvailable ? "Chosen Card Is Available" : "Chosen Card is not available");
         }
         // otherwise check the money and card.
-        return market.canBuy(order).getStatus();
+        return market.canBuy(order);
     }
 
     @Override

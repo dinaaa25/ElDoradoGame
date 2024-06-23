@@ -8,6 +8,7 @@ import org.utwente.market.model.Resource;
 import org.utwente.player.model.CardPile;
 import org.utwente.player.model.Pile;
 import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 
 import java.util.List;
 
@@ -29,18 +30,20 @@ public class DrawAction extends Action {
     }
 
     @Override
-    public boolean validate() {
+    public ValidationResult validate() {
         Resource resource = this.getResource();
         if (this.getResource() instanceof Card) {
             Card card = (Card) resource;
-            return List.of(CardType.Kartograph, CardType.Kompass, CardType.Wissenschaftlerin,
+            boolean cardAllowed = List.of(CardType.Kartograph, CardType.Kompass, CardType.Wissenschaftlerin,
                     CardType.Reisende).contains(card.getCardType());
+            return new ValidationResult(cardAllowed, cardAllowed ? "" : "Card not allowed for draw action.");
         }
         if (this.getResource() instanceof CaveCoin) {
             CaveCoin caveCoin = (CaveCoin) resource;
-            return caveCoin.caveCoinType() == CaveCoinType.Draw;
+            boolean coinAllowed = caveCoin.caveCoinType() == CaveCoinType.Draw;
+            return new ValidationResult(coinAllowed, coinAllowed ? "" : "Coin not allowed for draw action.");
         }
-        return false;
+        return new ValidationResult(false, "Not a Coin or Card.");
     }
 
     @Override

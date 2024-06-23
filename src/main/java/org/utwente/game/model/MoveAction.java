@@ -9,6 +9,7 @@ import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 
 public class MoveAction extends Action {
 
@@ -34,8 +35,6 @@ public class MoveAction extends Action {
         this.tileTo = to;
         this.phase = phase;
     }
-
-
 
     @Override
     public void execute() {
@@ -64,19 +63,28 @@ public class MoveAction extends Action {
     }
 
     @Override
-    public boolean validate() {
-        // especially check native
-        if (checkIfAdjacentCardOrCoin()) {
-            return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile() && isSingleResource();
-        }
-        if (checkIfScientistCard()) {
-            return isSingleResource();
-        }
-        return defaultValidate();
+    public ValidationResult validate() {
+        return checkNormalMovement();
     }
 
-    private boolean defaultValidate() {
-        return isTileToNeighbour() && !isTileToMountain() && isNoPlayerOnToTile() && isSingleResource() && resourceHasEnoughPower() && isCardMatchingTile();
+    private ValidationResult checkNormalMovement() {
+        if (!isTileToNeighbour()) {
+            return new ValidationResult(false, "Destination tile is not a neighbor of the player's tile.");
+        }
+        if (isTileToMountain()) {
+            return new ValidationResult(false, "Destination tile is a mountain.");
+        }
+        if (!isNoPlayerOnToTile()) {
+            return new ValidationResult(false, "There is another player on the destination tile.");
+        }
+        if (!resourceHasEnoughPower()) {
+            return new ValidationResult(false, "Chosen card or coin does not have enough power.");
+        }
+        if (!isCardMatchingTile()) {
+            return new ValidationResult(false, "The power type of the card or coin does not match the tile.");
+        }
+
+        return new ValidationResult(true, "");
     }
 
     protected boolean isTileToMountain() {
@@ -123,7 +131,7 @@ public class MoveAction extends Action {
      * check if another player is on TileTo
      *
      * @return true if destination tile isEmpty() and false if destination tile
-     * !isEmpty()
+     *         !isEmpty()
      */
     public boolean isNoPlayerOnToTile() {
         return tileTo.isEmpty();

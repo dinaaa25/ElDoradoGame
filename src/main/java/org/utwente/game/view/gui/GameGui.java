@@ -65,8 +65,8 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addBoard() {
-        if (game == null || game.getBoard() == null) return;
-        System.out.println("adding board with phase: " + game.getPhase());
+        if (game == null || game.getBoard() == null)
+            return;
         BoardView boardView = new BoardView(game.getBoard(), this.game.getPhase());
         boardViewScrollPane = new JScrollPane(boardView);
         this.add(boardViewScrollPane, BorderLayout.CENTER);
@@ -74,9 +74,11 @@ public class GameGui extends JPanel implements GameView {
     }
 
     private Point getViewportPosition(BoardView boardView) {
-        TileView firstTile = new TileView(game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), game.getBoard().isFlatTop(), false);
+        TileView firstTile = new TileView(game.getBoard().getTileOfPlayer(game.getCurrentPlayer()),
+                game.getBoard().isFlatTop(), false);
         Point offsets = boardView.calculateOffsets(game.getBoard());
-        Point tileOffset = firstTile.hexagonToPixel(game.getBoard().isFlatTop(), game.getBoard().getStartingTiles().getFirst());
+        Point tileOffset = firstTile.hexagonToPixel(game.getBoard().isFlatTop(),
+                game.getBoard().getStartingTiles().getFirst());
         return new Point(offsets.x + tileOffset.x, offsets.y + tileOffset.y);
     }
 
