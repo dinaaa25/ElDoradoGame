@@ -1,6 +1,5 @@
 package org.utwente.player.view.gui;
 
-
 import javax.swing.*;
 
 import org.utwente.CaveCoin.CaveCoin;
@@ -37,7 +36,7 @@ public class PlayerDeck extends JPanel {
     makeMoveButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
     playerRow.add(makeMoveButton);
 
-    JLabel name = new JLabel(String.format("Current Player: %s", player.getName()));
+    JLabel name = new JLabel(String.format("Current Player: %s (%s)", player.getName(), player.getColor().name()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
     name.setFont(PlayerConfig.NAME_FONT);
     playerRow.add(name);
@@ -69,14 +68,15 @@ public class PlayerDeck extends JPanel {
   private void addDeck(Player player) {
     this.add(new PlayCards(player.getPlayPile()), BorderLayout.CENTER);
 
-    // TODO this is just to show the Coins in the PlayerDeck, we can remove this to have to obtain the CaveCoins
-    //  through the game dynamically
-//    List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
-//    Collections.shuffle(caveCoinList);
-//    caveCoinList = caveCoinList.subList(0, 7);
-//    for (CaveCoin cc : caveCoinList) {
-//      player.getCaveCoinPile().add(cc);
-//    }
+    // TODO this is just to show the Coins in the PlayerDeck, we can remove this to
+    // have to obtain the CaveCoins
+    // through the game dynamically
+    // List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
+    // Collections.shuffle(caveCoinList);
+    // caveCoinList = caveCoinList.subList(0, 7);
+    // for (CaveCoin cc : caveCoinList) {
+    // player.getCaveCoinPile().add(cc);
+    // }
     this.add(new PlayCaveCoins(player.getCaveCoinPile()), BorderLayout.SOUTH);
   }
 
