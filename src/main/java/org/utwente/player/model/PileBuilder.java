@@ -1,6 +1,5 @@
 package org.utwente.player.model;
 
-import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 

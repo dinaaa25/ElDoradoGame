@@ -80,7 +80,7 @@ public class GameController {
     }
 
     void removeSemiUsedResources(Event event) {
-        List<Resource> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
+        List<Card> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
         currentResources.removeIf(resource -> resource.getConsumedPower() != 0 && !isResourceSelected(resource));
     }
 
