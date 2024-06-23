@@ -7,20 +7,21 @@ import java.util.List;
 import org.utwente.market.model.Card;
 import lombok.Getter;
 import lombok.Setter;
+import org.utwente.market.model.Resource;
 
 @Getter
 @Setter
 public class Pile {
-  protected List<Card> cards;
+  protected List<Resource> resources;
   protected Player player;
   protected PileType pileType;
 
   public Pile() {
-    this.cards = new ArrayList<>();
+    this.resources = new ArrayList<>();
   }
 
-  public Pile(List<Card> cards, Player player, PileType pileType) {
-    this.cards = cards;
+  public Pile(List<Resource> resources, Player player, PileType pileType) {
+    this.resources = resources;
     this.player = player;
     this.pileType = pileType;
   }
@@ -32,39 +33,39 @@ public class Pile {
    * @return
    */
   public Pile union(Pile other) {
-    List<Card> newList = new ArrayList<>(List.copyOf(cards));
-    newList.addAll(other.cards);
+    List<Resource> newList = new ArrayList<>(List.copyOf(resources));
+    newList.addAll(other.resources);
     return new Pile(newList, player, this.pileType);
   }
 
   public void addAll(Pile other) {
-    this.cards.addAll(other.getCards());
+    this.resources.addAll(other.getResources());
   }
 
   public boolean remove(Card card) {
-    return cards.remove(card);
+    return resources.remove(card);
   }
 
-  public boolean add(Card card) {
-    return cards.add(card);
+  public boolean add(Resource card) {
+    return resources.add(card);
   }
 
   public void shuffle() {
-    Collections.shuffle(cards);
+    Collections.shuffle(resources);
   }
 
   public Pile draw(int cardAmount) {
-    if (cardAmount > this.cards.size() && pileType == PileType.Draw) {
+    if (cardAmount > this.resources.size() && pileType == PileType.Draw) {
       Pile discardPile = player.getDiscardPile();
-      this.cards.addAll(discardPile.getCards());
+      this.resources.addAll(discardPile.getResources());
     }
 
     this.shuffle();
-    List<Card> drawnCards = new ArrayList<>();
-    int drawAmount = Math.min(cardAmount, this.cards.size());
+    List<Resource> drawnCards = new ArrayList<>();
+    int drawAmount = Math.min(cardAmount, this.resources.size());
     for (int i = 0; i < drawAmount; i++) {
-      drawnCards.add(this.cards.get(i));
-      this.cards.remove(i);
+      drawnCards.add(this.resources.get(i));
+      this.resources.remove(i);
     }
     return new Pile(drawnCards, this.player, this.pileType);
   }

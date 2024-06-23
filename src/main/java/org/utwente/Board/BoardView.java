@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-import static org.utwente.game.view.GameConfig.HEX_SIZE;
+import static org.utwente.game.view.GameConfig.TILE_SIZE;
 import static org.utwente.game.view.GameConfig.PADDING;
 
 public class BoardView extends JPanel {
@@ -45,8 +45,8 @@ public class BoardView extends JPanel {
         Point minPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(minQ, minR) : TileView.pointyTopHexToPixel(minQ, minR);
         Point maxPoint = board.isFlatTop() ? TileView.flatTopHexToPixel(maxQ, maxR) : TileView.pointyTopHexToPixel(maxQ, maxR);
 
-        int panelWidth = maxPoint.x - minPoint.x + 2 * PADDING + HEX_SIZE;
-        int panelHeight = maxPoint.y - minPoint.y + 2 * PADDING + HEX_SIZE;
+        int panelWidth = maxPoint.x - minPoint.x + 2 * PADDING + TILE_SIZE;
+        int panelHeight = maxPoint.y - minPoint.y + 2 * PADDING + TILE_SIZE;
 
         return new Dimension(panelWidth, panelHeight);
     }
@@ -86,7 +86,7 @@ public class BoardView extends JPanel {
                 TileView tileView = new TileView(tile, board.isFlatTop());
                 this.add(tileView);
                 Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
-                tileView.setBounds(tileViewCoords.x + offsets.x, tileViewCoords.y + offsets.y, HEX_SIZE * 2, HEX_SIZE * 2);
+                tileView.setBounds(tileViewCoords.x + offsets.x, tileViewCoords.y + offsets.y, TILE_SIZE * 2, TILE_SIZE * 2);
             }
         }
 

@@ -27,6 +27,7 @@ public class Player {
     private Pile playPile;
     private Pile outOfGamePile;
     private Pile drawPile;
+    private Pile caveCoinPile;
 
     public Player(String name) {
         this.name = name;
@@ -38,6 +39,7 @@ public class Player {
         this.playPile = startPile.draw(DECK_CARDS);
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
+        this.caveCoinPile = builder.buildCaveCoinPile();
     }
 
     public String getName() {

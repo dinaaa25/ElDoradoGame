@@ -193,7 +193,7 @@ public class MarketGui implements MarketView {
 
   private void addReserveText() {
     GridBagConstraints c = coord.toGridBagConstraints(maxColumns - 1);
-    JLabel subtitle = new JLabel("These are the reserve cards:");
+    JLabel subtitle = new JLabel("These are the reserve resources:");
     subtitle.setBorder(BorderFactory.createEmptyBorder(30, 10, 30, 10));
     subtitle.setFont(MarketConfig.MARKET_CARD_FONT);
     subtitle.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);

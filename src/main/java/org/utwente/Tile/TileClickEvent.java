@@ -13,4 +13,11 @@ public class TileClickEvent extends Event {
   public TileClickEvent(Tile tile) {
     this.tile = tile;
   }
+
+  @Override
+  public String toString() {
+    return "TileClickEvent{" +
+            "tile=" + tile +
+            '}';
+  }
 }

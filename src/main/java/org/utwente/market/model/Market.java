@@ -91,7 +91,7 @@ public class Market {
 
     public void removeCardFromMarket(CardType key) {
         if (cardInReserve(key)) {
-            // move card to current cards.
+            // move card to current resources.
             Integer cardAmount = this.reserveCardsSpec.get(key);
             this.currentCardsSpec.put(key, --cardAmount);
             this.reserveCardsSpec.remove(key);

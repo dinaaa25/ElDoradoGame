@@ -4,5 +4,6 @@ public enum PileType {
   Discard,
   Play,
   OutOfGame,
-  Draw
+  Draw,
+  CaveCoin
 }

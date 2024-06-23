@@ -9,21 +9,21 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 
-import static org.utwente.game.view.GameConfig.HEX_SIZE;
-
 public abstract class HexButton extends JButton {
+  protected int hexagonRadius;
   protected boolean flatTop;
   protected Tile tile;
 
-  public HexButton(boolean flatTop, Tile tile) {
+  public HexButton(boolean flatTop, Tile tile, int hexagonRadius) {
     this.flatTop = flatTop;
     this.tile = tile;
+    this.hexagonRadius = hexagonRadius;
     this.setPreferredSize(getPreferredSize());
   }
 
   @Override
   public Dimension getPreferredSize() {
-    return new Dimension(HEX_SIZE * 2, HEX_SIZE * 2);
+    return new Dimension(hexagonRadius * 2, hexagonRadius * 2);
   }
 
   protected Point2D.Double[] createHexagonVertices(boolean flatTop) {
@@ -31,8 +31,8 @@ public abstract class HexButton extends JButton {
     for (int i = 0; i < 6; i++) {
       double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
       vertices[i] = new Point2D.Double(
-          HEX_SIZE + HEX_SIZE * Math.cos(angle),
-          HEX_SIZE + HEX_SIZE * Math.sin(angle));
+          hexagonRadius + hexagonRadius * Math.cos(angle),
+          hexagonRadius + hexagonRadius * Math.sin(angle));
     }
     return vertices;
   }

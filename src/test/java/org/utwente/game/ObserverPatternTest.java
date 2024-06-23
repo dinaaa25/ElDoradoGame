@@ -7,6 +7,7 @@ import org.utwente.game.model.Game;
 import org.utwente.game.view.GameCLI;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.CardType;
+import org.utwente.util.event.EmptyEvent;
 import org.utwente.util.event.Event;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
@@ -47,14 +48,14 @@ public class ObserverPatternTest {
         eventManager.subscribe(subscriber1);
         eventManager.subscribe(subscriber2);
 
-        eventManager.notifying(EventType.StartGame, new Event() {});
+        eventManager.notifying(EventType.StartGame, new EmptyEvent() {});
 
         verify(subscriber1).accept(any(Event.class));
         verify(subscriber2).accept(any(Event.class));
 
         eventManager.unsubscribe(subscriber1);
 
-        eventManager.notifying(EventType.EndGame, new Event() {});
+        eventManager.notifying(EventType.EndGame, new EmptyEvent() {});
 
         verify(subscriber1, times(1)).accept(any(Event.class));
         verify(subscriber2, times(2)).accept(any(Event.class));

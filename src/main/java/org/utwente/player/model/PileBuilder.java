@@ -76,6 +76,13 @@ public class PileBuilder {
     return this.pile;
   }
 
+  public Pile buildCaveCoinPile() {
+    this.reset();
+    this.setType(PileType.CaveCoin);
+    this.pile.setPlayer(this.player);
+    return this.pile;
+  }
+
   public Pile build() {
     Pile temporaryPile = this.pile;
     this.reset();
