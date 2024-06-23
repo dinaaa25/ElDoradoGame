@@ -10,5 +10,6 @@ public enum EventType {
   AddPlayers,
   PickBoard,
   NextTurn,
-  NextPhase
+  NextPhase,
+  ClickCaveCoin
 }

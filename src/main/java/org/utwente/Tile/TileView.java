@@ -4,14 +4,15 @@ import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Blockade.BlockadeView;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Section.Section;
+import org.utwente.Tile.view.HexButton;
 import org.utwente.game.view.GameConfig;
 import org.utwente.player.PlayerController;
 import org.utwente.player.PlayerView;
 import org.utwente.player.model.Player;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+import org.utwente.util.images.ImageRepository;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
@@ -22,44 +23,13 @@ import java.util.List;
 
 import static org.utwente.game.view.GameConfig.HEX_SIZE;
 
-public class TileView extends JButton {
-    public Tile tile;
-    public boolean flatTop;
+public class TileView extends HexButton {
 
     public TileView(Tile tile, boolean flatTop) {
-        this.tile = tile;
-        this.flatTop = flatTop;
+        super(flatTop, tile);
 
         this.addActionListener(
                 e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
-
-        this.setPreferredSize(new Dimension(HEX_SIZE * 2, HEX_SIZE * 2));
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(HEX_SIZE * 2, HEX_SIZE * 2);
-    }
-
-    private Point2D.Double[] createHexagonVertices(boolean flatTop) {
-        Point2D.Double[] vertices = new Point2D.Double[6];
-        for (int i = 0; i < 6; i++) {
-            double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
-            vertices[i] = new Point2D.Double(
-                    HEX_SIZE + HEX_SIZE * Math.cos(angle),
-                    HEX_SIZE + HEX_SIZE * Math.sin(angle));
-        }
-        return vertices;
-    }
-
-    private Path2D.Double createHexagonPath(Point2D.Double[] vertices) {
-        Path2D.Double hexagon = new Path2D.Double();
-        hexagon.moveTo(vertices[0].x, vertices[0].y);
-        for (int i = 1; i < vertices.length; i++) {
-            hexagon.lineTo(vertices[i].x, vertices[i].y);
-        }
-        hexagon.closePath();
-        return hexagon;
     }
 
     private List<Integer> getEdgesForSectionDirection(SectionDirectionType.SectionDirection sectionDirection) {
@@ -85,7 +55,8 @@ public class TileView extends JButton {
         return List.of(0, 0);
     }
 
-    private void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
+    @Override
+    protected void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
         BlockadeView blockadeView = new BlockadeView();
         Path2D.Double hexagonPath = createHexagonPath(vertices);
         g2d.fill(hexagonPath);
@@ -130,16 +101,6 @@ public class TileView extends JButton {
         g2d.drawString(text, textX, textY);
     }
 
-    private void setTileTexture(Graphics2D g2d, Tile tile) {
-        BufferedImage tileImage = TileImageLoader.getInstance().getTileImage(tile.getTileType(), tile.getPower());
-        if (tileImage != null) {
-            TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
-            g2d.setPaint(texturePaint);
-        } else {
-            g2d.setColor(tile.getTileColor());
-        }
-    }
-
     private void drawPlayers(Graphics2D g2d, Set<Player> players) {
         if (!players.isEmpty()) {
             int playerXOffset = HEX_SIZE - ((players.size() - 1) * 25) / 2;
@@ -182,12 +143,20 @@ public class TileView extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        Point2D.Double[] hexagon = createHexagonVertices(flatTop);
-
-        setTileTexture(g2d, tile);
-        drawHexagon(tile, hexagon, g2d);
+        super.paintComponent(g2d);
         drawCoordinates(g2d, tile);
         drawCaveCoinCount(g2d, tile);
         drawPlayers(g2d, tile.getPlayers());
+    }
+
+    @Override
+    protected void setTileTexture(Graphics2D g2d) {
+        BufferedImage tileImage = ImageRepository.getTileImageLoader().getImage(tile.getTileType(), tile.getPower());
+        if (tileImage != null) {
+            TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(0, 0, 2 * HEX_SIZE, 2 * HEX_SIZE));
+            g2d.setPaint(texturePaint);
+        } else {
+            g2d.setColor(tile.getTileColor());
+        }
     }
 }
