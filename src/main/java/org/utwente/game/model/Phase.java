@@ -7,6 +7,7 @@ import org.utwente.Tile.Tile;
 import lombok.Getter;
 import lombok.Setter;
 import org.utwente.market.model.Resource;
+import org.utwente.util.ValidationResult;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class Phase {
   private Stack<Resource> selectedResources;
   private boolean moveThoughPlayers;
   private Tile selectedTile;
+  private ValidationResult actionMessage;
 
   public Phase() {
     this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
@@ -35,11 +37,11 @@ public class Phase {
   @Override
   public String toString() {
     return "Phase{" +
-            "currentPhase=" + currentPhase +
-            ", playedResources=" + playedResources +
-            ", selectedResources=" + selectedResources +
-            ", moveThoughPlayers=" + moveThoughPlayers +
-            ", selectedTile=" + selectedTile +
-            '}';
+        "currentPhase=" + currentPhase +
+        ", playedResources=" + playedResources +
+        ", selectedResources=" + selectedResources +
+        ", moveThoughPlayers=" + moveThoughPlayers +
+        ", selectedTile=" + selectedTile +
+        '}';
   }
 }

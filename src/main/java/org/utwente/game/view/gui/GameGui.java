@@ -13,6 +13,8 @@ import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
 import org.utwente.player.view.gui.PlayerDeck;
+import org.utwente.util.ValidationResult;
+
 import ch.qos.logback.classic.Logger;
 
 import lombok.Getter;
@@ -94,13 +96,18 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addPlayerSection() {
-        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase().getCurrentPhase());
+        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase());
         this.add(this.playerDeck, BorderLayout.SOUTH);
     }
 
     @Override
-    public void showMessage(String message) {
-
+    public void showMessage(ValidationResult message) {
+        System.out.println(message.getMessage());
+        this.remove(playerDeck);
+        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase());
+        this.add(this.playerDeck, BorderLayout.SOUTH);
+        this.revalidate();
+        this.repaint();
     }
 
     @Override

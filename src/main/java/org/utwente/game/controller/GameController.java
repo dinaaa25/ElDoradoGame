@@ -11,6 +11,7 @@ import org.utwente.game.view.GameView;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 import org.utwente.util.event.AddPlayersEvent;
 import org.utwente.util.event.Event;
 import org.utwente.util.event.EventManager;
@@ -74,7 +75,8 @@ public class GameController {
         MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
                 game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
                 game.getPhase());
-        action.validateExecute();
+        ValidationResult result = action.validateExecute();
+        this.game.getPhase().setActionMessage(result);
         removeSemiUsedResources(event);
         this.gameView.redraw();
     }
@@ -104,7 +106,7 @@ public class GameController {
 
     void onNextTurn(Event event) {
         game.nextPlayer();
-        gameView.setCurrentPlayer();
+        gameView.redraw();
     }
 
     /**

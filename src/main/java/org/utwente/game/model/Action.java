@@ -50,14 +50,13 @@ public abstract class Action {
 
     public abstract ValidationResult validate();
 
-    public void validateExecute() {
+    public ValidationResult validateExecute() {
         ValidationResult actionValidationResult = validate();
         if (actionValidationResult.getStatus()) {
             execute();
             discard();
-            return;
         }
-        logger.info(String.format("action validated false: %s", actionValidationResult.getMessage()));
+        return actionValidationResult;
     }
 
     public abstract void discard();

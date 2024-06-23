@@ -79,6 +79,7 @@ public class Game {
 
     public int nextPlayer() {
         checkWaitingForWinTurn();
+        this.phase = new Phase();
         if (currentPlayer < this.players.size() - 1) {
             currentPlayer = currentPlayer + 1;
             return currentPlayer;

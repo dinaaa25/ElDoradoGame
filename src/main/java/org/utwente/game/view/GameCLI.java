@@ -1,7 +1,7 @@
 package org.utwente.game.view;
 
 import org.utwente.game.model.Game;
-import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
 
 import lombok.Getter;
@@ -39,8 +39,8 @@ public class GameCLI implements GameView {
     }
 
     @Override
-    public void showMessage(String message) {
-        System.out.println(message);
+    public void showMessage(ValidationResult message) {
+        System.out.println(message.getMessage());
     }
 
     @Override
