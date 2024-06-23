@@ -71,7 +71,9 @@ public class GameController {
 
     void onMakeMove(Event event) {
         Card selectedCard = getCurrentlySelectedCard();
-        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard, game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(), game.getPhase());
+        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
+                game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
+                game.getPhase());
         action.validateExecute();
         removeSemiUsedResources(event);
         this.gameView.redraw();

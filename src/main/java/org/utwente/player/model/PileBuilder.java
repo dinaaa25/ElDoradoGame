@@ -1,5 +1,6 @@
 package org.utwente.player.model;
 
+import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 
@@ -7,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class PileBuilder {
-  private Pile pile;
+  private CardPile pile;
   private Player player;
 
   public PileBuilder() {
@@ -40,7 +41,7 @@ public class PileBuilder {
   }
 
   public void reset() {
-    this.pile = new Pile();
+    this.pile = new CardPile();
   }
 
   public PileBuilder setType(PileType type) {
@@ -48,43 +49,36 @@ public class PileBuilder {
     return this;
   }
 
-  public Pile buildDiscardPile() {
+  public CardPile buildDiscardPile() {
     this.reset();
     this.setType(PileType.Discard);
     this.pile.setPlayer(this.player);
     return this.pile;
   }
 
-  public Pile buildOutOfGamePile() {
+  public CardPile buildOutOfGamePile() {
     this.reset();
     this.setType(PileType.OutOfGame);
     this.pile.setPlayer(this.player);
     return this.pile;
   }
 
-  public Pile buildDrawPile() {
+  public CardPile buildDrawPile() {
     this.reset();
     this.setType(PileType.Draw);
     this.pile.setPlayer(this.player);
     return this.pile;
   }
 
-  public Pile buildStartPile() {
+  public CardPile buildStartPile() {
     this.reset();
     this.addStartingCards();
     this.pile.setPlayer(this.player);
     return this.pile;
   }
 
-  public Pile buildCaveCoinPile() {
-    this.reset();
-    this.setType(PileType.CaveCoin);
-    this.pile.setPlayer(this.player);
-    return this.pile;
-  }
-
-  public Pile build() {
-    Pile temporaryPile = this.pile;
+  public CardPile build() {
+    CardPile temporaryPile = this.pile;
     this.reset();
     return temporaryPile;
   }

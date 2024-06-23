@@ -5,6 +5,7 @@ import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
+import org.utwente.player.model.CardPile;
 import org.utwente.player.model.Pile;
 import org.utwente.player.model.Player;
 
@@ -21,8 +22,8 @@ public class DrawAction extends Action {
 
     @Override
     public void execute() {
-        Pile drawPile = player.getDrawPile();
-        Pile playPile = player.getPlayPile();
+        CardPile drawPile = player.getDrawPile();
+        CardPile playPile = player.getPlayPile();
         int power = this.getResource().getPower();
         playPile.addAll(drawPile.draw(power));
     }
