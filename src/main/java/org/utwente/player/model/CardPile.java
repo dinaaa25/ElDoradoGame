@@ -14,7 +14,7 @@ public class CardPile extends Pile<Card> {
   }
 
   public CardPile draw(int cardAmount) {
-    if (cardAmount > this.resources.size() && pileType == PileType.Draw) {
+    if (cardAmount >= this.resources.size() && pileType == PileType.Draw) {
       Pile<Card> discardPile = player.getDiscardPile();
       this.resources.addAll(discardPile.getResources());
     }
