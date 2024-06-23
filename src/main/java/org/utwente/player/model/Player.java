@@ -43,7 +43,7 @@ public class Player {
 
     public void discardCard(Card card) {
 //        card.setSelected(false);
-        // TODO find a way to set the Phase selected cards empty
+        // TODO find a way to set the Phase selected cards empty, perhaps we can do it once you move turns and then it is set there
         discardPile.add(card);
         playPile.remove(card);
     }
