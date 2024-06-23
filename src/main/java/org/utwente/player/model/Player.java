@@ -47,6 +47,14 @@ public class Player {
         playPile.remove(card);
     }
 
+    public void drawPlayCards() {
+        int currentCards = this.playPile.getCards().size();
+        int cardsToDraw = DECK_CARDS - currentCards;
+        System.out.println("Cards to Draw: " + cardsToDraw);
+        CardPile drawnCards = this.drawPile.draw(cardsToDraw);
+        this.playPile.addAll(drawnCards);
+    }
+
     public void removeCardFromGame(Card card) {
         outOfGamePile.add(card);
         playPile.remove(card);

@@ -4,10 +4,12 @@ import lombok.Getter;
 
 import org.utwente.Board.Board;
 import org.utwente.Tile.TileClickEvent;
+import org.utwente.game.model.BuyAction;
 import org.utwente.game.model.Game;
 import org.utwente.game.model.MoveAction;
 import org.utwente.game.model.Phase;
 import org.utwente.game.view.GameView;
+import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
@@ -45,6 +47,18 @@ public class GameController {
         eventManager.subscribe(this::onTileClick, EventType.ClickTile);
         eventManager.subscribe(this::onPlayerCardClick, EventType.PlayCards);
         eventManager.subscribe(this::onMakeMove, EventType.MakeMove);
+        eventManager.subscribe(this::onBuyCardFromMarket, EventType.BuyCards);
+    }
+
+    void onBuyCardFromMarket(Event event) {
+        if (event instanceof BuyEvent data) {
+            List<Resource> resources = game.getPhase().getSelectedResources();
+            BuyAction action = new BuyAction(this.game.getCurrentPlayer(), resources, data.getCardType(),
+                    this.game.getMarket());
+            ValidationResult result = action.validateExecute();
+            this.game.getPhase().setActionMessage(result);
+            this.gameView.redraw();
+        }
     }
 
     void onPlayerCardClick(Event event) {
@@ -105,6 +119,8 @@ public class GameController {
     }
 
     void onNextTurn(Event event) {
+        Player player = game.getCurrentPlayer();
+        player.drawPlayCards();
         game.nextPlayer();
         gameView.redraw();
     }

@@ -23,8 +23,8 @@ public class CardPile extends Pile<Card> {
     List<Card> drawnCards = new ArrayList<>();
     int drawAmount = Math.min(cardAmount, this.resources.size());
     for (int i = 0; i < drawAmount; i++) {
-      drawnCards.add(this.resources.get(i));
-      this.resources.remove(i);
+      Card resource = this.resources.remove(0);
+      drawnCards.add(resource);
     }
     return new CardPile(drawnCards, this.player, this.pileType);
   }
