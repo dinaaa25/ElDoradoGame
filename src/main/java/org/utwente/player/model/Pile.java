@@ -39,7 +39,7 @@ public class Pile {
   }
 
   public void addAll(Pile other) {
-    this.cards.addAll(other.getCards());
+    this.resources.addAll(other.getResources());
   }
 
   public boolean remove(Card card) {
@@ -55,9 +55,9 @@ public class Pile {
   }
 
   public Pile draw(int cardAmount) {
-    if (cardAmount > this.cards.size() && pileType == PileType.Draw) {
+    if (cardAmount > this.resources.size() && pileType == PileType.Draw) {
       Pile discardPile = player.getDiscardPile();
-      this.cards.addAll(discardPile.getCards());
+      this.resources.addAll(discardPile.getResources());
     }
 
     this.shuffle();

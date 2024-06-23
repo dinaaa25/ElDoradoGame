@@ -2,8 +2,8 @@ package org.utwente.Tile;
 
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Board.Blockade.BlockadeView;
-import org.utwente.Board.SectionDirectionType;
 import org.utwente.Section.Section;
+import org.utwente.Tile.view.EdgeSectionDirection;
 import org.utwente.Tile.view.HexButton;
 import org.utwente.game.view.GameConfig;
 import org.utwente.player.PlayerController;
@@ -14,45 +14,22 @@ import org.utwente.util.event.EventType;
 import org.utwente.util.images.ImageRepository;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.List;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Optional;
 
 import static org.utwente.game.view.GameConfig.TILE_SIZE;
 
 public class TileView extends HexButton {
 
     public TileView(Tile tile, boolean flatTop) {
-        super(flatTop, tile);
+        super(flatTop, tile, TILE_SIZE);
 
         this.addActionListener(
                 e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
-    }
-
-    private List<Integer> getEdgesForSectionDirection(SectionDirectionType.SectionDirection sectionDirection) {
-        if (sectionDirection instanceof SectionDirectionType.FlatTopSectionDirection flatTopSectionDirection) {
-            return switch (flatTopSectionDirection) {
-                case FT_NORTHEAST -> List.of(4, 5);
-                case FT_EAST -> List.of(5, 0);
-                case FT_SOUTHEAST -> List.of(0, 1);
-                case FT_SOUTHWEST -> List.of(1, 2);
-                case FT_WEST -> List.of(2, 3);
-                case FT_NORTHWEST -> List.of(3, 4);
-            };
-        } else if (sectionDirection instanceof SectionDirectionType.PointyTopSectionDirection pointyTopSectionDirection) {
-            return switch (pointyTopSectionDirection) {
-                case PT_NORTH -> List.of(3, 4);
-                case PT_NORTHEAST -> List.of(4, 5);
-                case PT_SOUTHEAST -> List.of(5, 0);
-                case PT_SOUTH -> List.of(0, 1);
-                case PT_SOUTHWEST -> List.of(1, 2);
-                case PT_NORTHWEST -> List.of(2, 3);
-            };
-        }
-        return List.of(0, 0);
     }
 
     @Override
@@ -64,11 +41,11 @@ public class TileView extends HexButton {
         BasicStroke basicStroke = new BasicStroke((2));
         BasicStroke thickStroke = new BasicStroke(8);
 
-        List<Integer> edges = Objects.requireNonNullElse(
+        java.util.List<Integer> edges = Objects.requireNonNullElse(
                 Optional.ofNullable(tile.getBlockade())
                         .map(Blockade::getSection2)
                         .map(Section::getDirectionType)
-                        .map(this::getEdgesForSectionDirection)
+                        .map(EdgeSectionDirection::getEdgesForSectionDirection)
                         .orElse(null),
                 Collections.emptyList());
 
@@ -96,8 +73,8 @@ public class TileView extends HexButton {
         g2d.setFont(GameConfig.TILE_FONT);
         FontMetrics metrics = g2d.getFontMetrics();
         String text = tile.getQ() + ", " + tile.getR();
-        int textX = TILE_SIZE - metrics.stringWidth(text) / 2;
-        int textY = TILE_SIZE + metrics.getHeight() / 2 - metrics.getDescent() + TILE_SIZE / 2;
+        int textX = hexagonRadius - metrics.stringWidth(text) / 2;
+        int textY = hexagonRadius + metrics.getHeight() / 2 - metrics.getDescent() + hexagonRadius / 2;
         g2d.drawString(text, textX, textY);
     }
 
@@ -106,7 +83,8 @@ public class TileView extends HexButton {
         BufferedImage tileImage = ImageRepository.getTileImageLoader().getImage(tile.getTileType(),
                 tile.getPower());
         if (tileImage != null) {
-            TexturePaint texturePaint = new TexturePaint(tileImage, new Rectangle(0, 0, 2 * TILE_SIZE, 2 * TILE_SIZE));
+            TexturePaint texturePaint = new TexturePaint(tileImage,
+                    new Rectangle(0, 0, 2 * hexagonRadius, 2 * hexagonRadius));
             g2d.setPaint(texturePaint);
         } else {
             g2d.setColor(tile.getTileColor());
@@ -115,10 +93,10 @@ public class TileView extends HexButton {
 
     private void drawPlayers(Graphics2D g2d, Set<Player> players) {
         if (!players.isEmpty()) {
-            int playerXOffset = TILE_SIZE - ((players.size() - 1) * 25) / 2;
+            int playerXOffset = hexagonRadius - ((players.size() - 1) * 25) / 2;
             for (Player player : players) {
                 PlayerController playerController = new PlayerController(player, new PlayerView());
-                playerController.updateView(g2d, playerXOffset, TILE_SIZE / 2);
+                playerController.updateView(g2d, playerXOffset, hexagonRadius / 2);
                 playerXOffset += 25;
             }
         }
@@ -130,8 +108,8 @@ public class TileView extends HexButton {
             g2d.setFont(GameConfig.TILE_FONT);
             FontMetrics metrics = g2d.getFontMetrics();
             String caveCoinCountText = String.valueOf(tile.getCaveCoinCount());
-            int caveCoinCountTextX = (int) (TILE_SIZE - TILE_SIZE / 1.3);
-            int caveCoinCountTextY = TILE_SIZE / 2 + metrics.getAscent();
+            int caveCoinCountTextX = (int) (hexagonRadius - hexagonRadius / 1.3);
+            int caveCoinCountTextY = hexagonRadius / 2 + metrics.getAscent();
             g2d.drawString(caveCoinCountText, caveCoinCountTextX, caveCoinCountTextY);
         }
     }

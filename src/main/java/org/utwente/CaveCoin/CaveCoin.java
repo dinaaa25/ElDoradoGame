@@ -2,6 +2,9 @@ package org.utwente.CaveCoin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+
 import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.PowerType;
 import org.utwente.market.model.Resource;
@@ -11,17 +14,8 @@ import java.util.*;
 public class CaveCoin implements Resource {
     int power;
     int removedPower = 0;
+    @Getter
     CaveCoinType caveCoinType;
-    private static final Map<CaveCoinType, PowerType> POWER_MAP;
-
-    static {
-        Map<CaveCoinType, PowerType> map = new HashMap<>();
-        map.put(CaveCoinType.Coin, PowerType.Coin);
-        map.put(CaveCoinType.Paddle, PowerType.Paddle);
-        map.put(CaveCoinType.Machete, PowerType.Machete);
-        POWER_MAP = Collections.unmodifiableMap(map);
-    }
-
     private static final Map<CaveCoinType, PowerType> POWER_MAP;
 
     static {
