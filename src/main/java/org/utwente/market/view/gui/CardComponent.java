@@ -16,14 +16,24 @@ public class CardComponent extends JButton {
   public static final int HEIGHT = 230;
   public static final int WIDTH = 150;
   private final Card card;
+  private boolean selected;
 
   public CardComponent(Card card) {
     this(card, null, card.remainingPower());
   }
 
+  public CardComponent(Card card, boolean selected) {
+    this(card, null, card.remainingPower(), selected);
+  }
+
   public CardComponent(Card card, Integer remainingAmount, Integer remainingPower) {
+    this(card, remainingAmount, remainingPower, false);
+  }
+
+  public CardComponent(Card card, Integer remainingAmount, Integer remainingPower, boolean selected) {
     super();
     this.card = card;
+    this.selected = selected;
     setup();
     addBorder();
     addName();
@@ -75,7 +85,7 @@ public class CardComponent extends JButton {
   }
 
   public void addBorder() {
-    Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, card.isSelected() ? MarketConfig.SELECTED_MARKET_BORDER : MarketConfig.MARKET_BORDER);
+    Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2, selected ? MarketConfig.SELECTED_MARKET_BORDER : MarketConfig.MARKET_BORDER);
     EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10); // Adjust the gap values as needed
     CompoundBorder compoundBorder = BorderFactory.createCompoundBorder(emptyBorder, bevelBorder);
 

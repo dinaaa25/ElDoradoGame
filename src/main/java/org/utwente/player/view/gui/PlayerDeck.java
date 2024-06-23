@@ -3,7 +3,6 @@ package org.utwente.player.view.gui;
 import javax.swing.*;
 
 import org.utwente.game.model.Phase;
-import org.utwente.game.model.PhaseType;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
@@ -66,7 +65,7 @@ public class PlayerDeck extends JPanel {
   }
 
   private void addDeck(Player player) {
-    this.add(new PlayCards(player.getPlayPile()), BorderLayout.CENTER);
+    this.add(new PlayCards(player.getPlayPile(), phase), BorderLayout.CENTER);
 
     // TODO this is just to show the Coins in the PlayerDeck, we can remove this to
     // have to obtain the CaveCoins

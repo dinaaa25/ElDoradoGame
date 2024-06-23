@@ -42,7 +42,8 @@ public class Player {
     }
 
     public void discardCard(Card card) {
-        card.setSelected(false);
+//        card.setSelected(false);
+        // TODO find a way to set the Phase selected cards empty
         discardPile.add(card);
         playPile.remove(card);
     }

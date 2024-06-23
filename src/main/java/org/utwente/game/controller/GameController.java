@@ -70,16 +70,14 @@ public class GameController {
             } else {
                 resources.add(card);
             }
-            card.switchSelected();
             gameView.redraw();
         }
     }
 
     Card getCurrentlySelectedCard() {
-        return this.game.getPhase().getSelectedResources().stream()
+        return game.getPhase().getSelectedResources().stream()
                 .filter(resource -> resource instanceof Card)
                 .map(resource -> (Card) resource)
-                .filter(Card::isSelected)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
     }

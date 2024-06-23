@@ -7,15 +7,10 @@ import lombok.*;
 public class Card implements Resource {
     private CardType cardType;
     private int consumedPower;
-    private boolean selected = false;
 
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
-    }
-
-    public void switchSelected() {
-        this.selected = !this.selected;
     }
 
     @Override
@@ -57,7 +52,6 @@ public class Card implements Resource {
         return "Card{" +
                 "cardType=" + cardType +
                 ", consumedPower=" + consumedPower +
-                ", selected=" + selected +
                 '}';
     }
 }
