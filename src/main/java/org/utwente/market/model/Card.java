@@ -23,6 +23,7 @@ public class Card implements Resource {
      *
      * @return power of the card as a number.
      */
+    @Override
     public int remainingPower() {
         return cardType.power - consumedPower;
     }

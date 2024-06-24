@@ -59,6 +59,7 @@ public class CaveCoin implements Resource {
         return 0;
     }
 
+    @Override
     public int remainingPower() {
         return power - consumedPower;
     }
