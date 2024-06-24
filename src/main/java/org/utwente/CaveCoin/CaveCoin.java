@@ -49,6 +49,9 @@ public class CaveCoin implements Resource {
 
     @Override
     public double getValue() {
+        if (remainingPower() != getPower()) {
+            return 0;
+        }
         if (this.caveCoinType == CaveCoinType.Coin) {
             return this.power;
         }
