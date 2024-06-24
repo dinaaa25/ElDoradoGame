@@ -52,9 +52,12 @@ public class PlayerDeck extends JPanel {
     nextTurnButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextTurn));
     playerRow.add(nextTurnButton);
 
-    JButton nextPhaseButton = new JButton("Next Phase");
-    nextPhaseButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextPhase));
-    playerRow.add(nextPhaseButton);
+    // only one step to be iterated:
+    if (this.phase.getCurrentPhase().getIndex() == 0) {
+      JButton nextPhaseButton = new JButton("Next Phase");
+      nextPhaseButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextPhase));
+      playerRow.add(nextPhaseButton);
+    }
 
     this.add(playerRow, BorderLayout.NORTH);
   }
