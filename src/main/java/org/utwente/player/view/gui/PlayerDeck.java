@@ -2,6 +2,7 @@ package org.utwente.player.view.gui;
 
 import javax.swing.*;
 
+import org.utwente.CaveCoin.PlayCaveCoins;
 import org.utwente.game.model.Phase;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
@@ -66,17 +67,7 @@ public class PlayerDeck extends JPanel {
 
   private void addDeck(Player player) {
     this.add(new PlayCards(player.getPlayPile(), phase), BorderLayout.CENTER);
-
-    // TODO this is just to show the Coins in the PlayerDeck, we can remove this to
-    // have to obtain the CaveCoins
-    // through the game dynamically
-    // List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
-    // Collections.shuffle(caveCoinList);
-    // caveCoinList = caveCoinList.subList(0, 7);
-    // for (CaveCoin cc : caveCoinList) {
-    // player.getCaveCoinPile().add(cc);
-    // }
-    // this.add(new PlayCaveCoins(player.getCaveCoinPile()), BorderLayout.SOUTH);
+    this.add(new PlayCaveCoins(player.getCaveCoinPile(), phase), BorderLayout.SOUTH);
   }
 
   public void setNotification(ValidationResult notification) {

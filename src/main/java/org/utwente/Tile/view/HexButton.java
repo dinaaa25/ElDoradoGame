@@ -2,22 +2,30 @@ package org.utwente.Tile.view;
 
 import javax.swing.*;
 
+import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Blockade.BlockadeView;
+import org.utwente.Section.Section;
 import org.utwente.Tile.Tile;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 
 public abstract class HexButton extends JButton {
   protected int hexagonRadius;
   protected boolean flatTop;
   protected Tile tile;
+  protected boolean selected;
 
-  public HexButton(boolean flatTop, Tile tile, int hexagonRadius) {
+  public HexButton(boolean flatTop, Tile tile, int hexagonRadius, boolean selected) {
     this.flatTop = flatTop;
     this.tile = tile;
     this.hexagonRadius = hexagonRadius;
+    this.selected = selected;
     this.setPreferredSize(getPreferredSize());
   }
 
@@ -47,18 +55,43 @@ public abstract class HexButton extends JButton {
     return hexagon;
   }
 
-  protected void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
+  protected void drawHexagon(Point2D.Double[] vertices, Graphics2D g2d) {
+    BlockadeView blockadeView = new BlockadeView();
     Path2D.Double hexagonPath = createHexagonPath(vertices);
     g2d.fill(hexagonPath);
 
     BasicStroke basicStroke = new BasicStroke((2));
+    BasicStroke thickStroke = new BasicStroke(8);
+    BasicStroke selectedStroke = new BasicStroke(6);
+
+    java.util.List<Integer> edges = Objects.requireNonNullElse(
+            Optional.ofNullable(tile.getBlockade())
+                    .map(Blockade::getSection2)
+                    .map(Section::getDirectionType)
+                    .map(EdgeSectionDirection::getEdgesForSectionDirection)
+                    .orElse(null),
+            Collections.emptyList());
 
     for (int i = 0; i < vertices.length; i++) {
       g2d.setStroke(basicStroke);
-      g2d.setColor(Color.BLACK);
 
       Point2D.Double start = vertices[i];
       Point2D.Double end = vertices[(i + 1) % vertices.length];
+
+      if (tile.isBlockadeTile() && edges.contains(i)) {
+        g2d.setStroke(thickStroke);
+        g2d.setColor(blockadeView.getBlockadeColor(tile.getBlockade().getTileType()));
+        g2d.setStroke(new BasicStroke(14));
+      } else {
+        if (selected) {
+          g2d.setStroke(selectedStroke);
+          g2d.setColor(Color.RED);
+        } else {
+          g2d.setStroke(basicStroke);
+          g2d.setColor(Color.BLACK);
+        }
+      }
+
       g2d.draw(new Line2D.Double(start, end));
     }
   }
@@ -71,6 +104,6 @@ public abstract class HexButton extends JButton {
     Point2D.Double[] hexagon = createHexagonVertices(this.flatTop);
 
     setTileTexture(g2d);
-    drawHexagon(this.tile, hexagon, g2d);
+    drawHexagon(hexagon, g2d);
   }
 }

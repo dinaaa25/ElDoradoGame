@@ -3,6 +3,8 @@ package org.utwente.game.controller;
 import lombok.Getter;
 
 import org.utwente.Board.Board;
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinClickEvent;
 import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.BuyAction;
 import org.utwente.game.model.Game;
@@ -48,6 +50,7 @@ public class GameController {
         eventManager.subscribe(this::onPlayerCardClick, EventType.PlayCards);
         eventManager.subscribe(this::onMakeMove, EventType.MakeMove);
         eventManager.subscribe(this::onBuyCardFromMarket, EventType.BuyCards);
+        eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
     }
 
     void onBuyCardFromMarket(Event event) {
@@ -64,14 +67,25 @@ public class GameController {
     void onPlayerCardClick(Event event) {
         if (event instanceof PlayCardEvent data) {
             Card card = data.getCard();
-            Stack<Resource> resources = game.getPhase().getSelectedResources();
-            if (resources.contains(card)) {
-                resources.remove(card);
-            } else {
-                resources.add(card);
-            }
-            gameView.redraw();
+            toggleSelectedResource(card);
         }
+    }
+
+    void onPlayerCaveCoinClick(Event event) {
+        if (event instanceof CaveCoinClickEvent data) {
+            CaveCoin caveCoin = data.getCaveCoin();
+            toggleSelectedResource(caveCoin);
+        }
+    }
+
+    void toggleSelectedResource(Resource resource) {
+        Stack<Resource> resources = game.getPhase().getSelectedResources();
+        if (resources.contains(resource)) {
+            resources.remove(resource);
+        } else {
+            resources.add(resource);
+        }
+        gameView.redraw();
     }
 
     Card getCurrentlySelectedCard() {
