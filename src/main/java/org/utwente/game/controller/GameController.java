@@ -114,8 +114,6 @@ public class GameController {
     }
 
     void removeUsedResources(Event event) {
-        List<Card> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
-        currentResources.removeIf(resource -> resource.remainingPower() <= 0);
         this.game.getPhase().getSelectedResources().removeIf(resource -> resource.remainingPower() <= 0);
     }
 
