@@ -37,7 +37,6 @@ public class CardComponent extends JButton {
     setup();
     addBorder();
     addName();
-    addPrice();
     if (remainingAmount != null) {
       addRemaining(remainingAmount, true);
     }
