@@ -18,6 +18,7 @@ public class Phase {
   private boolean moveThoughPlayers;
   private Tile selectedTile;
   private ValidationResult actionMessage;
+  private EffectPhase effectPhase;
 
   public Phase() {
     this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
