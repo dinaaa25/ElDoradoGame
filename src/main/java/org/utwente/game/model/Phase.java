@@ -27,6 +27,8 @@ public class Phase {
   }
 
   public void next() {
+    this.selectedResources.removeAllElements();
+    this.selectedTile = null;
     this.currentPhase = currentPhase.next();
   }
 
