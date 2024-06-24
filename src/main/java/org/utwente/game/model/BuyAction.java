@@ -4,6 +4,7 @@ import org.utwente.market.model.Order;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
+import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.market.exceptions.BuyException;
 import org.utwente.market.model.*;
 
@@ -24,11 +25,18 @@ public class BuyAction extends Action {
     @Override
     public void execute() {
         try {
-            if (this.checkIfTransmitter()) {
-                this.boughtCard = this.market.buy(this.order.getCardToken());
-            } else {
-                this.boughtCard = this.market.buy(this.order);
+            if (Configuration.getInstance().freeMarket) {
+                Card boughtCard = this.market.buy(this.order.getCardToken());
+                this.player.getPlayPile().add(boughtCard);
+                return;
             }
+            if (this.checkIfTransmitter()) {
+                Card boughtCard = this.market.buy(this.order.getCardToken());
+                this.player.getDiscardPile().add(boughtCard);
+                return;
+            }
+            this.boughtCard = this.market.buy(this.order);
+            this.player.getDiscardPile().add(boughtCard);
         } catch (BuyException buyException) {
 
         }
@@ -51,6 +59,11 @@ public class BuyAction extends Action {
 
     @Override
     public ValidationResult validate() {
+        // override with config variable to test advanced cards.
+        System.out.println(Configuration.getInstance().freeMarket);
+        if (Configuration.getInstance().freeMarket) {
+            return new ValidationResult(true, "using free market configuration 💵");
+        }
         // especially check for the transmitter card.
         if (this.checkIfTransmitter()) {
             boolean isCardAvailable = this.market.isCardAvailable(order.getCardToken());
@@ -63,12 +76,11 @@ public class BuyAction extends Action {
 
     @Override
     public void discard() {
-        player.discardCard(this.boughtCard);
         for (Resource r : this.resources) {
-            if (r instanceof Card) {
-                player.discardCard((Card) r);
-            } else {
-                // TODO: remove coin from the game coin pile basically
+            if (r instanceof Card card) {
+                player.discardCard(card);
+            } else if (r instanceof CaveCoin coin) {
+                player.discardCoin(coin);
             }
         }
     }

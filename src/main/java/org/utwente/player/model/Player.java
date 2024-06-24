@@ -3,6 +3,7 @@ package org.utwente.player.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.PlayerColor;
 import org.utwente.market.model.Card;
 
@@ -80,6 +81,10 @@ public class Player {
             return this.getName().equals(elPlayer.getName());
         }
         return false;
+    }
+
+    public void discardCoin(CaveCoin coin) {
+        this.caveCoinPile.remove(coin);
     }
 
 }
