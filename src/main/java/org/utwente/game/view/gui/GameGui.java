@@ -6,15 +6,15 @@ import javax.swing.*;
 import org.slf4j.LoggerFactory;
 import org.utwente.Board.Board;
 import org.utwente.Board.BoardView;
-import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileView;
 import org.utwente.game.model.Game;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.MarketController;
 import org.utwente.market.model.Market;
 import org.utwente.market.view.MarketGui;
-import org.utwente.player.model.Player;
 import org.utwente.player.view.gui.PlayerDeck;
+import org.utwente.util.ValidationResult;
+
 import ch.qos.logback.classic.Logger;
 
 import lombok.Getter;
@@ -28,6 +28,7 @@ public class GameGui extends JPanel implements GameView {
     int offsetX;
     int offsetY;
     PlayerDeck playerDeck;
+    JScrollPane boardViewScrollPane;
 
     public GameGui() {
         super();
@@ -66,17 +67,20 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addBoard() {
-        if (game == null || game.getBoard() == null) return;
-        BoardView boardView = new BoardView(game.getBoard());
-        JScrollPane scrollPane = new JScrollPane(boardView);
-        this.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.getViewport().setViewPosition(getViewportPosition(game.getBoard(), boardView));
+        if (game == null || game.getBoard() == null)
+            return;
+        BoardView boardView = new BoardView(game.getBoard(), this.game.getPhase());
+        boardViewScrollPane = new JScrollPane(boardView);
+        this.add(boardViewScrollPane, BorderLayout.CENTER);
+        boardViewScrollPane.getViewport().setViewPosition(getViewportPosition(boardView));
     }
 
-    private Point getViewportPosition(Board board, BoardView boardView) {
-        TileView firstTile = new TileView(board.getStartingTiles().getFirst(), board.isFlatTop());
-        Point offsets = boardView.calculateOffsets(board);
-        Point tileOffset = firstTile.hexagonToPixel(board.isFlatTop(), board.getStartingTiles().getFirst());
+    private Point getViewportPosition(BoardView boardView) {
+        TileView firstTile = new TileView(game.getBoard().getTileOfPlayer(game.getCurrentPlayer()),
+                game.getBoard().isFlatTop(), false);
+        Point offsets = boardView.calculateOffsets(game.getBoard());
+        Point tileOffset = firstTile.hexagonToPixel(game.getBoard().isFlatTop(),
+                game.getBoard().getStartingTiles().getFirst());
         return new Point(offsets.x + tileOffset.x, offsets.y + tileOffset.y);
     }
 
@@ -92,13 +96,18 @@ public class GameGui extends JPanel implements GameView {
     }
 
     public void addPlayerSection() {
-        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase().getCurrentPhase());
+        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase());
         this.add(this.playerDeck, BorderLayout.SOUTH);
     }
 
     @Override
-    public void showMessage(String message) {
-
+    public void showMessage(ValidationResult message) {
+        System.out.println(message.getMessage());
+        this.remove(playerDeck);
+        this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase());
+        this.add(this.playerDeck, BorderLayout.SOUTH);
+        this.revalidate();
+        this.repaint();
     }
 
     @Override
@@ -153,6 +162,16 @@ public class GameGui extends JPanel implements GameView {
         // set the current phase.
         // reuse setCurrentPlayer for now to redraw.
         this.setCurrentPlayer();
+    }
+
+    @Override
+    public void redraw() {
+        this.remove(playerDeck);
+        this.remove(boardViewScrollPane);
+        this.addBoard();
+        this.addPlayerSection();
+        this.revalidate();
+        this.repaint();
     }
 
 }

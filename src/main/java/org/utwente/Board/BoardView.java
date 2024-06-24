@@ -5,6 +5,7 @@ import org.utwente.Section.Section;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileView;
 import org.utwente.game.view.GameConfig;
+import org.utwente.game.model.Phase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,14 +16,21 @@ import static org.utwente.game.view.GameConfig.PADDING;
 
 public class BoardView extends JPanel {
     public Board board;
+    public Phase phase;
 
     public BoardView(Board board) {
+        this(board, null);
+    }
+
+    public BoardView(Board board, Phase phase) {
         this.board = board;
+        this.phase = phase;
         this.setLayout(null);
         this.drawBoard(board);
         Dimension preferredSize = calculatePreferredSize(board);
         this.setPreferredSize(preferredSize);
     }
+
 
     public Dimension calculatePreferredSize(Board board) {
         if (board.getSections().isEmpty() || board.getSections().get(0).getTiles().isEmpty()) {
@@ -83,7 +91,9 @@ public class BoardView extends JPanel {
 
         for (Section section : sections) {
             for (Tile tile : section.getTiles()) {
-                TileView tileView = new TileView(tile, board.isFlatTop());
+
+                boolean selectedTile = (phase != null && phase.getSelectedTile() == tile);
+                TileView tileView = new TileView(tile, board.isFlatTop(), selectedTile);
                 this.add(tileView);
                 Point tileViewCoords = tileView.hexagonToPixel(board.isFlatTop(), tile);
                 tileView.setBounds(tileViewCoords.x + offsets.x, tileViewCoords.y + offsets.y, TILE_SIZE * 2, TILE_SIZE * 2);

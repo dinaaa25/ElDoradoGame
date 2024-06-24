@@ -1,11 +1,11 @@
 package org.utwente.game.view;
 
 import org.utwente.game.model.Game;
-import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 
 public interface GameView {
 
-    void showMessage(String message);
+    void showMessage(ValidationResult message);
 
     void setGame(Game game);
 
@@ -20,5 +20,7 @@ public interface GameView {
     void setCurrentPlayer();
 
     void setCurrentPhase();
+
+    void redraw();
 
 }

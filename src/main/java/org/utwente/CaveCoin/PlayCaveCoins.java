@@ -1,19 +1,16 @@
 package org.utwente.CaveCoin;
 
-import org.utwente.market.model.Resource;
-import org.utwente.player.model.Pile;
-
+import org.utwente.game.model.Phase;
+import org.utwente.player.model.CoinPile;
 import javax.swing.*;
 import java.awt.*;
 
 public class PlayCaveCoins extends JPanel {
 
-    public PlayCaveCoins(Pile pile) {
+    public PlayCaveCoins(CoinPile pile, Phase phase) {
         super(new FlowLayout());
-        for (Resource caveCoin : pile.getResources()) {
-            if (caveCoin instanceof CaveCoin) {
-                this.add(new CaveCoinView((CaveCoin) caveCoin));
-            }
+        for (CaveCoin caveCoin : pile.getResources()) {
+            this.add(new CaveCoinView(caveCoin, phase.getSelectedResources().contains(caveCoin)));
         }
     }
 }

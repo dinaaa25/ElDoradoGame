@@ -1,9 +1,5 @@
 package org.utwente.Tile;
 
-import org.utwente.Board.Blockade.Blockade;
-import org.utwente.Board.Blockade.BlockadeView;
-import org.utwente.Section.Section;
-import org.utwente.Tile.view.EdgeSectionDirection;
 import org.utwente.Tile.view.HexButton;
 import org.utwente.game.view.GameConfig;
 import org.utwente.player.PlayerController;
@@ -14,58 +10,25 @@ import org.utwente.util.event.EventType;
 import org.utwente.util.images.ImageRepository;
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.image.*;
-import java.util.Objects;
 import java.util.Set;
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.utwente.game.view.GameConfig.TILE_SIZE;
 
 public class TileView extends HexButton {
+    public Tile tile;
+    public boolean flatTop;
 
     public TileView(Tile tile, boolean flatTop) {
-        super(flatTop, tile, TILE_SIZE);
-
-        this.addActionListener(
-                e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
+        this(tile, flatTop, false);
     }
 
-    @Override
-    protected void drawHexagon(Tile tile, Point2D.Double[] vertices, Graphics2D g2d) {
-        BlockadeView blockadeView = new BlockadeView();
-        Path2D.Double hexagonPath = createHexagonPath(vertices);
-        g2d.fill(hexagonPath);
-
-        BasicStroke basicStroke = new BasicStroke((2));
-        BasicStroke thickStroke = new BasicStroke(8);
-
-        java.util.List<Integer> edges = Objects.requireNonNullElse(
-                Optional.ofNullable(tile.getBlockade())
-                        .map(Blockade::getSection2)
-                        .map(Section::getDirectionType)
-                        .map(EdgeSectionDirection::getEdgesForSectionDirection)
-                        .orElse(null),
-                Collections.emptyList());
-
-        for (int i = 0; i < vertices.length; i++) {
-            g2d.setStroke(basicStroke);
-
-            Point2D.Double start = vertices[i];
-            Point2D.Double end = vertices[(i + 1) % vertices.length];
-
-            if (tile.isBlockadeTile() && edges.contains(i)) {
-                g2d.setStroke(thickStroke);
-                g2d.setColor(blockadeView.getBlockadeColor(tile.getBlockade().getTileType()));
-                g2d.setStroke(new BasicStroke(14));
-            } else {
-                g2d.setStroke(basicStroke);
-                g2d.setColor(Color.BLACK);
-            }
-
-            g2d.draw(new Line2D.Double(start, end));
-        }
+    public TileView(Tile tile, boolean flatTop, boolean selected) {
+        super(flatTop, tile, TILE_SIZE, selected);
+        this.tile = tile;
+        this.flatTop = flatTop;
+        this.addActionListener(
+                e -> EventManager.getInstance().notifying(EventType.ClickTile, new TileClickEvent(tile)));
     }
 
     private void drawCoordinates(Graphics2D g2d, Tile tile) {

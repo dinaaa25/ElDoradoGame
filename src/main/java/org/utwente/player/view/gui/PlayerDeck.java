@@ -1,43 +1,47 @@
 package org.utwente.player.view.gui;
 
-
 import javax.swing.*;
 
-import org.utwente.CaveCoin.CaveCoin;
-import org.utwente.CaveCoin.CaveCoinLoader;
 import org.utwente.CaveCoin.PlayCaveCoins;
-import org.utwente.game.model.PhaseType;
+import org.utwente.game.model.Phase;
 import org.utwente.player.model.Player;
+import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.List;
 
 public class PlayerDeck extends JPanel {
   int col = 0;
-  PhaseType phaseType;
+  Phase phase;
 
-  public PlayerDeck(Player player, PhaseType phase) {
+  public PlayerDeck(Player player, Phase phase) {
     super(new BorderLayout());
-    phaseType = phase;
+    this.phase = phase;
     addPlayerRow(player);
     addDiscardPile();
     addDeck(player);
     addDrawPile();
+    if (phase.getActionMessage() != null) {
+      this.setNotification(phase.getActionMessage());
+    }
     this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
   }
 
   public void addPlayerRow(Player player) {
     JPanel playerRow = new JPanel();
     playerRow.setLayout(new FlowLayout());
-    JLabel name = new JLabel(String.format("Current Player: %s", player.getName()));
+
+    JButton makeMoveButton = new JButton("Make Move");
+    makeMoveButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
+    playerRow.add(makeMoveButton);
+
+    JLabel name = new JLabel(String.format("Current Player: %s (%s)", player.getName(), player.getColor().name()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
     name.setFont(PlayerConfig.NAME_FONT);
     playerRow.add(name);
 
-    JLabel phase = new JLabel(String.format("Current Phase: %s", phaseType.toString()));
+    JLabel phase = new JLabel(String.format("Current Phase: %s", this.phase.getCurrentPhase().toString()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
     name.setFont(PlayerConfig.NAME_FONT);
     playerRow.add(phase);
@@ -62,17 +66,12 @@ public class PlayerDeck extends JPanel {
   }
 
   private void addDeck(Player player) {
-    this.add(new PlayCards(player.getPlayPile()), BorderLayout.CENTER);
+    this.add(new PlayCards(player.getPlayPile(), phase), BorderLayout.CENTER);
+    this.add(new PlayCaveCoins(player.getCaveCoinPile(), phase), BorderLayout.SOUTH);
+  }
 
-    // TODO this is just to show the Coins in the PlayerDeck, we can remove this to have to obtain the CaveCoins
-    //  through the game dynamically
-    List<CaveCoin> caveCoinList = CaveCoinLoader.loadCoins();
-    Collections.shuffle(caveCoinList);
-    caveCoinList = caveCoinList.subList(0, 7);
-    for (CaveCoin cc : caveCoinList) {
-      player.getCaveCoinPile().add(cc);
-    }
-    this.add(new PlayCaveCoins(player.getCaveCoinPile()), BorderLayout.SOUTH);
+  public void setNotification(ValidationResult notification) {
+    this.add(new JLabel(notification.getMessage()), BorderLayout.SOUTH);
   }
 
 }

@@ -6,6 +6,7 @@ import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.game.model.Action;
 import org.utwente.game.model.MoveAction;
+import org.utwente.game.model.Phase;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
@@ -35,7 +36,7 @@ public class MoveActionTest {
     @Test
     public void testMovePlayerToTile() {
         Resource card = new Card(CardType.Entdecker);
-        Action move = new MoveAction(dina, card, tileFrom, tileTo);
+        Action move = new MoveAction(dina, card, tileFrom, tileTo, new Phase());
 
         assertEquals(tileFrom.isEmpty(), false);
         assertEquals(tileTo.isEmpty(), true);
@@ -43,7 +44,7 @@ public class MoveActionTest {
         move.execute();
 
         assertEquals(1, tileTo.getPlayers().size());
-        assertTrue(tileTo.getPlayers().stream().map(player -> player.getName()).toList().contains("Dina"));
+        assertTrue(tileTo.getPlayers().stream().map(Player::getName).toList().contains("Dina"));
     }
 
     @Test

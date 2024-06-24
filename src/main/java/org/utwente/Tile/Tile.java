@@ -33,8 +33,6 @@ public class Tile {
     private Set<Player> players;
     private boolean isLastWaitingTile;
     @Getter
-    private boolean isBlockadeTile;
-    @Getter
     private Blockade blockade;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
@@ -42,22 +40,27 @@ public class Tile {
         this.r = r;
         this.tileType = tileType;
         this.power = power;
-        this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
+        this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a
+                                                                                    // new one
         this.players = new HashSet<>();
         this.isLastWaitingTile = isLastWaitingTile;
-        this.isBlockadeTile = false;
+        this.blockade = null;
     }
 
     @JsonCreator
-    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
-                @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
+    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType,
+            @JsonProperty("power") int power,
+            @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
 
         this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
     public void setBlockade(Blockade blockade) {
         this.blockade = blockade;
-        this.isBlockadeTile = true;
+    }
+
+    public boolean isBlockadeTile() {
+        return this.blockade != null && !this.blockade.isRemoved();
     }
 
     public void rotate(int turns) {
@@ -131,7 +134,6 @@ public class Tile {
         this.players.remove(player);
     }
 
-
     public boolean isNeighbor(Tile tile) {
         if (tile == null) {
             return false;
@@ -152,4 +154,8 @@ public class Tile {
         r += translationParameters.r();
     }
 
+    public Blockade earnBlockade() {
+        this.blockade.remove();
+        return this.blockade;
+    }
 }

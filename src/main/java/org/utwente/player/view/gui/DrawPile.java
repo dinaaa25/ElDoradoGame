@@ -1,8 +1,6 @@
 package org.utwente.player.view.gui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;

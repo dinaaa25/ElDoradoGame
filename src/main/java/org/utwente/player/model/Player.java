@@ -3,12 +3,9 @@ package org.utwente.player.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.PlayerColor;
-
-import lombok.Getter;
-import lombok.Setter;
 import org.utwente.market.model.Card;
-import org.utwente.player.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,14 +17,13 @@ public class Player {
     public static final int DECK_CARDS = 4;
     private String name;
     private List<Blockade> blockades;
-    @Getter
-    @Setter
     private PlayerColor color;
-    private Pile discardPile;
-    private Pile playPile;
-    private Pile outOfGamePile;
-    private Pile drawPile;
-    private Pile caveCoinPile;
+    private CardPile discardPile;
+    private CardPile playPile;
+    private CardPile outOfGamePile;
+    private CardPile drawPile;
+    private CoinPile caveCoinPile;
+    private CoinPile outOfGameCoinsPile;
 
     public Player(String name) {
         this.name = name;
@@ -35,11 +31,11 @@ public class Player {
         PileBuilder builder = new PileBuilder();
         builder.setPlayer(this);
         this.discardPile = builder.buildDiscardPile();
-        Pile startPile = builder.buildStartPile();
+        CardPile startPile = builder.buildStartPile();
         this.playPile = startPile.draw(DECK_CARDS);
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
-        this.caveCoinPile = builder.buildCaveCoinPile();
+        this.caveCoinPile = new CoinPile();
     }
 
     public String getName() {
@@ -49,6 +45,14 @@ public class Player {
     public void discardCard(Card card) {
         discardPile.add(card);
         playPile.remove(card);
+    }
+
+    public void drawPlayCards() {
+        int currentCards = this.playPile.getCards().size();
+        int cardsToDraw = DECK_CARDS - currentCards;
+        System.out.println("Cards to Draw: " + cardsToDraw);
+        CardPile drawnCards = this.drawPile.draw(cardsToDraw);
+        this.playPile.addAll(drawnCards);
     }
 
     public void removeCardFromGame(Card card) {
@@ -77,6 +81,10 @@ public class Player {
             return this.getName().equals(elPlayer.getName());
         }
         return false;
+    }
+
+    public void discardCoin(CaveCoin coin) {
+        this.caveCoinPile.remove(coin);
     }
 
 }

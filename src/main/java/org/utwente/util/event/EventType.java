@@ -11,5 +11,6 @@ public enum EventType {
   PickBoard,
   NextTurn,
   NextPhase,
+  MakeMove,
   ClickCaveCoin
 }

@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 public class Configuration {
   public boolean gui;
   public String loggingLevel;
+  public boolean freeMarket;
 
   static Configuration _instance;
 
@@ -30,7 +31,7 @@ public class Configuration {
     if (_instance == null) {
       _instance = loadConfigurationFromFile();
       if (_instance == null) {
-        _instance = new Configuration(true, "ALL");
+        _instance = new Configuration(true, "ALL", false);
       }
     }
 
@@ -38,8 +39,13 @@ public class Configuration {
   }
 
   @JsonCreator
-  private Configuration(@JsonProperty("gui") boolean gui, @JsonProperty("loggingLevel") String loggingLevel) {
+  private Configuration(
+      @JsonProperty("gui") boolean gui,
+      @JsonProperty("loggingLevel") String loggingLevel,
+      @JsonProperty("freeMarket") boolean freeMarket) {
     this.gui = gui;
     this.loggingLevel = loggingLevel;
+    this.freeMarket = freeMarket;
   }
+
 }
