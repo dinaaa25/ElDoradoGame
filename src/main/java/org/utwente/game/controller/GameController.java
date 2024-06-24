@@ -45,9 +45,15 @@ public class GameController {
         eventManager.subscribe(this::onBuyCardFromMarket, EventType.BuyCards);
         eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
         eventManager.subscribe(this::onDiscardCards, EventType.DiscardCards);
+        eventManager.subscribe(this::onDrawCards, EventType.DrawCards);
 
     }
 
+    void onDrawCards(Event event) {
+        Player currentPlayer = this.game.getCurrentPlayer();
+        currentPlayer.drawPlayCards();
+        this.gameView.redraw();
+    }
 
     void onDiscardCards(Event event) {
         try {
@@ -69,6 +75,7 @@ public class GameController {
             System.out.println("No selected card found: " + e.getMessage());
         }
     }
+
     void onBuyCardFromMarket(Event event) {
         if (event instanceof BuyEvent data) {
             List<Resource> resources = game.getPhase().getSelectedResources();

@@ -6,6 +6,7 @@ import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.PlayerColor;
 import org.utwente.market.model.Card;
+import  org.utwente.util.ShuffleUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,9 +51,16 @@ public class Player {
     public void drawPlayCards() {
         int currentCards = this.playPile.getCards().size();
         int cardsToDraw = DECK_CARDS - currentCards;
-        System.out.println("Cards to Draw: " + cardsToDraw);
-        CardPile drawnCards = this.drawPile.draw(cardsToDraw);
-        this.playPile.addAll(drawnCards);
+        if (cardsToDraw > 0) {
+            CardPile drawnCards = this.drawPile.draw(cardsToDraw);
+            if (drawnCards.getCards().size() < cardsToDraw && !this.discardPile.isEmpty()) {
+                // Shuffle discard pile into draw pile if draw pile is exhausted
+                ShuffleUtils.shuffle(this.discardPile.getCards());
+                this.drawPile.addAll(this.discardPile.draw(this.discardPile.getCards().size()));
+                drawnCards.addAll(this.drawPile.draw(cardsToDraw - drawnCards.getCards().size()));
+            }
+            this.playPile.addAll(drawnCards);
+        }
     }
 
     public void removeCardFromGame(Card card) {
