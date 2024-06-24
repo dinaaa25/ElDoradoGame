@@ -48,7 +48,17 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-##gitlab-ci-local runner 
+##gitlab-ci-local runner
  .gitlab-ci-local/*
  .gitlab-ci-local
  .gitlab-ci-local/
+.gitlab-ci-local/builds/.docker
+.gitlab-ci-local
+htmlReport
+org.jacoco.report-0.8.12.202403310830.jar
+org.jacoco.ant-0.8.12.202403310830.jar
+org.jacoco.agent-0.8.12.202403310830.jar
+jacocoagent.jar
+jacococli.jar
+jacocoant.jar
+

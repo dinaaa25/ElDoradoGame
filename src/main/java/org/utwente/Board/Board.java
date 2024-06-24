@@ -11,6 +11,8 @@ import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.player.model.Player;
+import org.utwente.util.ShuffleUtils;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -303,7 +305,7 @@ public class Board {
                 throw new IllegalStateException("Not at least 2 sections in BoardBuilder");
             }
             List<Blockade> blockades = getBlockadesList();
-            Collections.shuffle(blockades);
+            ShuffleUtils.shuffle(blockades);
             List<Section> nonElDoradoSections = getNonElDoradoSections();
             int numberOfBlockades = nonElDoradoSections.size() - 1;
 
@@ -395,8 +397,8 @@ public class Board {
             List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, CAVE_COIN_CHUNK_SIZE);
             List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
 
-            Collections.shuffle(caveCoinChunks, random);
-            Collections.shuffle(caveTiles, random);
+            ShuffleUtils.shuffle(caveCoinChunks);
+            ShuffleUtils.shuffle(caveTiles);
 
             int numTiles = caveTiles.size();
             int numChunks = caveCoinChunks.size();

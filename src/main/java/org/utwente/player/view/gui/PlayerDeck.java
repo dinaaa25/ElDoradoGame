@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import org.utwente.CaveCoin.PlayCaveCoins;
 import org.utwente.game.model.Phase;
+import org.utwente.game.model.PhaseType;
+import org.utwente.market.model.Card;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
@@ -19,9 +21,9 @@ public class PlayerDeck extends JPanel {
     super(new BorderLayout());
     this.phase = phase;
     addPlayerRow(player);
-    addDiscardPile();
+    addDiscardPile(player);
     addDeck(player);
-    addDrawPile();
+    addDrawPile(player);
     if (phase.getActionMessage() != null) {
       this.setNotification(phase.getActionMessage());
     }
@@ -32,9 +34,9 @@ public class PlayerDeck extends JPanel {
     JPanel playerRow = new JPanel();
     playerRow.setLayout(new FlowLayout());
 
-    JButton makeMoveButton = new JButton("Make Move");
-    makeMoveButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
-    playerRow.add(makeMoveButton);
+    JButton actionButton = new JButton();
+    updateActionButton(actionButton, phase, player);
+    playerRow.add(actionButton);
 
     JLabel name = new JLabel(String.format("Current Player: %s (%s)", player.getName(), player.getColor().name()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -57,12 +59,26 @@ public class PlayerDeck extends JPanel {
     this.add(playerRow, BorderLayout.NORTH);
   }
 
-  public void addDrawPile() {
-    this.add(new DrawPile(), BorderLayout.WEST);
+  private void updateActionButton(JButton actionButton, Phase phase, Player player) {
+    if (this.phase.getCurrentPhase() == PhaseType.BUYING_AND_PLAYING_PHASE) {
+      actionButton.setText("Make Move");
+      actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
+    } else if (phase.getCurrentPhase() == PhaseType.DISCARD_PHASE) {
+      actionButton.setText("Discard Currently Selected Card");
+      actionButton.addActionListener(l -> {EventManager.getInstance().notifying(EventType.DiscardCards);
+      });
+    } else {
+      actionButton.setText("Action Not Available");
+      actionButton.setEnabled(false);
+    }
+  }public void addDrawPile(Player player) {
+    int sizeOfDrawPile = player.getDrawPile().getCards().size();
+    this.add(new DrawPile(sizeOfDrawPile), BorderLayout.WEST);
   }
 
-  public void addDiscardPile() {
-    this.add(new DiscardCard(), BorderLayout.EAST);
+  public void addDiscardPile(Player player) {
+    int sizeOfDiscardPile = player.getDiscardPile().getCards().size();
+    this.add(new DiscardCard(sizeOfDiscardPile), BorderLayout.EAST);
   }
 
   private void addDeck(Player player) {

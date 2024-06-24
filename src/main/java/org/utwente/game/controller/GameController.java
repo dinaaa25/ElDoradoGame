@@ -6,26 +6,19 @@ import org.utwente.Board.Board;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.CaveCoin.CaveCoinClickEvent;
 import org.utwente.Tile.TileClickEvent;
-import org.utwente.game.model.BuyAction;
-import org.utwente.game.model.Game;
-import org.utwente.game.model.MoveAction;
-import org.utwente.game.model.Phase;
+import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
-import org.utwente.util.event.AddPlayersEvent;
-import org.utwente.util.event.Event;
-import org.utwente.util.event.EventManager;
-import org.utwente.util.event.EventType;
-import org.utwente.util.event.PickBoardEvent;
-import org.utwente.util.event.PlayCardEvent;
+import org.utwente.util.event.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 @Getter
 public class GameController {
@@ -51,8 +44,31 @@ public class GameController {
         eventManager.subscribe(this::onMakeMove, EventType.MakeMove);
         eventManager.subscribe(this::onBuyCardFromMarket, EventType.BuyCards);
         eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
+        eventManager.subscribe(this::onDiscardCards, EventType.DiscardCards);
+
     }
 
+
+    void onDiscardCards(Event event) {
+        try {
+            List<Card> selectedCards = getAllCurrentlySelectedCards().stream()
+                    .filter(card -> game.getCurrentPlayer().getPlayPile().getCards().contains(card))
+                    .toList();
+
+            for (Card selectedCard : selectedCards) {
+                DiscardAction action = new DiscardAction(this.game.getCurrentPlayer(), selectedCard, game.getPhase());
+                ValidationResult result = action.validateExecute();
+                this.game.getPhase().setActionMessage(result);
+                this.gameView.redraw();
+            }
+
+            // Deselect all cards after processing
+            game.getPhase().getSelectedResources().clear();
+            this.gameView.redraw();
+        } catch (NoSuchElementException e) {
+            System.out.println("No selected card found: " + e.getMessage());
+        }
+    }
     void onBuyCardFromMarket(Event event) {
         if (event instanceof BuyEvent data) {
             List<Resource> resources = game.getPhase().getSelectedResources();
@@ -94,6 +110,13 @@ public class GameController {
                 .map(resource -> (Card) resource)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
+    }
+
+    List<Card> getAllCurrentlySelectedCards() {
+        return game.getPhase().getSelectedResources().stream()
+                .filter(resource -> resource instanceof Card)
+                .map(resource -> (Card) resource)
+                .toList();
     }
 
     void onMakeMove(Event event) {
