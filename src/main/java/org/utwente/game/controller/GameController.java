@@ -104,12 +104,19 @@ public class GameController {
         ValidationResult result = action.validateExecute();
         this.game.getPhase().setActionMessage(result);
         removeSemiUsedResources(event);
+        removeUsedResources(event);
         this.gameView.redraw();
     }
 
     void removeSemiUsedResources(Event event) {
         List<Card> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
         currentResources.removeIf(resource -> resource.getConsumedPower() != 0 && !isResourceSelected(resource));
+    }
+
+    void removeUsedResources(Event event) {
+        List<Card> currentResources = this.game.getCurrentPlayer().getPlayPile().getResources();
+        currentResources.removeIf(resource -> resource.getPower() <= 0);
+        this.game.getPhase().getSelectedResources().removeIf(resource -> resource.getPower() <= 0);
     }
 
     boolean isResourceSelected(Resource resource) {

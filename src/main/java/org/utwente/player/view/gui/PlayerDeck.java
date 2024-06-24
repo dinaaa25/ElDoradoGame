@@ -71,8 +71,6 @@ public class PlayerDeck extends JPanel {
   }
 
   public void setNotification(ValidationResult notification) {
-    System.out.println("Notification:");
-    System.out.println(notification);
     this.add(new JLabel(notification.getMessage()), BorderLayout.SOUTH);
   }
 
