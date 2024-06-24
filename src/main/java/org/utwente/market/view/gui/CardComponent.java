@@ -38,11 +38,11 @@ public class CardComponent extends JButton {
     addBorder();
     addName();
     addPrice();
-    addPower();
     if (remainingAmount != null) {
       addRemaining(remainingAmount, true);
-    } else {
-      addRemaining(remainingPower, false);
+    }
+    else {
+      addValue();
     }
     addPicture();
 
@@ -67,6 +67,13 @@ public class CardComponent extends JButton {
     price.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     price.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     this.add(price);
+  }
+
+  public void addValue() {
+    JLabel value = new JLabel(String.format("Market value: %.1f coins", card.getValue()));
+    value.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
+    value.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
+    this.add(value);
   }
 
   public void addPower() {
