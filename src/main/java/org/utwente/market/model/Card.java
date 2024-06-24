@@ -39,6 +39,9 @@ public class Card implements Resource {
 
     @Override
     public double getValue() {
+        if (remainingPower() != getPower()) {
+            return 0;
+        }
         if (this.cardType.powerType == PowerType.Coin) {
             return this.getPower();
         }
