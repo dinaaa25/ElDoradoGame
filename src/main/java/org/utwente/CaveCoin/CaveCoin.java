@@ -33,17 +33,13 @@ public class CaveCoin implements Resource {
         this.caveCoinType = caveCoinType;
     }
 
-    public int power() {
-        return power;
-    }
-
     public CaveCoinType caveCoinType() {
         return this.caveCoinType;
     }
 
     @Override
     public int getPower() {
-        return this.remainingPower();
+        return this.power;
     }
 
     @Override

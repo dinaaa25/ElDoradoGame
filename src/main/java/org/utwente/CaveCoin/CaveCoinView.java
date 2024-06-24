@@ -44,7 +44,7 @@ public class CaveCoinView extends HexButton {
     @Override
     protected void setTileTexture(Graphics2D g2d) {
         BufferedImage caveCoinImage = ImageRepository.getCaveCoinLoader().getImage(caveCoin.caveCoinType(),
-                caveCoin.power());
+                caveCoin.getPower());
         if (caveCoinImage != null) {
             TexturePaint texturePaint = new TexturePaint(caveCoinImage,
                     new Rectangle(0, 0, 2 * hexagonRadius, 2 * hexagonRadius));

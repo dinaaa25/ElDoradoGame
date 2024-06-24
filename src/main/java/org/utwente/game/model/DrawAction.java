@@ -24,7 +24,7 @@ public class DrawAction extends Action {
     public void execute() {
         CardPile drawPile = player.getDrawPile();
         CardPile playPile = player.getPlayPile();
-        int power = this.getResource().getPower();
+        int power = this.getResource().remainingPower();
         playPile.addAll(drawPile.draw(power));
     }
 

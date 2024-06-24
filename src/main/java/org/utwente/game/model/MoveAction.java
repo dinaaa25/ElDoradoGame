@@ -148,7 +148,7 @@ public class MoveAction extends Action {
     public void discard() {
         Resource resource = this.getResource();
         if (resource instanceof Card) {
-            if (resource.getPower() <= 0) {
+            if (resource.remainingPower() <= 0) {
                 player.discardCard((Card) resource);
             }
         }
@@ -170,7 +170,7 @@ public class MoveAction extends Action {
     }
 
     public boolean resourceHasEnoughPower() {
-        return this.getMovePower() <= this.getResource().getPower();
+        return this.getMovePower() <= this.getResource().remainingPower();
     }
 
     /**

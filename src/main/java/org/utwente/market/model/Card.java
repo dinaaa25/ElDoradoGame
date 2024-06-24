@@ -6,11 +6,13 @@ import lombok.*;
 @Setter
 public class Card implements Resource {
     private CardType cardType;
+    private int power;
     private int consumedPower;
 
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
+        this.power = cardType.power;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class Card implements Resource {
 
     @Override
     public int getPower() {
-        return remainingPower();
+        return this.power;
     }
 
     @Override
