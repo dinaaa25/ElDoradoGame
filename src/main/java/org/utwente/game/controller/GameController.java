@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.utwente.Board.Board;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.CaveCoin.CaveCoinClickEvent;
+import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
@@ -51,6 +52,7 @@ public class GameController {
         eventManager.subscribe(this::onScientistStep2, EventType.ScientistStep2);
         eventManager.subscribe(this::onCartographerEvent, EventType.CartographerEvent);
         eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
+        eventManager.subscribe(this::onCaveCoinDraw, EventType.CaveCoinDraw);
     }
 
     void onDrawCards(Event event) {
@@ -183,7 +185,13 @@ public class GameController {
             }
         }
         if (resource instanceof CaveCoin coin) {
-
+            switch (coin.getCaveCoinType()) {
+                case CaveCoinType.Draw:
+                    this.game.getPhase().setEffectPhase(new CaveCoinDrawEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+                default:
+                    break;
+            }
         }
 
         return false;
@@ -193,6 +201,13 @@ public class GameController {
         game.getPhase().getEffectPhase().completeStep(EventType.CartographerEvent);
         DrawAction action = new DrawAction(this.game.getCurrentPlayer(),
                 this.game.getPhase().getEffectPhase().getResource());
+        ValidationResult result = action.validateExecute();
+        this.gameView.redraw();
+    }
+
+    void onCaveCoinDraw(Event event) {
+        game.getPhase().getEffectPhase().completeStep(EventType.CaveCoinDraw);
+        DrawAction action = new DrawAction(this.game.getCurrentPlayer(), this.game.getPhase().getEffectPhase().getResource());
         ValidationResult result = action.validateExecute();
         this.gameView.redraw();
     }

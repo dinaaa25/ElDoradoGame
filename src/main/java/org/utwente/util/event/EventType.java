@@ -18,4 +18,5 @@ public enum EventType {
   ScientistStep2,
   EffectPhaseDone,
   CartographerEvent,
+  CaveCoinDraw,
 }
