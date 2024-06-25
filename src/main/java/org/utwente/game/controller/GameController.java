@@ -73,7 +73,7 @@ public class GameController {
         try {
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
             DrawAction drawAction = new DrawAction(game.getCurrentPlayer(),
-                    game.getPhase().getEffectPhase().getResource(), null);
+                    game.getPhase().getEffectPhase().getResource());
             drawAction.validateExecute();
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
