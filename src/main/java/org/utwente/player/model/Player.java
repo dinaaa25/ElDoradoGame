@@ -108,7 +108,7 @@ public class Player {
 
 
     public void xRayEyes() {
-        System.out.println("[xRayEyes]");
+        System.out.println("-----[xRayEyes]-----");
         System.out.println("drawPile: " + getCardsAsString(drawPile));
         System.out.println("discardPile: " + getCardsAsString(discardPile));
         System.out.println("playPile: " + getCardsAsString(playPile));
@@ -116,6 +116,7 @@ public class Player {
         System.out.println("outOfGamePile: " + getCardsAsString(outOfGamePile));
         System.out.println("caveCoinPile: " + getCoinsAsString(caveCoinPile));
         System.out.println("outOfGameCoinsPile: " + getCoinsAsString(outOfGameCoinsPile));
+        System.out.println();
     }
 
     private String getCardsAsString(CardPile cardPile) {

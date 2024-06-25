@@ -131,6 +131,10 @@ public class GameController {
 
     void onMakeMove(Event event) {
         Card selectedCard = getCurrentlySelectedCard();
+        if (selectedCard == null) {
+            System.err.println("No selected card found");
+            return; //catch
+        }
         MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
                 game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
                 game.getPhase());
@@ -277,3 +281,4 @@ public class GameController {
     // }
 
 }
+

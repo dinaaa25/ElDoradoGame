@@ -19,12 +19,12 @@ public class FaceUpDiscard extends JPanel {
             cardsPanel.add(new CardComponent(card, SCALE_FACTOR));
         }
 
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        JLabel discardLabel = new JLabel("To be discarded");
-        JLabel cardCountLabel = new JLabel("Cards: " + faceUpDiscardPile.getCards().size());
-        textPanel.add(cardCountLabel);
-        textPanel.add(discardLabel);
+       // JPanel textPanel = new JPanel();
+       // textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+       // JLabel discardLabel = new JLabel("To be discarded");
+       // JLabel cardCountLabel = new JLabel("Cards: " + faceUpDiscardPile.getCards().size());
+       // textPanel.add(cardCountLabel);
+       // textPanel.add(discardLabel);
 
         this.add(cardsPanel);
         //this.add(cardCountLabel);

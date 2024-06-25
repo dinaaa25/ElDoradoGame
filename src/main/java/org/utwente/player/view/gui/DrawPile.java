@@ -37,7 +37,6 @@ public class DrawPile extends JPanel {
     this.add(layeredPane);
     this.add(new JLabel("Draw Pile"));
     this.add(new JLabel("Cards: " + sizeOfDrawPile));
-    System.out.println("DrawPile component setup complete");
 
     this.revalidate();
     this.repaint();

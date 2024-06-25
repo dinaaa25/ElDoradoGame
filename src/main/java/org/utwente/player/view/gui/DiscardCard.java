@@ -28,7 +28,6 @@ public class DiscardCard extends JPanel {
       JLabel backgroundLabel = new JLabel(iconBackground);
       backgroundLabel.setBounds(0, 0, cardWidth, cardHeight);
       layeredPane.add(backgroundLabel, Integer.valueOf(-1));
-      System.out.println("Background icon added successfully");
 
     // Add the normal icons on top
     ImageIcon icon = CardHelper.getImageIcon("back", new Dimension(cardWidth, cardHeight));
