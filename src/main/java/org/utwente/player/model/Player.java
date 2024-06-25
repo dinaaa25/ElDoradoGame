@@ -24,7 +24,7 @@ public class Player {
     private CardPile outOfGamePile;
     private CardPile drawPile;
     private CoinPile caveCoinPile;
-    private CoinPile outOfGameCoinsPile;
+    private CardPile outOfGameCoinsPile;
 
     public Player(String name) {
         this.name = name;
@@ -37,6 +37,7 @@ public class Player {
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
         this.caveCoinPile = new CoinPile();
+        this.outOfGameCoinsPile = builder.buildOutOfGamePile();
     }
 
     public String getName() {

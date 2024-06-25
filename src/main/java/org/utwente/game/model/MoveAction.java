@@ -41,7 +41,7 @@ public class MoveAction extends Action {
     public void execute() {
         phase.addPlayedResource(this.getResource());
         if (checkIfScientistCard()) {
-            phase.setEffectPhase(new ScientistEffectPhase());
+            phase.setEffectPhase(new ScientistEffectPhase(this.getResource()));
             // TODO set game to ScientistPhase
             // TODO instruct user through selecting the right things
             // TODO go back to Move Phase

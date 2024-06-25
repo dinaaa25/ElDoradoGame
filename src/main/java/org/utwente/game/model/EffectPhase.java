@@ -1,6 +1,7 @@
 package org.utwente.game.model;
 
 import lombok.Getter;
+import org.utwente.market.model.Resource;
 import org.utwente.util.event.EventType;
 
 import java.util.*;
@@ -11,12 +12,15 @@ public abstract class EffectPhase {
     protected List<EventType> allStepsOrder = new ArrayList<>();
     @Getter
     protected EffectPhaseEnum effectPhaseEnum;
+    @Getter
+    protected Resource resource;
     /**
      * You can use this variable to set buttons to active or not in the EffectPhase
      */
     private int currentStepIndex = -1; // Initialize to -1 to indicate no steps have been completed yet
 
-    public EffectPhase() {
+    public EffectPhase(Resource resource) {
+        this.resource = resource;
         defineSteps();
     }
 

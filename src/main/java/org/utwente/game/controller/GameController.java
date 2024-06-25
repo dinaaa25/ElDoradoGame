@@ -72,7 +72,8 @@ public class GameController {
     void onScientistStep1(Event event) {
         try {
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
-            System.out.println("implement drawing a single card into playpile");
+            DrawAction drawAction = new DrawAction(game.getCurrentPlayer(), game.getPhase().getEffectPhase().getResource(), null);
+            drawAction.validateExecute();
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
         } finally {

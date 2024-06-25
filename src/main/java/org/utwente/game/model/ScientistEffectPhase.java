@@ -1,8 +1,13 @@
 package org.utwente.game.model;
 
+import org.utwente.market.model.Resource;
 import org.utwente.util.event.EventType;
 
 public class ScientistEffectPhase extends EffectPhase {
+
+    public ScientistEffectPhase(Resource resource) {
+        super(resource);
+    }
 
     @Override
     protected void defineSteps() {
