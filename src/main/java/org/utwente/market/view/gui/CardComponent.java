@@ -43,6 +43,9 @@ public class CardComponent extends JButton {
     else {
       addValue();
     }
+    if (remainingAmount == null && card.getConsumedPower() > 0) {
+      addRemaining(remainingPower, false);
+    }
     addPicture();
 
     this.addActionListener(
