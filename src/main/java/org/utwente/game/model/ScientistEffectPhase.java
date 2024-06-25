@@ -8,18 +8,12 @@ public class ScientistEffectPhase extends EffectPhase {
 
     public ScientistEffectPhase(Resource resource, Player player) {
         super(resource, player);
+        effectPhaseEnum = EffectPhaseEnum.Scientist;
     }
 
     @Override
     protected void defineSteps() {
-        steps.put(EventType.ScientistStep1, false);
-        steps.put(EventType.ScientistStep2, false);
-
-        mandatoryStepsOrder.add(EventType.ScientistStep1);
-
-        allStepsOrder.add(EventType.ScientistStep1);
-        allStepsOrder.add(EventType.ScientistStep2);
-
-        effectPhaseEnum = EffectPhaseEnum.Scientist;
+        this.createMandatoryStep(EventType.ScientistStep1, 0);
+        this.createOptionalStep(EventType.ScientistStep2, 1);
     }
 }

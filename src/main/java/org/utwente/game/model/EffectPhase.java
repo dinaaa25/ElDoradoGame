@@ -11,9 +11,7 @@ import org.utwente.util.event.EventType;
 import java.util.*;
 
 public abstract class EffectPhase {
-    protected Map<EventType, Boolean> steps = new LinkedHashMap<>();
-    protected List<EventType> mandatoryStepsOrder = new ArrayList<>();
-    protected List<EventType> allStepsOrder = new ArrayList<>();
+    protected Map<EventType, EffectStep> steps = new LinkedHashMap<>();
     @Getter
     protected EffectPhaseEnum effectPhaseEnum;
     @Getter
@@ -36,6 +34,14 @@ public abstract class EffectPhase {
      */
     protected abstract void defineSteps();
 
+    protected void createOptionalStep(EventType eventType, int order) {
+        this.steps.put(eventType, new EffectStep(false, false, order));
+    }
+
+    protected void createMandatoryStep(EventType eventType, int order) {
+        this.steps.put(eventType, new EffectStep(false, true, order));
+    }
+
     /**
      * @param step defines the EventType that has to be done in the step
      * @throws IllegalArgumentException if step is not done in correct order
@@ -45,7 +51,8 @@ public abstract class EffectPhase {
             throw new IllegalArgumentException("Step not defined: " + step);
         }
 
-        int stepIndex = allStepsOrder.indexOf(step);
+        EffectStep effectStep = steps.get(step);
+        int stepIndex = effectStep.getOrder();
         if (stepIndex == -1) {
             throw new IllegalArgumentException("Step order not defined: " + step);
         }
@@ -55,17 +62,16 @@ public abstract class EffectPhase {
         }
 
         currentStepIndex = stepIndex;
-        steps.put(step, true);
+        effectStep.setCompleted(true);
+        // steps.put(step, true);
     }
 
     /**
      * @return the current step to be completed
      */
     public EventType getCurrentStep() {
-        if (currentStepIndex + 1 < allStepsOrder.size()) {
-            return allStepsOrder.get(currentStepIndex + 1);
-        }
-        return null; // All steps are completed
+        return this.steps.entrySet().stream().filter(e -> e.getValue().getOrder() == this.currentStepIndex + 1)
+                .map(e -> e.getKey()).findFirst().orElse(null);
     }
 
     /**
@@ -73,12 +79,7 @@ public abstract class EffectPhase {
      *         done.
      */
     public boolean allMandatoryStepsCompleted() {
-        for (EventType step : mandatoryStepsOrder) {
-            if (!steps.getOrDefault(step, false)) {
-                return false;
-            }
-        }
-        return true;
+        return this.steps.values().stream().filter(e -> !e.isCompleted() && e.isMandatory()).count() == 0;
     }
 
     public void discardEffectResource() {
