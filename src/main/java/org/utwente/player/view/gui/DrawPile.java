@@ -14,19 +14,32 @@ public class DrawPile extends JPanel {
 
   public DrawPile(int sizeOfDrawPile) {
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    JLayeredPane layeredPane = new JLayeredPane();
-    layeredPane.setPreferredSize(new Dimension(CardComponent.WIDTH + ICON_OFFSET * sizeOfDrawPile, CardComponent.HEIGHT));
 
-    ImageIcon icon = CardHelper.getImageIcon("back", new Dimension(CardComponent.WIDTH, CardComponent.HEIGHT));
+    int cardWidth = CardComponent.BASE_WIDTH;
+    int cardHeight = CardComponent.BASE_HEIGHT;
+
+    JLayeredPane layeredPane = new JLayeredPane();
+    layeredPane.setPreferredSize(new Dimension(cardWidth + ICON_OFFSET * (sizeOfDrawPile - 1), cardHeight));
+
+
+    ImageIcon icon = CardHelper.getImageIcon("back", new Dimension(cardWidth, cardHeight));
+    if (icon == null) {
+      return;
+    } else {
+    }
 
     for (int i = 0; i < sizeOfDrawPile; i++) {
       JLabel iconLabel = new JLabel(icon);
-      iconLabel.setBounds(i * ICON_OFFSET, 0, icon.getIconWidth(), icon.getIconHeight());
+      iconLabel.setBounds(i * ICON_OFFSET, 0, cardWidth, cardHeight);
       layeredPane.add(iconLabel, Integer.valueOf(i));
     }
 
     this.add(layeredPane);
     this.add(new JLabel("Draw Pile"));
     this.add(new JLabel("Cards: " + sizeOfDrawPile));
+    System.out.println("DrawPile component setup complete");
+
+    this.revalidate();
+    this.repaint();
   }
 }

@@ -11,9 +11,12 @@ import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.Resource;
+import org.utwente.player.model.CardPile;
+import org.utwente.player.model.PileType;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.*;
+import org.utwente.game.model.Configuration;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -160,14 +163,62 @@ public class GameController {
     }
 
     void onNextPhase(Event event) {
+
+        //run final checks of each phase
+        this.endPhase();
         game.nextPhase();
         gameView.setCurrentPhase();
         gameView.redraw();
     }
 
+    public void endPhase() {
+        // function to end the current phase and run associated actions/validations
+        // Maybe remove entirely saw mark was working on flow control aswell
+
+        Player currentPlayer = game.getCurrentPlayer();
+        PhaseType currentPhase = game.getPhase().getCurrentPhase();
+
+        if (Configuration.getInstance().xray){
+            currentPlayer.xRayEyes();
+        }
+
+        if (currentPhase == PhaseType.BUYING_AND_PLAYING_PHASE) {
+            // Move all played resources of type Card to the FaceUpDiscardPile
+            //List<Card> playedCards = currentPlayer.getPlayPile().getCards().stream()
+            //        .filter(card -> !currentPlayer.getOutOfGamePile().getCards().contains(card))
+            //        .collect(Collectors.toList());
+            // currentPlayer.getFaceUpDiscardPile().addAll(new CardPile(playedCards, currentPlayer, PileType.FaceUpDiscard));
+            // currentPlayer.getPlayPile().getCards().removeAll(playedCards);
+
+        } else if (currentPhase == PhaseType.DISCARD_PHASE) {
+            // Move all items from the face up discard pile to the main discard pile
+            currentPlayer.getDiscardPile().addAll(currentPlayer.getFaceUpDiscardPile());
+            currentPlayer.clearFaceUpDiscardPile();
+
+        } else if (currentPhase == PhaseType.DRAW_PHASE) {
+            // Ensure the player has drawn the correct number of cards
+            int cardsToDraw = Player.DECK_CARDS - currentPlayer.getPlayPile().getCards().size();
+            if (cardsToDraw > 0) {
+                currentPlayer.getPlayPile().addAll(currentPlayer.getDrawPile().draw(cardsToDraw));
+            }
+            // Make the only available button be the <end turn/next player>
+            // dont use gameview but player.something boolean
+            // gameView.enableEndTurnButtonOnly();
+
+        } else {
+
+
+            // Print the phase string to console, for debugging
+            currentPlayer.xRayEyes();
+            System.out.println("[ DEBUG ] " + this.toString());
+        }
+    }
+
+
+
     void onNextTurn(Event event) {
         Player player = game.getCurrentPlayer();
-        player.drawPlayCards();
+//        player.drawPlayCards(); this should be done at the end of previous turn
         game.nextPlayer();
         gameView.redraw();
     }

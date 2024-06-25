@@ -30,7 +30,8 @@ public class DiscardAction extends Action {
 
     @Override
     public void discard() {
-        player.discardCard(cardToDiscard);
+        player.getFaceUpDiscardPile().add(cardToDiscard);
+        player.getPlayPile().remove(cardToDiscard);
     }
 
 }

@@ -1,7 +1,10 @@
+
 package org.utwente.player.view.gui;
 
 import javax.swing.*;
-
+        import java.awt.*;
+        import java.util.ArrayList;
+import java.util.List;
 import org.utwente.CaveCoin.PlayCaveCoins;
 import org.utwente.game.model.Phase;
 import org.utwente.game.model.PhaseType;
@@ -11,19 +14,19 @@ import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
 
-import java.awt.*;
-
 public class PlayerDeck extends JPanel {
   int col = 0;
   Phase phase;
+  private List<JButton> actionButtons = new ArrayList<>();
+  private JButton nextTurnButton;
 
   public PlayerDeck(Player player, Phase phase) {
     super(new BorderLayout());
     this.phase = phase;
     addPlayerRow(player);
-    addDiscardPile(player);
     addDeck(player);
     addDrawPile(player);
+    addDiscardPanel(player);
     if (phase.getActionMessage() != null) {
       this.setNotification(phase.getActionMessage());
     }
@@ -37,6 +40,7 @@ public class PlayerDeck extends JPanel {
     JButton actionButton = new JButton();
     updateActionButton(actionButton, phase, player);
     playerRow.add(actionButton);
+    actionButtons.add(actionButton); // Store reference to the action button
 
     JLabel name = new JLabel(String.format("Current Player: %s (%s)", player.getName(), player.getColor().name()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -44,17 +48,18 @@ public class PlayerDeck extends JPanel {
     playerRow.add(name);
 
     JLabel phase = new JLabel(String.format("Current Phase: %s", this.phase.getCurrentPhase().toString()));
-    name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-    name.setFont(PlayerConfig.NAME_FONT);
+    phase.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+    phase.setFont(PlayerConfig.NAME_FONT);
     playerRow.add(phase);
 
-    JButton nextTurnButton = new JButton("Next Turn");
+    nextTurnButton = new JButton("Next Turn");
     nextTurnButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextTurn));
     playerRow.add(nextTurnButton);
 
     JButton nextPhaseButton = new JButton("Next Phase");
     nextPhaseButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextPhase));
     playerRow.add(nextPhaseButton);
+    actionButtons.add(nextPhaseButton); // Store reference to the next phase button
 
     this.add(playerRow, BorderLayout.NORTH);
   }
@@ -65,16 +70,22 @@ public class PlayerDeck extends JPanel {
       actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
     } else if (phase.getCurrentPhase() == PhaseType.DISCARD_PHASE) {
       actionButton.setText("Discard Currently Selected Cards");
-      actionButton.addActionListener(l -> {
-        EventManager.getInstance().notifying(EventType.DiscardCards);
-      });
+      actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.DiscardCards));
     } else if (phase.getCurrentPhase() == PhaseType.DRAW_PHASE) {
       actionButton.setText("Draw Cards");
       actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.DrawCards));
     } else {
-      actionButton.setText("Action Not Available");
+      actionButton.setText("End of Turn/Action Not Available");
       actionButton.setEnabled(false);
     }
+  }
+
+
+  public void enableEndTurnButtonOnly() {
+    for (JButton button : actionButtons) {
+//      button.setEnabled(false); // Disable all action buttons
+    }
+    nextTurnButton.setEnabled(true);// should look into making the next turn button the action button after drawing cards
   }
 
   public void addDrawPile(Player player) {
@@ -82,9 +93,8 @@ public class PlayerDeck extends JPanel {
     this.add(new DrawPile(sizeOfDrawPile), BorderLayout.WEST);
   }
 
-  public void addDiscardPile(Player player) {
-    int sizeOfDiscardPile = player.getDiscardPile().getCards().size();
-    this.add(new DiscardCard(sizeOfDiscardPile), BorderLayout.EAST);
+  public void addDiscardPanel(Player player) {
+    this.add(new DiscardPanel(player), BorderLayout.EAST);
   }
 
   private void addDeck(Player player) {
@@ -95,5 +105,4 @@ public class PlayerDeck extends JPanel {
   public void setNotification(ValidationResult notification) {
     this.add(new JLabel(notification.getMessage()), BorderLayout.SOUTH);
   }
-
 }

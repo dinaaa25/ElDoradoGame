@@ -11,6 +11,7 @@ import  org.utwente.util.ShuffleUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class Player {
     private CardPile drawPile;
     private CoinPile caveCoinPile;
     private CoinPile outOfGameCoinsPile;
+    private CardPile faceUpDiscardPile;
 
     public Player(String name) {
         this.name = name;
@@ -37,6 +39,15 @@ public class Player {
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
         this.caveCoinPile = new CoinPile();
+        this.faceUpDiscardPile = new CardPile(new ArrayList<>(), this, PileType.FaceUpDiscard);
+
+    }
+    public CardPile getFaceUpDiscardPile() {
+        return faceUpDiscardPile;
+    }
+
+    public void clearFaceUpDiscardPile() {
+        faceUpDiscardPile = new CardPile(new ArrayList<>(), this, PileType.FaceUpDiscard);
     }
 
     public String getName() {
@@ -44,7 +55,7 @@ public class Player {
     }
 
     public void discardCard(Card card) {
-        discardPile.add(card);
+        faceUpDiscardPile.add(card);
         playPile.remove(card);
     }
 
@@ -95,4 +106,33 @@ public class Player {
         this.caveCoinPile.remove(coin);
     }
 
+
+    public void xRayEyes() {
+        System.out.println("[xRayEyes]");
+        System.out.println("drawPile: " + getCardsAsString(drawPile));
+        System.out.println("discardPile: " + getCardsAsString(discardPile));
+        System.out.println("playPile: " + getCardsAsString(playPile));
+        System.out.println("faceUpDiscardPile: " + getCardsAsString(faceUpDiscardPile));
+        System.out.println("outOfGamePile: " + getCardsAsString(outOfGamePile));
+        System.out.println("caveCoinPile: " + getCoinsAsString(caveCoinPile));
+        System.out.println("outOfGameCoinsPile: " + getCoinsAsString(outOfGameCoinsPile));
+    }
+
+    private String getCardsAsString(CardPile cardPile) {
+        if (cardPile == null || cardPile.getCards() == null) {
+            return "No cards";
+        }
+        return cardPile.getCards().stream()
+                .map(card -> card.getCardType().name())
+                .collect(Collectors.joining(", "));
+    }
+
+    private String getCoinsAsString(CoinPile coinPile) {
+        if (coinPile == null || coinPile.getResources() == null) {
+            return "No coins";
+        }
+        return coinPile.getResources().stream()
+                .map(coin -> coin.getCaveCoinType().name())
+                .collect(Collectors.joining(", "));
+    }
 }
