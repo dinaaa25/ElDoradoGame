@@ -10,10 +10,13 @@ import org.utwente.game.view.GameView;
 import org.utwente.game.view.gui.GameFrame;
 import org.utwente.game.view.gui.GameGui;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import ch.qos.logback.classic.Level;
 
 @Getter
 public class Main {
+
+    Dotenv dotenv = Dotenv.load();
 
     private static void setLoggingLevel(String level) {
         Level loggingLevel;

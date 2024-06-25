@@ -3,6 +3,7 @@ package org.utwente.player.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.utwente.util.ShuffleUtils;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +50,8 @@ public class Pile<T> {
   }
 
   public void shuffle() {
-    Collections.shuffle(resources);
+
+    ShuffleUtils.shuffle(resources);
   }
 
 }
