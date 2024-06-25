@@ -11,7 +11,7 @@ public class GameFrame extends JFrame {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.add(gamePanel);
     this.setLocationRelativeTo(null);
-    this.setMinimumSize(new Dimension(400, 400));
+    this.setMinimumSize(new Dimension(1400, 800));
     this.pack();
   }
 
