@@ -18,7 +18,6 @@ import org.utwente.util.event.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 @Getter
 public class GameController {
@@ -46,13 +45,50 @@ public class GameController {
         eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
         eventManager.subscribe(this::onDiscardCards, EventType.DiscardCards);
         eventManager.subscribe(this::onDrawCards, EventType.DrawCards);
-
+        eventManager.subscribe(this::onScientistStep1, EventType.ScientistStep1);
+        eventManager.subscribe(this::onScientistStep2, EventType.ScientistStep2);
+        eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
     }
 
     void onDrawCards(Event event) {
         Player currentPlayer = this.game.getCurrentPlayer();
         currentPlayer.drawPlayCards();
         this.gameView.redraw();
+    }
+
+    void onEffectPhaseDone(Event event) {
+        boolean result = game.getPhase().getEffectPhase().allMandatoryStepsCompleted();
+        if (!result) {
+            this.game.getPhase().setActionMessage(
+                    new ValidationResult(false, "Not all mandatory steps of the phase are completed."));
+        } else {
+            this.game.getPhase().setActionMessage(new ValidationResult(true,
+                    game.getPhase().getEffectPhase().getEffectPhaseEnum() + " phase successfully completed."));
+            this.game.getPhase().setEffectPhase(null);
+        }
+        this.gameView.redraw();
+    }
+
+    void onScientistStep1(Event event) {
+        try {
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
+            System.out.println("implement drawing a single card into playpile");
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
+    }
+
+    void onScientistStep2(Event event) {
+        try {
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
+            System.out.println("implement deleting a single card from the game");
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
     }
 
     void onDiscardCards(Event event) {

@@ -41,7 +41,7 @@ public class MoveAction extends Action {
     public void execute() {
         phase.addPlayedResource(this.getResource());
         if (checkIfScientistCard()) {
-            phase.setEffectPhase(EffectPhase.Scientist);
+            phase.setEffectPhase(new ScientistEffectPhase());
             // TODO set game to ScientistPhase
             // TODO instruct user through selecting the right things
             // TODO go back to Move Phase
@@ -99,6 +99,9 @@ public class MoveAction extends Action {
 
     @Override
     public ValidationResult validate() {
+        if (checkIfScientistCard()) {
+            return new ValidationResult(true, "");
+        }
         return checkNormalMovement();
     }
 
