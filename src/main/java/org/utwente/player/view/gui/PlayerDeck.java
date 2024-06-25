@@ -52,8 +52,8 @@ public class PlayerDeck extends JPanel {
     nextTurnButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextTurn));
     playerRow.add(nextTurnButton);
 
-    // only one step to be iterated:
-    if (this.phase.getCurrentPhase().getIndex() == 0) {
+    // only one step to be iterated (made it responsive to PhaseType phases) :
+    if (this.phase.getCurrentPhase().getIndex() < PhaseType.values().length - 1) {
       JButton nextPhaseButton = new JButton("Next Phase");
       nextPhaseButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextPhase));
       playerRow.add(nextPhaseButton);
