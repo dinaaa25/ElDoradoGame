@@ -35,8 +35,6 @@ public class MoveAction extends Action {
 
     @Override
     public void execute() {
-        System.out.println(player.getCaveCoinPile());
-
         try {
             System.out.println("consumed power: " + resources.getFirst().getConsumedPower());
             System.out.println("card in use: " + resources.getFirst().toString());
