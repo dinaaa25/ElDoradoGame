@@ -64,14 +64,20 @@ public class PlayerDeck extends JPanel {
       actionButton.setText("Make Move");
       actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
     } else if (phase.getCurrentPhase() == PhaseType.DISCARD_PHASE) {
-      actionButton.setText("Discard Currently Selected Card");
-      actionButton.addActionListener(l -> {EventManager.getInstance().notifying(EventType.DiscardCards);
+      actionButton.setText("Discard Currently Selected Cards");
+      actionButton.addActionListener(l -> {
+        EventManager.getInstance().notifying(EventType.DiscardCards);
       });
+    } else if (phase.getCurrentPhase() == PhaseType.DRAW_PHASE) {
+      actionButton.setText("Draw Cards");
+      actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.DrawCards));
     } else {
       actionButton.setText("Action Not Available");
       actionButton.setEnabled(false);
     }
-  }public void addDrawPile(Player player) {
+  }
+
+  public void addDrawPile(Player player) {
     int sizeOfDrawPile = player.getDrawPile().getCards().size();
     this.add(new DrawPile(sizeOfDrawPile), BorderLayout.WEST);
   }

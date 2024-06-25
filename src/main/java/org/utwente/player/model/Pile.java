@@ -54,4 +54,7 @@ public class Pile<T> {
     ShuffleUtils.shuffle(resources);
   }
 
+  public boolean isEmpty() {
+    return this.resources.isEmpty();
+  }
 }
