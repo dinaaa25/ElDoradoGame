@@ -84,12 +84,13 @@ public abstract class EffectPhase {
     public void discardEffectResource() {
         if (resource instanceof Card card) {
             if (card.getCardType().oneTimeUse) {
-                this.player.removeCardFromGame(card);
+                this.player.removeResourceFromGame(card);
 
             } else {
                 this.player.discardResource(card);
             }
-        } else if (resource instanceof CaveCoin caveCoin) {
+        } else {
+            this.player.removeResourceFromGame(resource);
 
         }
     }

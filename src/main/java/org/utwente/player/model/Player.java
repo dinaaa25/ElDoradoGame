@@ -72,9 +72,15 @@ public class Player {
         }
     }
 
-    public void removeCardFromGame(Card card) {
-        outOfGamePile.add(card);
-        playPile.remove(card);
+    public void removeResourceFromGame(Resource resource) {
+        if (resource instanceof Card) {
+            outOfGamePile.add((Card) resource);
+            playPile.remove((Card) resource);
+        } else if (resource instanceof CaveCoin) {
+            outOfGameCoinsPile.add((CaveCoin) resource);
+            caveCoinPile.remove((CaveCoin) resource);
+        }
+
     }
 
     public void addBlockade(Blockade b) {
