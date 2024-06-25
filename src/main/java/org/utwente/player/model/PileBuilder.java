@@ -27,7 +27,7 @@ public class PileBuilder {
   }
 
   public PileBuilder addStartingCards() {
-    this.addCard(CardType.Wissenschaftlerin);
+    this.addCard(CardType.Matrose);
     this.addCard(CardType.Forscher, 3);
     this.addCard(CardType.Reisende, 4);
     return this;
