@@ -10,6 +10,8 @@ import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.CardPowerException;
+import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
@@ -18,7 +20,6 @@ import org.utwente.util.event.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 @Getter
 public class GameController {
@@ -46,13 +47,57 @@ public class GameController {
         eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
         eventManager.subscribe(this::onDiscardCards, EventType.DiscardCards);
         eventManager.subscribe(this::onDrawCards, EventType.DrawCards);
-
+        eventManager.subscribe(this::onScientistStep1, EventType.ScientistStep1);
+        eventManager.subscribe(this::onScientistStep2, EventType.ScientistStep2);
+        eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
     }
 
     void onDrawCards(Event event) {
         Player currentPlayer = this.game.getCurrentPlayer();
         currentPlayer.drawPlayCards();
         this.gameView.redraw();
+    }
+
+    void onEffectPhaseDone(Event event) {
+        boolean result = game.getPhase().getEffectPhase().allMandatoryStepsCompleted();
+        if (!result) {
+            this.game.getPhase().setActionMessage(
+                    new ValidationResult(false, "Not all mandatory steps of the phase are completed."));
+        } else {
+            this.game.getPhase().getEffectPhase().discardEffectResource();
+            this.game.getPhase().setActionMessage(new ValidationResult(true,
+                    game.getPhase().getEffectPhase().getEffectPhaseEnum() + " phase successfully completed."));
+            this.game.getPhase().setEffectPhase(null);
+        }
+        this.gameView.redraw();
+    }
+
+    void onScientistStep1(Event event) {
+        try {
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
+            DrawAction drawAction = new DrawAction(game.getCurrentPlayer(),
+                    game.getPhase().getEffectPhase().getResource());
+            drawAction.validateExecute();
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
+    }
+
+    void onScientistStep2(Event event) {
+        try {
+            System.out.println(getCurrentlySelectedResource());
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
+            RemoveAction action = new RemoveAction(this.game.getCurrentPlayer(), getCurrentlySelectedResource());
+            action.validateExecute();
+            System.out.println(game.getCurrentPlayer().getPlayPile());
+            System.out.println(game.getCurrentPlayer().getOutOfGamePile());
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
     }
 
     void onDiscardCards(Event event) {
@@ -111,10 +156,8 @@ public class GameController {
         gameView.redraw();
     }
 
-    Card getCurrentlySelectedCard() {
+    Resource getCurrentlySelectedResource() {
         return game.getPhase().getSelectedResources().stream()
-                .filter(resource -> resource instanceof Card)
-                .map(resource -> (Card) resource)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
     }
@@ -126,15 +169,43 @@ public class GameController {
                 .toList();
     }
 
+    boolean triggerSubPhase(Resource resource) {
+        if (resource instanceof Card card) {
+            switch (card.getCardType()) {
+                case CardType.Wissenschaftlerin:
+                    this.game.getPhase()
+                            .setEffectPhase(new ScientistEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+
+                default:
+                    break;
+            }
+        }
+        if (resource instanceof CaveCoin coin) {
+
+        }
+
+        return false;
+    }
+
     void onMakeMove(Event event) {
-        Card selectedCard = getCurrentlySelectedCard();
-        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
-                game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
-                game.getPhase());
-        ValidationResult result = action.validateExecute();
-        this.game.getPhase().setActionMessage(result);
+        Resource usedResource = getCurrentlySelectedResource();
+        // add played resource to phase.
+        this.game.getPhase().addPlayedResource(usedResource);
+        // trigger sub phase if needed.
+        // if this is triggered it's not necessary to move.
+        boolean subphaseTriggered = this.triggerSubPhase(usedResource);
+        if (!subphaseTriggered) {
+            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), usedResource,
+                    game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
+            ValidationResult result = action.validateExecute();
+            this.game.getPhase().setActionMessage(result);
+        } else {
+            game.getPhase().getSelectedResources().clear();
+        }
         removeSemiUsedResources(event);
         removeUsedResources(event);
+
         this.gameView.redraw();
     }
 
@@ -200,29 +271,5 @@ public class GameController {
             this.gameView.setGameStage();
         }
     }
-
-    void gameSetup() {
-
-    }
-
-    @Override
-    public boolean equals(Object subscriber) {
-        if (!(subscriber instanceof GameController)) {
-            return false;
-        }
-
-        GameController subscriberController = (GameController) subscriber;
-
-        return false;
-    }
-
-    // @Override
-    // public void update(EventType event) {
-    // if (event == EventType.EndGame) {
-    // game.setFinish(true);
-    // } else if (event == EventType.StartGame) {
-    // gameView.showMessage("Welcome to the game el Dorado");
-    // }
-    // }
 
 }

@@ -1,15 +1,17 @@
 package org.utwente.game.model;
 
+import lombok.Getter;
+
+@Getter
 public enum PhaseType {
   BUYING_AND_PLAYING_PHASE(0),
   DISCARD_PHASE(1),
-  DRAW_PHASE(2),
-  SCIENTIST_PHASE(3);
+  DRAW_PHASE(2);
 
-  private final int i;
+  private final int index;
 
-  PhaseType(int i) {
-    this.i = i;
+  PhaseType(int index) {
+    this.index = index;
   }
 
   public PhaseType next() {

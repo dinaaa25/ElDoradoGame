@@ -13,18 +13,15 @@ import java.util.List;
 
 public class DrawAction extends Action {
 
-    List<Card> discardList;
-
-    public DrawAction(Player player, Resource resource, List<Card> discardList) {
+    public DrawAction(Player player, Resource resource) {
         super(player, resource);
-        this.discardList = discardList;
     }
 
     @Override
     public void execute() {
         CardPile drawPile = player.getDrawPile();
         CardPile playPile = player.getPlayPile();
-        int power = this.getResource().remainingPower();
+        int power = this.getResource().getPower();
         playPile.addAll(drawPile.draw(power));
     }
 
@@ -47,15 +44,7 @@ public class DrawAction extends Action {
 
     @Override
     public void discard() {
-        if (this.getResource() instanceof Card) {
-            Card card = (Card) this.getResource();
-            if ((card.getCardType() == CardType.Kartograph) || (card.getCardType() == CardType.Wissenschaftlerin)) {
-                player.discardCard(card);
-            }
-            player.removeCardFromGame(card);
-        } else if (this.getResource() instanceof CaveCoin) {
-            // cave coin discard.
-        }
-
+        // since this is a special card or coin.
+        // it should be discarded in the end of the EffectPhase.
     }
 }

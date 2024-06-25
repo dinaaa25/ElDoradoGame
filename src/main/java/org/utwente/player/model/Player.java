@@ -6,7 +6,7 @@ import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.player.PlayerColor;
 import org.utwente.market.model.Card;
-import  org.utwente.util.ShuffleUtils;
+import org.utwente.util.ShuffleUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +24,7 @@ public class Player {
     private CardPile outOfGamePile;
     private CardPile drawPile;
     private CoinPile caveCoinPile;
-    private CoinPile outOfGameCoinsPile;
+    private CardPile outOfGameCoinsPile;
 
     public Player(String name) {
         this.name = name;
@@ -32,11 +32,13 @@ public class Player {
         PileBuilder builder = new PileBuilder();
         builder.setPlayer(this);
         this.discardPile = builder.buildDiscardPile();
+        this.outOfGamePile = builder.buildOutOfGamePile();
         CardPile startPile = builder.buildStartPile();
         this.playPile = startPile.draw(DECK_CARDS);
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
         this.caveCoinPile = new CoinPile();
+        this.outOfGameCoinsPile = builder.buildOutOfGamePile();
     }
 
     public String getName() {
