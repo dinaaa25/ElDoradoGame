@@ -81,7 +81,7 @@ public abstract class EffectPhase {
         return true;
     }
 
-    public void discardEffectResource(Resource resource) {
+    public void discardEffectResource() {
         if (resource instanceof Card card) {
             if (card.getCardType().oneTimeUse) {
                 this.player.removeCardFromGame(card);

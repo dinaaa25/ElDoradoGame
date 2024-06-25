@@ -64,6 +64,7 @@ public class GameController {
             this.game.getPhase().setActionMessage(
                     new ValidationResult(false, "Not all mandatory steps of the phase are completed."));
         } else {
+            this.game.getPhase().getEffectPhase().discardEffectResource();
             this.game.getPhase().setActionMessage(new ValidationResult(true,
                     game.getPhase().getEffectPhase().getEffectPhaseEnum() + " phase successfully completed."));
             this.game.getPhase().setEffectPhase(null);
