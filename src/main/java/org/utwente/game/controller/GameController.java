@@ -72,7 +72,8 @@ public class GameController {
     void onScientistStep1(Event event) {
         try {
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
-            DrawAction drawAction = new DrawAction(game.getCurrentPlayer(), game.getPhase().getEffectPhase().getResource(), null);
+            DrawAction drawAction = new DrawAction(game.getCurrentPlayer(),
+                    game.getPhase().getEffectPhase().getResource(), null);
             drawAction.validateExecute();
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
@@ -85,6 +86,9 @@ public class GameController {
         try {
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
             System.out.println("implement deleting a single card from the game");
+            DiscardAction action = new DiscardAction(this.game.getCurrentPlayer(), getCurrentlySelectedCard(),
+                    this.game.getPhase());
+            action.validateExecute();
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
         } finally {
