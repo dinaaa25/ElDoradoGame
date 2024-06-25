@@ -17,4 +17,5 @@ public enum EventType {
   ScientistStep1,
   ScientistStep2,
   EffectPhaseDone,
+  CartographerEvent,
 }
