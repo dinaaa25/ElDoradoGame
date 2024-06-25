@@ -78,7 +78,7 @@ public class BuyAction extends Action {
     public void discard() {
         for (Resource r : this.resources) {
             if (r instanceof Card card) {
-                player.discardCard(card);
+                player.discardResource(card);
             } else if (r instanceof CaveCoin coin) {
                 player.discardCoin(coin);
             }

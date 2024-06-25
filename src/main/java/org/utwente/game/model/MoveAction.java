@@ -146,12 +146,9 @@ public class MoveAction extends Action {
     @Override
     public void discard() {
         Resource resource = this.getResource();
-        if (resource instanceof Card) {
-            if (resource.remainingPower() <= 0) {
-                player.discardCard((Card) resource);
-            }
+        if (resource.remainingPower() <= 0) {
+            player.discardResource(resource);
         }
-        // TODO: coins
     }
 
     public boolean isTileToNeighbour() {
