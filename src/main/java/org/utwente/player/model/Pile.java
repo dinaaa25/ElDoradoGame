@@ -50,11 +50,16 @@ public class Pile<T> {
   }
 
   public void shuffle() {
-
     ShuffleUtils.shuffle(resources);
   }
 
   public boolean isEmpty() {
     return this.resources.isEmpty();
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Pile %s (%s)", this.getPileType(),
+        this.getResources().stream().map(e -> e.toString()).reduce((a, b) -> a + " " + b));
   }
 }

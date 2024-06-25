@@ -36,7 +36,7 @@ public class MoveActionTest {
     @Test
     public void testMovePlayerToTile() {
         Resource card = new Card(CardType.Entdecker);
-        Action move = new MoveAction(dina, card, tileFrom, tileTo, new Phase());
+        Action move = new MoveAction(dina, card, tileFrom, tileTo);
 
         assertEquals(tileFrom.isEmpty(), false);
         assertEquals(tileTo.isEmpty(), true);

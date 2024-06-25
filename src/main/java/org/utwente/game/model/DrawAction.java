@@ -44,15 +44,7 @@ public class DrawAction extends Action {
 
     @Override
     public void discard() {
-        if (this.getResource() instanceof Card) {
-            Card card = (Card) this.getResource();
-            if ((card.getCardType() == CardType.Kartograph) || (card.getCardType() == CardType.Wissenschaftlerin)) {
-                player.discardCard(card);
-            }
-            player.removeCardFromGame(card);
-        } else if (this.getResource() instanceof CaveCoin) {
-            // cave coin discard.
-        }
-
+        // since this is a special card or coin.
+        // it should be discarded in the end of the EffectPhase.
     }
 }

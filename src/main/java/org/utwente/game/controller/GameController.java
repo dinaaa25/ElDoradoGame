@@ -10,6 +10,8 @@ import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.CardPowerException;
+import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
@@ -84,11 +86,12 @@ public class GameController {
 
     void onScientistStep2(Event event) {
         try {
+            System.out.println(getCurrentlySelectedResource());
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
-            System.out.println("implement deleting a single card from the game");
-            DiscardAction action = new DiscardAction(this.game.getCurrentPlayer(), getCurrentlySelectedCard(),
-                    this.game.getPhase());
+            RemoveAction action = new RemoveAction(this.game.getCurrentPlayer(), getCurrentlySelectedResource());
             action.validateExecute();
+            System.out.println(game.getCurrentPlayer().getPlayPile());
+            System.out.println(game.getCurrentPlayer().getOutOfGamePile());
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
         } finally {
@@ -152,10 +155,8 @@ public class GameController {
         gameView.redraw();
     }
 
-    Card getCurrentlySelectedCard() {
+    Resource getCurrentlySelectedResource() {
         return game.getPhase().getSelectedResources().stream()
-                .filter(resource -> resource instanceof Card)
-                .map(resource -> (Card) resource)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
     }
@@ -167,15 +168,43 @@ public class GameController {
                 .toList();
     }
 
+    boolean triggerSubPhase(Resource resource) {
+        if (resource instanceof Card card) {
+            switch (card.getCardType()) {
+                case CardType.Wissenschaftlerin:
+                    this.game.getPhase()
+                            .setEffectPhase(new ScientistEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+
+                default:
+                    break;
+            }
+        }
+        if (resource instanceof CaveCoin coin) {
+
+        }
+
+        return false;
+    }
+
     void onMakeMove(Event event) {
-        Card selectedCard = getCurrentlySelectedCard();
-        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
-                game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
-                game.getPhase());
-        ValidationResult result = action.validateExecute();
-        this.game.getPhase().setActionMessage(result);
+        Resource usedResource = getCurrentlySelectedResource();
+        // add played resource to phase.
+        this.game.getPhase().addPlayedResource(usedResource);
+        // trigger sub phase if needed.
+        // if this is triggered it's not necessary to move.
+        boolean subphaseTriggered = this.triggerSubPhase(usedResource);
+        if (!subphaseTriggered) {
+            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), usedResource,
+                    game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
+            ValidationResult result = action.validateExecute();
+            this.game.getPhase().setActionMessage(result);
+        } else {
+            game.getPhase().getSelectedResources().clear();
+        }
         removeSemiUsedResources(event);
         removeUsedResources(event);
+
         this.gameView.redraw();
     }
 

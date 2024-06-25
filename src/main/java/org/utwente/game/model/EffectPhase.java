@@ -1,7 +1,11 @@
 package org.utwente.game.model;
 
 import lombok.Getter;
+
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.market.model.Card;
 import org.utwente.market.model.Resource;
+import org.utwente.player.model.Player;
 import org.utwente.util.event.EventType;
 
 import java.util.*;
@@ -14,18 +18,21 @@ public abstract class EffectPhase {
     protected EffectPhaseEnum effectPhaseEnum;
     @Getter
     protected Resource resource;
+    protected Player player;
     /**
      * You can use this variable to set buttons to active or not in the EffectPhase
      */
     private int currentStepIndex = -1; // Initialize to -1 to indicate no steps have been completed yet
 
-    public EffectPhase(Resource resource) {
+    public EffectPhase(Resource resource, Player player) {
         this.resource = resource;
+        this.player = player;
         defineSteps();
     }
 
     /**
-     * Use this method to define all the EventTypes, that have to be done and their order
+     * Use this method to define all the EventTypes, that have to be done and their
+     * order
      */
     protected abstract void defineSteps();
 
@@ -62,7 +69,8 @@ public abstract class EffectPhase {
     }
 
     /**
-     * @return whether all indicated mandatory steps of the EffectPhase have been done.
+     * @return whether all indicated mandatory steps of the EffectPhase have been
+     *         done.
      */
     public boolean allMandatoryStepsCompleted() {
         for (EventType step : mandatoryStepsOrder) {
@@ -71,5 +79,18 @@ public abstract class EffectPhase {
             }
         }
         return true;
+    }
+
+    public void discardEffectResource(Resource resource) {
+        if (resource instanceof Card card) {
+            if (card.getCardType().oneTimeUse) {
+                this.player.removeCardFromGame(card);
+
+            } else {
+                this.player.discardCard(card);
+            }
+        } else if (resource instanceof CaveCoin caveCoin) {
+
+        }
     }
 }

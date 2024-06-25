@@ -16,7 +16,6 @@ public class MoveAction extends Action {
 
     private Tile tileFrom;
     private Tile tileTo;
-    private Phase phase;
 
     public Tile getTileFrom() {
         return this.tileFrom;
@@ -27,31 +26,13 @@ public class MoveAction extends Action {
     }
 
     public MoveAction(Player player, Resource resource, Tile from, Tile to) {
-        this(player, resource, from, to, new Phase());
-    }
-
-    public MoveAction(Player player, Resource resource, Tile from, Tile to, Phase phase) {
         super(player, resource);
         this.tileFrom = from;
         this.tileTo = to;
-        this.phase = phase;
     }
 
     @Override
     public void execute() {
-        phase.addPlayedResource(this.getResource());
-        if (checkIfScientistCard()) {
-            phase.setEffectPhase(new ScientistEffectPhase(this.getResource()));
-            // TODO set game to ScientistPhase
-            // TODO instruct user through selecting the right things
-            // TODO go back to Move Phase
-            try {
-                resources.getFirst().removePower(CardType.Wissenschaftlerin.power);
-            } catch (CardPowerException e) {
-                throw new RuntimeException(e);
-            }
-            return;
-        }
 
         try {
             System.out.println("consumed power: " + resources.getFirst().getConsumedPower());
