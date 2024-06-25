@@ -227,7 +227,7 @@ public class MarketGui implements MarketView {
     }
   }
 
-  public JComponent getMainComponent() {
+  public JScrollPane getMainComponent() {
     return this.scrollPane;
   }
 
