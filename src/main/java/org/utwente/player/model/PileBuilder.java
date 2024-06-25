@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class PileBuilder {
   private CardPile pile;
+  private CoinPile coinPile;
   private Player player;
 
   public PileBuilder() {
@@ -74,6 +75,14 @@ public class PileBuilder {
     this.addStartingCards();
     this.pile.setPlayer(this.player);
     return this.pile;
+  }
+
+  public CoinPile buildCaveCoinPile() {
+    this.reset();
+    this.coinPile = new CoinPile();
+    this.setType(PileType.CaveCoin);
+    this.coinPile.setPlayer(this.player);
+    return this.coinPile;
   }
 
   public CardPile build() {

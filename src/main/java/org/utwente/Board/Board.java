@@ -394,10 +394,12 @@ public class Board {
 
         public BoardBuilder addCaveCoinTiles() {
             List<CaveCoin> caveCoins = CaveCoinLoader.loadCoins();
+
+            ShuffleUtils.shuffle(caveCoins);
+
             List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, CAVE_COIN_CHUNK_SIZE);
             List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
 
-            ShuffleUtils.shuffle(caveCoinChunks);
             ShuffleUtils.shuffle(caveTiles);
 
             int numTiles = caveTiles.size();
@@ -416,7 +418,13 @@ public class Board {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
             assert !getNonElDoradoSections().isEmpty() || !blockades.isEmpty() : "No blockades found in setups without ElDorado";
-            return new Board(sections, path, flatTop, blockades);
+            Board tempBoard = new Board(sections, path, flatTop, blockades);
+            for (Section section : tempBoard.getSections()) {
+                for (Tile tile : section.getTiles()) {
+                    tile.setBoard(tempBoard);
+                }
+            }
+            return tempBoard;
         }
     }
 }
