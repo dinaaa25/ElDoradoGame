@@ -29,6 +29,7 @@ public class GameGui extends JPanel implements GameView {
     int offsetY;
     PlayerDeck playerDeck;
     JScrollPane boardViewScrollPane;
+    JScrollPane marketViewScrollPane;
 
     public GameGui() {
         super();
@@ -89,9 +90,9 @@ public class GameGui extends JPanel implements GameView {
             MarketGui marketGui = new MarketGui();
             Market market = this.game.getMarket();
             new MarketController(marketGui, market);
-            JComponent marketComponent = marketGui.getMainComponent();
-            marketComponent.setPreferredSize(new Dimension(600, 150));
-            this.add(marketComponent, BorderLayout.WEST);
+            marketViewScrollPane = marketGui.getMainComponent();
+            marketViewScrollPane.setPreferredSize(new Dimension(600, 150));
+            this.add(marketViewScrollPane, BorderLayout.WEST);
         }
     }
 
@@ -102,7 +103,6 @@ public class GameGui extends JPanel implements GameView {
 
     @Override
     public void showMessage(ValidationResult message) {
-        System.out.println(message.getMessage());
         this.remove(playerDeck);
         this.playerDeck = new PlayerDeck(game.getCurrentPlayer(), game.getPhase());
         this.add(this.playerDeck, BorderLayout.SOUTH);
@@ -168,8 +168,12 @@ public class GameGui extends JPanel implements GameView {
     public void redraw() {
         this.remove(playerDeck);
         this.remove(boardViewScrollPane);
+        this.remove(marketViewScrollPane);
+
         this.addBoard();
         this.addPlayerSection();
+        this.addMarket();
+
         this.revalidate();
         this.repaint();
     }

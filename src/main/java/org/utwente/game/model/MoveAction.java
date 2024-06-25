@@ -54,6 +54,9 @@ public class MoveAction extends Action {
         }
 
         try {
+            System.out.println("consumed power: " + resources.getFirst().getConsumedPower());
+            System.out.println("card in use: " + resources.getFirst().toString());
+            System.out.println("move power: " + getMovePower());
             resources.getFirst().removePower(getMovePower());
         } catch (CardPowerException e) {
             // TODO implement UI error display
