@@ -14,11 +14,6 @@ public class CardPile extends Pile<Card> {
   }
 
   public CardPile draw(int cardAmount) {
-    if (cardAmount >= this.resources.size() && pileType == PileType.Draw) {
-      Pile<Card> discardPile = player.getDiscardPile();
-      this.resources.addAll(discardPile.getResources());
-    }
-
     this.shuffle();
     List<Card> drawnCards = new ArrayList<>();
     int drawAmount = Math.min(cardAmount, this.resources.size());
