@@ -50,14 +50,16 @@ public class PlayerDeck extends JPanel {
     name.setFont(PlayerConfig.NAME_FONT);
     playerRow.add(name);
 
-    JLabel phase = new JLabel(String.format("Current Phase: %s", this.phase.getCurrentPhase().toString()));
+    JLabel phaseLabel = new JLabel(String.format("Current Phase: %s", this.phase.getCurrentPhase().toString()));
     name.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
     name.setFont(PlayerConfig.NAME_FONT);
-    playerRow.add(phase);
+    playerRow.add(phaseLabel);
 
-    JButton nextTurnButton = new JButton("Next Turn");
-    nextTurnButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextTurn));
-    playerRow.add(nextTurnButton);
+    if (this.phase.getCurrentPhase() == PhaseType.DRAW_PHASE) {
+      JButton nextTurnButton = new JButton("Next Turn");
+      nextTurnButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.NextTurn));
+      playerRow.add(nextTurnButton);
+    }
 
     // only one step to be iterated (made it responsive to PhaseType phases) :
     if (this.phase.getCurrentPhase().getIndex() < PhaseType.values().length - 1) {
