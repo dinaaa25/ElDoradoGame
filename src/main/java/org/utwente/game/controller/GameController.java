@@ -49,6 +49,7 @@ public class GameController {
         eventManager.subscribe(this::onDrawCards, EventType.DrawCards);
         eventManager.subscribe(this::onScientistStep1, EventType.ScientistStep1);
         eventManager.subscribe(this::onScientistStep2, EventType.ScientistStep2);
+        eventManager.subscribe(this::onCartographerEvent, EventType.CartographerEvent);
         eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
     }
 
@@ -87,12 +88,9 @@ public class GameController {
 
     void onScientistStep2(Event event) {
         try {
-            System.out.println(getCurrentlySelectedResource());
             game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
             RemoveAction action = new RemoveAction(this.game.getCurrentPlayer(), getCurrentlySelectedResource());
             action.validateExecute();
-            System.out.println(game.getCurrentPlayer().getPlayPile());
-            System.out.println(game.getCurrentPlayer().getOutOfGamePile());
         } catch (IllegalArgumentException e) {
             this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
         } finally {
@@ -176,7 +174,10 @@ public class GameController {
                     this.game.getPhase()
                             .setEffectPhase(new ScientistEffectPhase(resource, this.game.getCurrentPlayer()));
                     return true;
-
+                case CardType.Kartograph:
+                    this.game.getPhase()
+                            .setEffectPhase(new CartographerEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
                 default:
                     break;
             }
@@ -186,6 +187,14 @@ public class GameController {
         }
 
         return false;
+    }
+
+    void onCartographerEvent(Event event) {
+        game.getPhase().getEffectPhase().completeStep(EventType.CartographerEvent);
+        DrawAction action = new DrawAction(this.game.getCurrentPlayer(),
+                this.game.getPhase().getEffectPhase().getResource());
+        ValidationResult result = action.validateExecute();
+        this.gameView.redraw();
     }
 
     void onMakeMove(Event event) {
