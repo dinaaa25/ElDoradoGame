@@ -201,28 +201,4 @@ public class GameController {
         }
     }
 
-    void gameSetup() {
-
-    }
-
-    @Override
-    public boolean equals(Object subscriber) {
-        if (!(subscriber instanceof GameController)) {
-            return false;
-        }
-
-        GameController subscriberController = (GameController) subscriber;
-
-        return false;
-    }
-
-    // @Override
-    // public void update(EventType event) {
-    // if (event == EventType.EndGame) {
-    // game.setFinish(true);
-    // } else if (event == EventType.StartGame) {
-    // gameView.showMessage("Welcome to the game el Dorado");
-    // }
-    // }
-
 }
