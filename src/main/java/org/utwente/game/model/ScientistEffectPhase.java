@@ -13,7 +13,8 @@ public class ScientistEffectPhase extends EffectPhase {
 
     @Override
     protected void defineSteps() {
-        this.createMandatoryStep(EventType.ScientistStep1, 0);
-        this.createOptionalStep(EventType.ScientistStep2, 1);
+        this.createMandatoryStep(EventType.ScientistStep1, 0, "draw card", "1. Draw an additional card");
+        this.createOptionalStep(EventType.ScientistStep2, 1,
+                "Remove selected card", "2. (Optional) Select 1 card and then remove it from the game");
     }
 }

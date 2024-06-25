@@ -3,13 +3,14 @@ package org.utwente.player.view.gui;
 import javax.swing.*;
 
 import org.utwente.CaveCoin.PlayCaveCoins;
-import org.utwente.game.model.EffectPhaseEnum;
+import org.utwente.game.model.EffectStep;
 import org.utwente.game.model.Phase;
 import org.utwente.game.model.PhaseType;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+import java.util.Map.Entry;
 
 import java.awt.*;
 
@@ -34,9 +35,9 @@ public class PlayerDeck extends JPanel {
     JPanel playerRow = new JPanel();
     playerRow.setLayout(new FlowLayout());
 
-    if (phase.getEffectPhase() != null && phase.getEffectPhase().getEffectPhaseEnum() == EffectPhaseEnum.Scientist) {
-      System.out.println("Scientist EffectPhase reached");
-      addScientistPhase(playerRow);
+    if (phase.getEffectPhase() != null) {
+      System.out.println("Any EffectPhase reached " + phase.getEffectPhase().getEffectPhaseEnum());
+      this.addEffectCardPhase(playerRow);
       this.add(playerRow, BorderLayout.NORTH);
       return;
     }
@@ -95,46 +96,31 @@ public class PlayerDeck extends JPanel {
     panel.add(effectPhase);
   }
 
-  public void addScientistPhase(JPanel playerRow) {
-    JPanel scientistPanel = new JPanel();
-    scientistPanel.setLayout(new BoxLayout(scientistPanel, BoxLayout.Y_AXIS));
-    addEffectPhaseText(scientistPanel);
-    addScientistStep1(scientistPanel);
-    addScientistStep2(scientistPanel);
-    addEffectPhaseDoneButton(scientistPanel);
-    playerRow.add(scientistPanel);
+  public void addEffectCardPhase(JPanel playerRow) {
+    JPanel specialCardPanel = new JPanel();
+    specialCardPanel.setLayout(new BoxLayout(specialCardPanel, BoxLayout.Y_AXIS));
+
+    for (var entry : this.phase.getEffectPhase().getSteps().entrySet()) {
+      addEffectRow(specialCardPanel, entry);
+    }
+
+    addEffectPhaseDoneButton(specialCardPanel);
+    playerRow.add(specialCardPanel);
   }
 
-  public void addScientistStep1(JPanel panel) {
-    EventType eventType = EventType.ScientistStep1;
+  public void addEffectRow(JPanel cardPanel, Entry<EventType, EffectStep> step) {
 
-    JPanel scientistStep1Panel = new JPanel();
-    scientistStep1Panel.setLayout(new BoxLayout(scientistStep1Panel, BoxLayout.X_AXIS));
-    JLabel scientistStep1Label = new JLabel("1. Draw an additional card");
-    JButton scientistStep1Button = new JButton("Draw card");
-    scientistStep1Button.setEnabled(phase.getEffectPhase().getCurrentStep() == eventType);
-    scientistStep1Button.addActionListener(l -> {
-      EventManager.getInstance().notifying(eventType);
+    JPanel rowPanel = new JPanel();
+    rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+    JLabel label = new JLabel(step.getValue().getStepLabel());
+    JButton button = new JButton(step.getValue().getButtonText());
+    button.setEnabled(phase.getEffectPhase().getCurrentStep() == step.getKey());
+    button.addActionListener(l -> {
+      EventManager.getInstance().notifying(step.getKey());
     });
-    scientistStep1Panel.add(scientistStep1Label);
-    scientistStep1Panel.add(scientistStep1Button);
-    panel.add(scientistStep1Panel);
-  }
-
-  public void addScientistStep2(JPanel panel) {
-    EventType eventType = EventType.ScientistStep2;
-
-    JPanel scientistStep2Panel = new JPanel();
-    scientistStep2Panel.setLayout(new BoxLayout(scientistStep2Panel, BoxLayout.X_AXIS));
-    JLabel scientistStep2Label = new JLabel("2. (Optional) Select 1 card and then remove it from the game");
-    JButton scientistStep2Button = new JButton("Remove selected card");
-    scientistStep2Button.setEnabled(phase.getEffectPhase().getCurrentStep() == eventType);
-    scientistStep2Button.addActionListener(l -> {
-      EventManager.getInstance().notifying(eventType);
-    });
-    scientistStep2Panel.add(scientistStep2Label);
-    scientistStep2Panel.add(scientistStep2Button);
-    panel.add(scientistStep2Panel);
+    rowPanel.add(label);
+    rowPanel.add(button);
+    cardPanel.add(rowPanel);
   }
 
   public void addEffectPhaseDoneButton(JPanel panel) {

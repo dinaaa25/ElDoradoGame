@@ -10,11 +10,10 @@ import org.utwente.util.event.EventType;
 
 import java.util.*;
 
+@Getter
 public abstract class EffectPhase {
     protected Map<EventType, EffectStep> steps = new LinkedHashMap<>();
-    @Getter
     protected EffectPhaseEnum effectPhaseEnum;
-    @Getter
     protected Resource resource;
     protected Player player;
     /**
@@ -34,12 +33,12 @@ public abstract class EffectPhase {
      */
     protected abstract void defineSteps();
 
-    protected void createOptionalStep(EventType eventType, int order) {
-        this.steps.put(eventType, new EffectStep(false, false, order));
+    protected void createOptionalStep(EventType eventType, int order, String buttonText, String stepLabel) {
+        this.steps.put(eventType, new EffectStep(false, false, order, buttonText, stepLabel));
     }
 
-    protected void createMandatoryStep(EventType eventType, int order) {
-        this.steps.put(eventType, new EffectStep(false, true, order));
+    protected void createMandatoryStep(EventType eventType, int order, String buttonText, String stepLabel) {
+        this.steps.put(eventType, new EffectStep(false, true, order, buttonText, stepLabel));
     }
 
     /**

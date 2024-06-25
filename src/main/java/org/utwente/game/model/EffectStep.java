@@ -11,4 +11,6 @@ public class EffectStep {
   private boolean completed;
   private boolean mandatory;
   private int order;
+  private String buttonText;
+  private String stepLabel;
 }
