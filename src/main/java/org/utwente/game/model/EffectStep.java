@@ -13,4 +13,15 @@ public class EffectStep {
   private int order;
   private String buttonText;
   private String stepLabel;
+
+  @Override
+  public String toString() {
+    return "EffectStep{" +
+            "completed=" + completed +
+            ", mandatory=" + mandatory +
+            ", order=" + order +
+            ", buttonText='" + buttonText + '\'' +
+            ", stepLabel='" + stepLabel + '\'' +
+            '}';
+  }
 }

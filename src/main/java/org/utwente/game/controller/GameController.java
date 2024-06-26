@@ -10,10 +10,7 @@ import org.utwente.Tile.TileClickEvent;
 import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
-import org.utwente.market.model.Card;
-import org.utwente.market.model.CardPowerException;
-import org.utwente.market.model.CardType;
-import org.utwente.market.model.Resource;
+import org.utwente.market.model.*;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.*;
@@ -53,6 +50,8 @@ public class GameController {
         eventManager.subscribe(this::onCartographerEvent, EventType.CartographerEvent);
         eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
         eventManager.subscribe(this::onCaveCoinDraw, EventType.CaveCoinDraw);
+        eventManager.subscribe(this::onSymbolSelectType, EventType.CaveCoinSymbolSelectType);
+        eventManager.subscribe(this::onSymbolTypeEventDone, EventType.CaveCoinSymbolSelectTypeDone);
     }
 
     void onDrawCards(Event event) {
@@ -67,6 +66,9 @@ public class GameController {
             this.game.getPhase().setActionMessage(
                     new ValidationResult(false, "Not all mandatory steps of the phase are completed."));
         } else {
+            if (this.game.getPhase().getEffectPhase().getEffectPhaseEnum() == EffectPhaseEnum.CaveCoinSymbol) {
+                onSymbolTypeEventDone(event);
+            }
             this.game.getPhase().getEffectPhase().discardEffectResource();
             this.game.getPhase().setActionMessage(new ValidationResult(true,
                     game.getPhase().getEffectPhase().getEffectPhaseEnum() + " phase successfully completed."));
@@ -134,9 +136,40 @@ public class GameController {
 
     void onPlayerCardClick(Event event) {
         if (event instanceof PlayCardEvent data) {
+            onPlayerCardClickCaveCoinSymbol(data.getCard());
             Card card = data.getCard();
             toggleSelectedResource(card);
         }
+    }
+
+    void onPlayerCardClickCaveCoinSymbol(Card eventCard) {
+        if (this.game.getPhase().getEffectPhase() != null && this.game.getPhase().getEffectPhase().getEffectPhaseEnum() == EffectPhaseEnum.CaveCoinSymbol) {
+            ((CaveCoinSymbolEffectPhase) this.game.getPhase().getEffectPhase()).setCardToSymbolChange(eventCard);
+            this.game.getPhase().getEffectPhase().completeStep(EventType.PlayCards);
+            System.out.println(((CaveCoinSymbolEffectPhase) this.game.getPhase().getEffectPhase()));
+            this.gameView.redraw();
+        }
+    }
+
+    void onSymbolSelectType(Event event) {
+        if (event instanceof SelectSymbolTypeEvent) {
+            System.out.println("Select symbol type event: " + event);
+            System.out.println(event);
+            ((CaveCoinSymbolEffectPhase) this.game.getPhase().getEffectPhase()).setPowerTypeToChangeTo(((SelectSymbolTypeEvent) event).getPowerType());
+            if (!this.game.getPhase().getEffectPhase().allMandatoryStepsCompleted()) {
+                this.game.getPhase().getEffectPhase().completeStep(EventType.CaveCoinSymbolSelectType);
+            }
+            this.gameView.redraw();
+        }
+    }
+
+    void onSymbolTypeEventDone(Event event) {
+        Card card = ((CaveCoinSymbolEffectPhase) this.game.getPhase().getEffectPhase()).getCardToSymbolChange();
+        Card card2 = new Card(card.getCardType());
+        card2.setCardType(CardType.Forscher);
+        card2.setOneTimeUse(true);
+        this.game.getCurrentPlayer().getPlayPile().add(card2);
+        this.game.getCurrentPlayer().discardResource(card);
     }
 
     void onPlayerCaveCoinClick(Event event) {
@@ -188,6 +221,9 @@ public class GameController {
             switch (coin.getCaveCoinType()) {
                 case CaveCoinType.Draw:
                     this.game.getPhase().setEffectPhase(new CaveCoinDrawEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+                case CaveCoinType.Symbol:
+                    this.game.getPhase().setEffectPhase(new CaveCoinSymbolEffectPhase(resource, this.game.getCurrentPlayer()));
                     return true;
                 default:
                     break;

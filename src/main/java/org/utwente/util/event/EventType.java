@@ -19,4 +19,6 @@ public enum EventType {
   EffectPhaseDone,
   CartographerEvent,
   CaveCoinDraw,
+  CaveCoinSymbolSelectTypeDone,
+  CaveCoinSymbolSelectType
 }
