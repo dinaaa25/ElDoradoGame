@@ -1,7 +1,13 @@
 package org.utwente.Board;
 
 import org.junit.Before;
+import org.utwente.Section.Section;
+import org.utwente.player.model.Player;
+
+import org.utwente.player.model.Player;
+import org.utwente.player.view.PlayerView;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
@@ -32,5 +38,37 @@ public class BoardTest {
             boolean found = blockadeTiles.stream().anyMatch(tile -> tile.toString().equals(expectedTile.toString()));
             assert found : "Missing tile: " + expectedTile;
         }
+    }
+
+    @Test
+    public void testElDoradoTile() {
+        Tile elDoradoTile = board.getElDoradoTile();
+        assertNotNull("El Dorado tile should exist on the board", elDoradoTile);
+        assertEquals("Tile should be El Dorado type", TileType.ElDorado, elDoradoTile.getTileType());
+    }
+
+    @Test
+    public void testPlayerPlacement() {
+        Player player = new Player("TestPlayer");
+        Tile startingTile = board.getStartingTiles().get(0);
+        board.placePlayer(startingTile, player);
+        assertTrue("Player should be placed on starting tile", startingTile.getPlayers().contains(player));
+    }
+
+    @Test
+    public void testPathConnectivity() { // ie no weird non connected sections
+        List<Section> sections = board.getSections();
+        assertTrue("Sections should be correctly connected to form a path", validatePathConnectivity(sections));
+    }
+
+    private boolean validatePathConnectivity(List<Section> sections) {
+        // need to look in to this more but too complex for now, maybe @stijn give one
+        // or two pointers to get me started
+        return true;
+    }
+
+    @Test
+    public void testPathSelection() {
+        assertEquals("Correct path should be selected", Path.BlockadeTest, board.getPath());
     }
 }

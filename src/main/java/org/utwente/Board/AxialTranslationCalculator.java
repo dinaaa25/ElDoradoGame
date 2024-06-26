@@ -10,8 +10,8 @@ public class AxialTranslationCalculator {
     public record AxialTranslation(int q, int r) {
     }
 
-    private AxialTranslation getTranslationSmallRectangle(SectionWithRotationPositionSectionDirection sectionWithData,
-                                                          CoordinateBounds coordinateBounds) {
+    AxialTranslation getTranslationSmallRectangle(SectionWithRotationPositionSectionDirection sectionWithData,
+                                                  CoordinateBounds coordinateBounds) {
 
         SectionDirectionType.PointyTopSectionDirection sectionDirection = SectionDirectionType.toPointyTopSectionDirection(sectionWithData.getSectionDirection());
         int rotation = sectionWithData.getRotation();
@@ -59,8 +59,8 @@ public class AxialTranslationCalculator {
         };
     }
 
-    private AxialTranslation getTranslationElDorado(SectionWithRotationPositionSectionDirection sectionWithData,
-                                                    CoordinateBounds coordinateBounds) {
+    AxialTranslation getTranslationElDorado(SectionWithRotationPositionSectionDirection sectionWithData,
+                                            CoordinateBounds coordinateBounds) {
         SectionDirectionType.SectionDirection sectionDirection = sectionWithData.getSectionDirection();
         int rotation = sectionWithData.getRotation();
         if (sectionDirection instanceof SectionDirectionType.PointyTopSectionDirection pointyTopSectionDirection) {

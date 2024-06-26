@@ -5,11 +5,12 @@ stages:
 
 variables:
   DOCKER_TLS_CERTDIR: "/certs"
+  JAVA_OPTS: "-Djava.awt.headless=true"
 
 build:
   stage: build
   before_script:
-    - apk add --no-cache openjdk17 gradle curl # Install JDK 17
+    - apk add --no-cache openjdk21 gradle curl # Install JDK 21
     - chmod +x ./gradlew
   script:
     - ./gradlew clean assemble
@@ -30,7 +31,8 @@ test:
   dependencies:
     - build
   before_script:
-    - apk add --no-cache openjdk17 gradle # gitlab creates clean environment per stage, need to install jdk again here
+    - apk add --no-cache fontconfig ttf-dejavu openjdk17 openjdk21 gradle # gitlab creates clean environment per stage, need to install jdk again here
+
     - chmod +x ./gradlew
   script:
     - ./gradlew clean test # run tests
@@ -38,6 +40,7 @@ test:
     when: always
     paths:
       - build/reports/tests/test
+      - build/reports/tests/jacoco
     reports:
       junit: build/test-results/test/TEST-*.xml
     expire_in: 1 week

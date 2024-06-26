@@ -12,6 +12,7 @@ public class Configuration {
   public boolean gui;
   public String loggingLevel;
   public boolean freeMarket;
+  public boolean xray; // Added xray variable
 
   static Configuration _instance;
 
@@ -31,7 +32,7 @@ public class Configuration {
     if (_instance == null) {
       _instance = loadConfigurationFromFile();
       if (_instance == null) {
-        _instance = new Configuration(true, "ALL", false);
+        _instance = new Configuration(true, "ALL", false, false);
       }
     }
 
@@ -40,12 +41,13 @@ public class Configuration {
 
   @JsonCreator
   private Configuration(
-      @JsonProperty("gui") boolean gui,
-      @JsonProperty("loggingLevel") String loggingLevel,
-      @JsonProperty("freeMarket") boolean freeMarket) {
+          @JsonProperty("gui") boolean gui,
+          @JsonProperty("loggingLevel") String loggingLevel,
+          @JsonProperty("freeMarket") boolean freeMarket,
+          @JsonProperty("xray") boolean xray) { // Updated constructor
     this.gui = gui;
     this.loggingLevel = loggingLevel;
     this.freeMarket = freeMarket;
+    this.xray = xray;
   }
-
 }

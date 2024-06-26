@@ -2,6 +2,8 @@ plugins {
     id("java")
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("jacoco")
+
 }
 
 group = "org.utwente"
@@ -38,8 +40,12 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.6")
 }
 
+
+
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED", "-Djava.awt.headless=true")
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 java {
@@ -47,6 +53,45 @@ java {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:unchecked")
+}
+
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) 
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+
+tasks {
+    val javadoc by getting(Javadoc::class) {
+        source = sourceSets["main"].allJava
+
+        classpath = sourceSets["main"].compileClasspath
+
+
+        destinationDir = layout.buildDirectory.dir("docs/javadoc").get().asFile
+
+        options {
+             val opts = this as StandardJavadocDocletOptions
+            opts.encoding = "UTF-8"
+            opts.charSet = "UTF-8"
+            opts.links("https://docs.oracle.com/javase/21/docs/api/")        }
+    }
+}
+
+
+
 
 application {
     mainClass.set("org.utwente.Main")
