@@ -30,7 +30,7 @@ test:
   dependencies:
     - build
   before_script:
-    - apk add --no-cache openjdk17 gradle # gitlab creates clean environment per stage, need to install jdk again here
+    - apk add --no-cache openjdk17 openjdk21 gradle # gitlab creates clean environment per stage, need to install jdk again here
     - chmod +x ./gradlew
   script:
     - ./gradlew clean test # run tests
