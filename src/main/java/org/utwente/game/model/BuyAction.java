@@ -27,6 +27,8 @@ public class BuyAction extends Action {
         try {
             if (Configuration.getInstance().freeMarket) {
                 Card boughtCard = this.market.buy(this.order.getCardToken());
+                //added print to make sure that we recognize that this is not a normal behavior
+                System.out.println("FREEMARKET: Moving bought card to play pile instead of discarding");
                 this.player.getPlayPile().add(boughtCard);
                 return;
             }
@@ -36,7 +38,7 @@ public class BuyAction extends Action {
                 return;
             }
             this.boughtCard = this.market.buy(this.order);
-            this.player.getDiscardPile().add(boughtCard);
+            this.player.getFaceUpDiscardPile().add(this.boughtCard);
         } catch (BuyException buyException) {
 
         }
@@ -44,7 +46,7 @@ public class BuyAction extends Action {
 
     /**
      * iterate over the list of resources and translate each resource to money
-     * 
+     *
      * @return int value of money value for all resources in this.resources
      */
     private int getTotalMoney() {

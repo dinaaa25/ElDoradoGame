@@ -1,7 +1,7 @@
 package org.utwente.player.view.gui;
 
 import javax.swing.*;
-
+import  java.util.ArrayList;
 import org.utwente.CaveCoin.PlayCaveCoins;
 import org.utwente.game.model.EffectStep;
 import org.utwente.game.model.Phase;
@@ -17,14 +17,15 @@ import java.awt.*;
 public class PlayerDeck extends JPanel {
   int col = 0;
   Phase phase;
+  private JButton nextTurnButton;
 
   public PlayerDeck(Player player, Phase phase) {
     super(new BorderLayout());
     this.phase = phase;
     addPlayerRow(player);
-    addDiscardPile(player);
     addDeck(player);
     addDrawPile(player);
+    addDiscardPanel(player);
     if (phase.getActionMessage() != null) {
       this.setNotification(phase.getActionMessage());
     }
@@ -78,9 +79,7 @@ public class PlayerDeck extends JPanel {
       actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.MakeMove));
     } else if (phase.getCurrentPhase() == PhaseType.DISCARD_PHASE) {
       actionButton.setText("Discard Currently Selected Cards");
-      actionButton.addActionListener(l -> {
-        EventManager.getInstance().notifying(EventType.DiscardCards);
-      });
+      actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.DiscardCards));
     } else if (phase.getCurrentPhase() == PhaseType.DRAW_PHASE) {
       actionButton.setText("Draw Cards");
       actionButton.addActionListener(l -> EventManager.getInstance().notifying(EventType.DrawCards));
@@ -135,9 +134,8 @@ public class PlayerDeck extends JPanel {
     this.add(new DrawPile(sizeOfDrawPile), BorderLayout.WEST);
   }
 
-  public void addDiscardPile(Player player) {
-    int sizeOfDiscardPile = player.getDiscardPile().getCards().size();
-    this.add(new DiscardCard(sizeOfDiscardPile), BorderLayout.EAST);
+  public void addDiscardPanel(Player player) {
+    this.add(new DiscardPanel(player), BorderLayout.EAST);
   }
 
   private void addDeck(Player player) {

@@ -44,8 +44,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    finalizedBy(tasks.jacocoTestReport) 
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED", "-Djava.awt.headless=true")
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 java {

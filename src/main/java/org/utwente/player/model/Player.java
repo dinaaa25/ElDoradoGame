@@ -2,6 +2,7 @@ package org.utwente.player.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.EqualsAndHashCode;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.market.model.Resource;
@@ -12,9 +13,11 @@ import org.utwente.util.ShuffleUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = "name")
 public class Player {
     public static final int DECK_CARDS = 4;
     private String name;
@@ -26,6 +29,7 @@ public class Player {
     private CardPile drawPile;
     private CoinPile caveCoinPile;
     private CoinPile outOfGameCoinsPile;
+    private CardPile faceUpDiscardPile;
 
     public Player(String name) {
         this.name = name;
@@ -40,6 +44,15 @@ public class Player {
         this.drawPile = startPile;
         this.caveCoinPile = builder.buildCaveCoinPile();
         this.outOfGameCoinsPile = builder.buildOutOfGameCoinPile();
+        this.faceUpDiscardPile = new CardPile(new ArrayList<>(), this, PileType.FaceUpDiscard);
+
+    }
+    public CardPile getFaceUpDiscardPile() {
+        return faceUpDiscardPile;
+    }
+
+    public void clearFaceUpDiscardPile() {
+        faceUpDiscardPile = new CardPile(new ArrayList<>(), this, PileType.FaceUpDiscard);
     }
 
     public String getName() {
@@ -48,7 +61,7 @@ public class Player {
 
     public void discardResource(Resource resource) {
         if (resource instanceof Card) {
-            discardPile.add((Card) resource);
+            faceUpDiscardPile.add((Card) resource);
             playPile.remove((Card) resource);
         }
         else if (resource instanceof CaveCoin) {
@@ -91,17 +104,38 @@ public class Player {
                 .orElse(null);
     }
 
-    @Override
-    public boolean equals(Object p) {
-        if (p instanceof Player) {
-            Player elPlayer = (Player) p;
-            return this.getName().equals(elPlayer.getName());
-        }
-        return false;
-    }
-
     public void discardCoin(CaveCoin coin) {
         this.caveCoinPile.remove(coin);
     }
 
+
+    public void xRayEyes() {
+        System.out.println("-----[xRayEyes]-----");
+        System.out.println("drawPile: " + getCardsAsString(drawPile));
+        System.out.println("discardPile: " + getCardsAsString(discardPile));
+        System.out.println("playPile: " + getCardsAsString(playPile));
+        System.out.println("faceUpDiscardPile: " + getCardsAsString(faceUpDiscardPile));
+        System.out.println("outOfGamePile: " + getCardsAsString(outOfGamePile));
+        System.out.println("caveCoinPile: " + getCoinsAsString(caveCoinPile));
+        System.out.println("outOfGameCoinsPile: " + getCoinsAsString(outOfGameCoinsPile));
+        System.out.println();
+    }
+
+    private String getCardsAsString(CardPile cardPile) {
+        if (cardPile == null || cardPile.getCards() == null) {
+            return "No cards";
+        }
+        return cardPile.getCards().stream()
+                .map(card -> card.getCardType().name())
+                .collect(Collectors.joining(", "));
+    }
+
+    private String getCoinsAsString(CoinPile coinPile) {
+        if (coinPile == null || coinPile.getResources() == null) {
+            return "No coins";
+        }
+        return coinPile.getResources().stream()
+                .map(coin -> coin.getCaveCoinType().name())
+                .collect(Collectors.joining(", "));
+    }
 }

@@ -5,7 +5,7 @@ public enum CardType {
   Forscher(1, null, PowerType.Machete),
   Entdecker(3, 3, PowerType.Machete),
   Pionier(5, 5, PowerType.Machete),
-  MachtigeMachete(6, 3, PowerType.Machete),
+  MachtigeMachete(6, 3, PowerType.Machete, true, null),
   Kapitan(3, 2, PowerType.Paddle),
   Matrose(1, null, PowerType.Paddle),
   Reisende(1, null, PowerType.Coin),
