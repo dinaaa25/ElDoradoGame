@@ -34,7 +34,7 @@ public abstract class HexButton extends JButton {
     return new Dimension(hexagonRadius * 2, hexagonRadius * 2);
   }
 
-  protected Point2D.Double[] createHexagonVertices(boolean flatTop) {
+  public Point2D.Double[] createHexagonVertices(boolean flatTop) {
     Point2D.Double[] vertices = new Point2D.Double[6];
     for (int i = 0; i < 6; i++) {
       double angle = flatTop ? Math.PI / 3 * i : 2 * Math.PI / 6 * (i + 0.5);
@@ -45,7 +45,7 @@ public abstract class HexButton extends JButton {
     return vertices;
   }
 
-  protected Path2D.Double createHexagonPath(Point2D.Double[] vertices) {
+  public Path2D.Double createHexagonPath(Point2D.Double[] vertices) {
     Path2D.Double hexagon = new Path2D.Double();
     hexagon.moveTo(vertices[0].x, vertices[0].y);
     for (int i = 1; i < vertices.length; i++) {

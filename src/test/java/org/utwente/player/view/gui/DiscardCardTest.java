@@ -15,7 +15,7 @@ class DiscardCardTest {
     @Test
     void testNewDiscardCard() {
         // Arrange, Act and Assert
-        Color background = (new DiscardCard()).getBackground();
+        Color background = (new DiscardCard(1)).getBackground();
         ColorSpace expectedColorSpace = background.getColorSpace();
         assertSame(expectedColorSpace, background.darker().getColorSpace());
     }

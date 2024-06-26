@@ -15,6 +15,7 @@ public class CardComponent extends JButton {
   private final Card card;
   private boolean selected;
   private double scaleFactor;
+  private Object cardType;
 
   public CardComponent(Card card) {
     this(card, null, card.remainingPower(), false, 1.0);
@@ -39,6 +40,7 @@ public class CardComponent extends JButton {
   public CardComponent(Card card, Integer remainingAmount, Integer remainingPower, boolean selected, double scaleFactor) {
     super();
     this.card = card;
+    this.cardType = card.getCardType();
     this.selected = selected;
     this.scaleFactor = scaleFactor;
     setup();
@@ -112,5 +114,9 @@ public class CardComponent extends JButton {
     name.setFont(MarketConfig.MARKET_CARD_NAME);
     name.setForeground(MarketConfig.MARKET_TEXT_COLOR);
     this.add(name);
+  }
+
+  public Object getCardType() {
+    return cardType;
   }
 }

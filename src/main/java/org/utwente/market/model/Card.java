@@ -31,6 +31,9 @@ public class Card implements Resource {
     }
 
     public void removePower(int toBeRemoved) throws CardPowerException {
+        if (toBeRemoved < 0) {
+            throw new IllegalArgumentException("Power to remove cannot be negative.");
+        }
         if (toBeRemoved > remainingPower()) {
             throw new CardPowerException("Not enough power to remove.");
         }

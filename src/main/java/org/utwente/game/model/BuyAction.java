@@ -46,7 +46,7 @@ public class BuyAction extends Action {
 
     /**
      * iterate over the list of resources and translate each resource to money
-     * 
+     *
      * @return int value of money value for all resources in this.resources
      */
     private int getTotalMoney() {

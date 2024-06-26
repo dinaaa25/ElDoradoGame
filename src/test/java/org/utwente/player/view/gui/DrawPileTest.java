@@ -14,7 +14,7 @@ class DrawPileTest {
     @Test
     void testNewDrawPile() {
         // Arrange, Act and Assert
-        Color background = (new DrawPile()).getBackground();
+        Color background = (new DrawPile(1).getBackground());
         ColorSpace expectedColorSpace = background.getColorSpace();
         assertSame(expectedColorSpace, background.darker().getColorSpace());
     }

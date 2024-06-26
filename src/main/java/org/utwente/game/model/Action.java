@@ -1,13 +1,11 @@
 package org.utwente.game.model;
 
 import org.slf4j.LoggerFactory;
-import org.utwente.game.view.gui.GameGui;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 
 import ch.qos.logback.classic.Logger;
-import lombok.val;
 
 import java.util.List;
 

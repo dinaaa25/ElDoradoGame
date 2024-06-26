@@ -168,7 +168,7 @@ class HexButtonTest {
         Graphics2D g2d = mock(Graphics2D.class);
 
         // Act
-        caveCoinView.drawHexagon(tile, vertices, g2d);
+        caveCoinView.drawHexagon( vertices, g2d);
 
         // Assert
         // You can verify interactions with the mock object if needed
@@ -186,7 +186,7 @@ class HexButtonTest {
         Point2D.Double[] vertices = new Point2D.Double[]{new Point2D.Double(10.0d, 10.0d), new Point2D.Double(20.0d, 20.0d)};
 
         // Act & Assert
-        assertThrows(NullPointerException.class, () -> caveCoinView.drawHexagon(tile, vertices, null));
+        assertThrows(NullPointerException.class, () -> caveCoinView.drawHexagon( vertices, null));
     }
 
 
@@ -197,7 +197,7 @@ class HexButtonTest {
     void testPaintComponent() {
         // Arrange
         Tile tile = new Tile(1, 1, TileType.Machete, 1, true);
-        HexButton hexButton = new HexButton(false, tile, 50) {
+        HexButton hexButton = new HexButton(false, tile, 50,false) {
             @Override
             protected void setTileTexture(Graphics2D g) {
                 // Implement the abstract method with a simple operation

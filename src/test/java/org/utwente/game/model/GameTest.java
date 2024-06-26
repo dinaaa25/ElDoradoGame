@@ -14,7 +14,9 @@ import org.utwente.Section.Section;
 import org.utwente.Section.SectionType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
+import org.utwente.market.model.Card;
 import org.utwente.market.model.Market;
+import org.utwente.player.model.CardPile;
 import org.utwente.player.model.Player;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -643,18 +645,20 @@ class GameTest {
         Game actualGame = new Game();
 
         // Assert
+        Phase phase = actualGame.getPhase();
+        assertNull(phase.getActionMessage());
         assertEquals(0, actualGame.getWaitCounter());
         assertEquals(0, actualGame.getWaitingPlayerIndex());
         Market market = actualGame.getMarket();
         assertEquals(11, market.getReserve().size());
         assertEquals(6, market.getCurrent().size());
-        Phase phase = actualGame.getPhase();
         assertEquals(PhaseType.BUYING_AND_PLAYING_PHASE, phase.getCurrentPhase());
         assertFalse(actualGame.isEnteredWaitingState());
         assertFalse(actualGame.isFinished());
         assertFalse(phase.isMoveThoughPlayers());
         assertTrue(actualGame.getMaxBlockadePlayers().isEmpty());
-        assertTrue(phase.getPlayedCards().isEmpty());
+        assertTrue(phase.getPlayedResources().isEmpty());
+        assertTrue(phase.getSelectedResources().isEmpty());
     }
 
     /**
@@ -672,18 +676,20 @@ class GameTest {
         // Assert
         assertEquals("Game Description", actualGame.getGameDescription());
         assertEquals("Game Name", actualGame.getGameName());
+        Phase phase = actualGame.getPhase();
+        assertNull(phase.getActionMessage());
         assertEquals(0, actualGame.getWaitCounter());
         assertEquals(0, actualGame.getWaitingPlayerIndex());
         Market market = actualGame.getMarket();
         assertEquals(11, market.getReserve().size());
         assertEquals(6, market.getCurrent().size());
-        Phase phase = actualGame.getPhase();
         assertEquals(PhaseType.BUYING_AND_PLAYING_PHASE, phase.getCurrentPhase());
         assertFalse(actualGame.isEnteredWaitingState());
         assertFalse(actualGame.isFinished());
         assertFalse(actualGame.isInWaitingState());
         assertFalse(phase.isMoveThoughPlayers());
-        assertTrue(phase.getPlayedCards().isEmpty());
+        assertTrue(phase.getPlayedResources().isEmpty());
+        assertTrue(phase.getSelectedResources().isEmpty());
         assertEquals(sections, actualGame.getMaxBlockadePlayers());
     }
 
@@ -699,25 +705,11 @@ class GameTest {
         ArrayList<Player> players = new ArrayList<>();
         players.add(new Player("Name"));
 
-        // Act
-        Game actualGame = new Game("Game Name", "Game Description", board, players);
-
-        // Assert
-        assertEquals("Game Description", actualGame.getGameDescription());
-        assertEquals("Game Name", actualGame.getGameName());
-        assertEquals(0, actualGame.getWaitCounter());
-        assertEquals(0, actualGame.getWaitingPlayerIndex());
-        Market market = actualGame.getMarket();
-        assertEquals(11, market.getReserve().size());
-        assertEquals(6, market.getCurrent().size());
-        Phase phase = actualGame.getPhase();
-        assertEquals(PhaseType.BUYING_AND_PLAYING_PHASE, phase.getCurrentPhase());
-        assertFalse(actualGame.isEnteredWaitingState());
-        assertFalse(actualGame.isFinished());
-        assertFalse(actualGame.isInWaitingState());
-        assertFalse(phase.isMoveThoughPlayers());
-        assertTrue(phase.getPlayedCards().isEmpty());
-        assertEquals(sections, actualGame.getMaxBlockadePlayers());
+        // Act and Assert
+        CardPile faceUpDiscardPile = (new Game("Game Name", "Game Description", board, players)).getCurrentPlayer()
+                .getFaceUpDiscardPile();
+        List<Card> expectedCards = faceUpDiscardPile.getResources();
+        assertSame(expectedCards, faceUpDiscardPile.getCards());
     }
 
     /**
@@ -733,26 +725,14 @@ class GameTest {
         players.add(new Player("Name"));
         players.add(new Player("Name"));
 
-        // Act
-        Game actualGame = new Game("Game Name", "Game Description", board, players);
-
-        // Assert
-        assertEquals("Game Description", actualGame.getGameDescription());
-        assertEquals("Game Name", actualGame.getGameName());
-        assertEquals(0, actualGame.getWaitCounter());
-        assertEquals(0, actualGame.getWaitingPlayerIndex());
-        Market market = actualGame.getMarket();
-        assertEquals(11, market.getReserve().size());
-        assertEquals(6, market.getCurrent().size());
-        Phase phase = actualGame.getPhase();
-        assertEquals(PhaseType.BUYING_AND_PLAYING_PHASE, phase.getCurrentPhase());
-        assertFalse(actualGame.isEnteredWaitingState());
-        assertFalse(actualGame.isFinished());
-        assertFalse(actualGame.isInWaitingState());
-        assertFalse(phase.isMoveThoughPlayers());
-        assertTrue(phase.getPlayedCards().isEmpty());
-        assertEquals(sections, actualGame.getMaxBlockadePlayers());
+        // Act and Assert
+        CardPile faceUpDiscardPile = (new Game("Game Name", "Game Description", board, players)).getCurrentPlayer()
+                .getFaceUpDiscardPile();
+        List<Card> expectedCards = faceUpDiscardPile.getResources();
+        assertSame(expectedCards, faceUpDiscardPile.getCards());
     }
+
+    
 
 
 

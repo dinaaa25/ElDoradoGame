@@ -2,6 +2,7 @@ package org.utwente.player.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.EqualsAndHashCode;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
 import org.utwente.market.model.Resource;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = "name")
 public class Player {
     public static final int DECK_CARDS = 4;
     private String name;
@@ -100,15 +102,6 @@ public class Player {
         return blockades.stream()
                 .max(Comparator.comparingInt(Blockade::getPower))
                 .orElse(null);
-    }
-
-    @Override
-    public boolean equals(Object p) {
-        if (p instanceof Player) {
-            Player elPlayer = (Player) p;
-            return this.getName().equals(elPlayer.getName());
-        }
-        return false;
     }
 
     public void discardCoin(CaveCoin coin) {
