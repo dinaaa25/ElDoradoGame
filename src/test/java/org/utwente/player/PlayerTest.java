@@ -1,9 +1,6 @@
 package org.utwente.player;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -57,10 +54,10 @@ public class PlayerTest {
     Player anotherPlayer = new Player("TestPlayer");
     Player differentPlayer = new Player("DifferentPlayer");
 
-    assertTrue(player.equals(anotherPlayer));
-    assertFalse(player.equals(differentPlayer));
-    assertFalse(player.equals(null));
-    assertFalse(player.equals("SomeString"));
+      assertEquals(player, anotherPlayer);
+      assertNotEquals(player, differentPlayer);
+      assertNotEquals(null, player);
+      assertNotEquals("SomeString", player);
   }
 
   @Test

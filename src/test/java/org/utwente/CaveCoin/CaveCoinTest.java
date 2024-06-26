@@ -27,13 +27,13 @@ public class CaveCoinTest {
                 .toList();
         assertEquals(7, macheteCoins.size());
 
-        List<CaveCoin> macheteCoinsPower1 = macheteCoins.stream().filter(coin -> coin.getPower() == 1).toList();
+        List<CaveCoin> macheteCoinsPower1 = macheteCoins.stream().filter(coin -> coin.power() == 1).toList();
         assertEquals(2, macheteCoinsPower1.size());
 
-        List<CaveCoin> macheteCoinsPower2 = macheteCoins.stream().filter(coin -> coin.getPower() == 2).toList();
+        List<CaveCoin> macheteCoinsPower2 = macheteCoins.stream().filter(coin -> coin.power() == 2).toList();
         assertEquals(3, macheteCoinsPower2.size());
 
-        List<CaveCoin> macheteCoinsPower3 = macheteCoins.stream().filter(coin -> coin.getPower() == 3).toList();
+        List<CaveCoin> macheteCoinsPower3 = macheteCoins.stream().filter(coin -> coin.power() == 3).toList();
         assertEquals(2, macheteCoinsPower3.size());
     }
 
@@ -44,10 +44,10 @@ public class CaveCoinTest {
                 .toList();
         assertEquals(5, paddleCoins.size());
 
-        List<CaveCoin> macheteCoinsPower1 = paddleCoins.stream().filter(coin -> coin.getPower() == 1).toList();
+        List<CaveCoin> macheteCoinsPower1 = paddleCoins.stream().filter(coin -> coin.power() == 1).toList();
         assertEquals(2, macheteCoinsPower1.size());
 
-        List<CaveCoin> macheteCoinsPower2 = paddleCoins.stream().filter(coin -> coin.getPower() == 2).toList();
+        List<CaveCoin> macheteCoinsPower2 = paddleCoins.stream().filter(coin -> coin.power() == 2).toList();
         assertEquals(3, macheteCoinsPower2.size());
     }
 
@@ -58,10 +58,10 @@ public class CaveCoinTest {
                 .toList();
         assertEquals(5, coinCoins.size());
 
-        List<CaveCoin> macheteCoinsPower1 = coinCoins.stream().filter(coin -> coin.getPower() == 1).toList();
+        List<CaveCoin> macheteCoinsPower1 = coinCoins.stream().filter(coin -> coin.power() == 1).toList();
         assertEquals(2, macheteCoinsPower1.size());
 
-        List<CaveCoin> macheteCoinsPower2 = coinCoins.stream().filter(coin -> coin.getPower() == 2).toList();
+        List<CaveCoin> macheteCoinsPower2 = coinCoins.stream().filter(coin -> coin.power() == 2).toList();
         assertEquals(3, macheteCoinsPower2.size());
     }
 

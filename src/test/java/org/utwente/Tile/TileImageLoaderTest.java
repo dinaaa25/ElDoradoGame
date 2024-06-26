@@ -18,4 +18,16 @@ public class TileImageLoaderTest {
             }
         }
     }
+    @Test
+    void testGetTileImage() {
+        assertNotNull((new TileImageLoader()).getImage(TileType.Machete, 1));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Paddle, 1));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Coin, 1));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Basecamp, 1));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Discard, 1));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Mountain,0));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Cave, 0));
+        assertNotNull((new TileImageLoader()).getImage(TileType.ElDorado, 0));
+        assertNotNull((new TileImageLoader()).getImage(TileType.Start, 0));
+    }
 }
