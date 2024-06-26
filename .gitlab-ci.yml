@@ -16,6 +16,7 @@ build:
     - ./gradlew shadowJar
   artifacts:
     paths:
+      - build/libs/*.jar
       - build/reports/tests/test
     reports:
       junit: build/test-results/test/TEST-*.xml
