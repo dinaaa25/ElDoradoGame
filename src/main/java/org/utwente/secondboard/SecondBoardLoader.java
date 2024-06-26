@@ -8,7 +8,6 @@ import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.secondboard.boardPieces.HexagonGameBoard;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class SecondBoardLoader {
         return TileType.Paddle;
     }
 
-    Board getConvertedBoard() {
+    public Board getConvertedBoard() {
         HexagonGameBoard board = new HexagonGameBoard(28, 28, 30,false);
         List<Tile> tiles = new ArrayList<>();
         for (org.utwente.secondboard.boardPieces.Tile tile : board.boardPieces.get("Terrain_1").getTiles()) {
@@ -38,7 +37,19 @@ public class SecondBoardLoader {
         Section section = new Section(tiles, SectionType.A);
         Board board2 = new Board(List.of(section), null, true, List.of());
         System.out.println(board2);
-        return board2;
+        return setStartingTiles(board2);
+    }
+
+    public Board setStartingTiles(Board board) {
+        int count = 0;
+        for (Section section : board.getSections()) {
+            for (Tile tile : section.getTiles()) {
+                if (count > 4) return board;
+                tile.setTileType(TileType.Start);
+                count++;
+            }
+        }
+        return board;
     }
 
     public static void main(String[] args) {

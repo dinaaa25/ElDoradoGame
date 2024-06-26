@@ -16,6 +16,7 @@ import org.utwente.market.model.Resource;
 import org.utwente.player.model.CardPile;
 import org.utwente.player.model.PileType;
 import org.utwente.player.model.Player;
+import org.utwente.secondboard.SecondBoardLoader;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.*;
 import org.utwente.game.model.Configuration;
@@ -309,9 +310,17 @@ public class GameController {
     void onPickBoard(Event event) {
         if (event instanceof PickBoardEvent) {
             PickBoardEvent data = (PickBoardEvent) event;
-            Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-            Board board = boardBuilder.selectPath(data.getPath()).buildPath().addCaveCoinTiles().addBlockades()
-                    .build();
+            Board board;
+            if (data.isOtherBoard() || true) {
+                SecondBoardLoader secondBoardLoader = new SecondBoardLoader();
+                board = secondBoardLoader.getConvertedBoard();
+
+            } else {
+                Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
+                board = boardBuilder.selectPath(data.getPath()).buildPath().addCaveCoinTiles().addBlockades()
+                        .build();
+
+            }
             this.game.setBoard(board);
             this.game.placePlayersStart();
             this.gameView.setGameStage();
