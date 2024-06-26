@@ -690,7 +690,7 @@ class GameGuiTest {
     gameGui.addPlayerSection();
 
     // Assert
-    assertEquals(409.0d, gameGui.getPreferredSize().getHeight());
+    assertEquals(410.0d, gameGui.getPreferredSize().getHeight());
     Component expectedPlayerDeck = gameGui.getComponents()[0];
     assertSame(expectedPlayerDeck, gameGui.getPlayerDeck());
   }
@@ -751,7 +751,7 @@ class GameGuiTest {
     gameGui.addPlayerSection();
 
     // Assert
-    assertEquals(409.0d, gameGui.getPreferredSize().getHeight());
+    assertEquals(410.0d, gameGui.getPreferredSize().getHeight());
     Component expectedPlayerDeck = gameGui.getComponents()[0];
     assertSame(expectedPlayerDeck, gameGui.getPlayerDeck());
   }

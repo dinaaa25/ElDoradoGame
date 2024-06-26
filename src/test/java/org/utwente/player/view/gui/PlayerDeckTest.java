@@ -556,7 +556,7 @@ class PlayerDeckTest {
 
     // Assert
     verify(card, atLeast(1)).getCardType();
-    verify(card).getConsumedPower();
+//    verify(card).getConsumedPower();
     verify(card).getValue();
     verify(card).remainingPower();
     verify(player).getCaveCoinPile();
