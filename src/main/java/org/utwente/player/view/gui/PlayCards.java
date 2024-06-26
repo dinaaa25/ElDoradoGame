@@ -17,6 +17,9 @@ public class PlayCards extends JPanel {
     public PlayCards(CardPile pile, Phase phase) {
         super(new FlowLayout());
         for (Card card : pile.getResources()) {
+            if (phase != null && phase.getEffectPhase() != null && phase.getEffectPhase().getResource() == card) {
+                continue;
+            }
             CardComponent cardComponent = new CardComponent(card, phase.getSelectedResources().contains(card));
             cardComponent.addActionListener(
                     e -> EventManager.getInstance().notifying(EventType.PlayCards, new PlayCardEvent(card)));

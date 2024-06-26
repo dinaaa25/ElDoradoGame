@@ -2,6 +2,10 @@ package org.utwente.game;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.utwente.Board.Board;
+import org.utwente.Board.Path;
+import org.utwente.Section.Section;
+import org.utwente.Section.SectionType;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.game.model.Action;
@@ -21,6 +25,8 @@ public class MoveActionTest {
 
     Tile tileTo;
     Tile tileFrom;
+    Section section;
+    Board board;
     Player dina;
     Player mark;
 
@@ -28,18 +34,22 @@ public class MoveActionTest {
     public void setUp() {
         tileTo = new Tile(0, 1, TileType.Machete, 2, new ArrayList<>(), false);
         tileFrom = new Tile(0, 0, TileType.Paddle, 2, new ArrayList<>(), false);
+        section = new Section(List.of(tileTo, tileFrom), SectionType.A);
+        board = new Board(List.of(section), Path.HillsOfGold, false, List.of());
         dina = new Player("Dina");
         mark = new Player("Mark");
         tileFrom.placePlayer(dina);
+        tileTo.setBoard(board);
+        tileFrom.setBoard(board);
     }
 
     @Test
     public void testMovePlayerToTile() {
         Resource card = new Card(CardType.Entdecker);
-        Action move = new MoveAction(dina, card, tileFrom, tileTo, new Phase());
+        Action move = new MoveAction(dina, card, tileFrom, tileTo);
 
-        assertEquals(tileFrom.isEmpty(), false);
-        assertEquals(tileTo.isEmpty(), true);
+        assertFalse(tileFrom.isEmpty());
+        assertTrue(tileTo.isEmpty());
 
         move.execute();
 

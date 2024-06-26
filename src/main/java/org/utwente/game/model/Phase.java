@@ -18,6 +18,7 @@ public class Phase {
     private boolean moveThoughPlayers;
     private Tile selectedTile;
     private ValidationResult actionMessage;
+  private EffectPhase effectPhase;
 
     public Phase() {
         this.currentPhase = PhaseType.BUYING_AND_PLAYING_PHASE;
@@ -27,14 +28,10 @@ public class Phase {
     }
 
     public void next() {
-        System.out.println("[ DEBUG A ] " + this.toString());
         this.selectedResources.removeAllElements();
         this.selectedTile = null;
         this.currentPhase = currentPhase.next();
-        // print the phase string to console,for debugging
     }
-
-
 
     public void addPlayedResource(Resource resource) {
         this.playedResources.push(resource);

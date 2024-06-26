@@ -10,6 +10,8 @@ import org.utwente.game.model.*;
 import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.Card;
+import org.utwente.market.model.CardPowerException;
+import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
 import org.utwente.player.model.CardPile;
 import org.utwente.player.model.PileType;
@@ -21,7 +23,6 @@ import org.utwente.game.model.Configuration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 @Getter
 public class GameController {
@@ -49,13 +50,55 @@ public class GameController {
         eventManager.subscribe(this::onPlayerCaveCoinClick, EventType.ClickCaveCoin);
         eventManager.subscribe(this::onDiscardCards, EventType.DiscardCards);
         eventManager.subscribe(this::onDrawCards, EventType.DrawCards);
-
+        eventManager.subscribe(this::onScientistStep1, EventType.ScientistStep1);
+        eventManager.subscribe(this::onScientistStep2, EventType.ScientistStep2);
+        eventManager.subscribe(this::onCartographerEvent, EventType.CartographerEvent);
+        eventManager.subscribe(this::onEffectPhaseDone, EventType.EffectPhaseDone);
     }
 
     void onDrawCards(Event event) {
         Player currentPlayer = this.game.getCurrentPlayer();
         currentPlayer.drawPlayCards();
         this.gameView.redraw();
+    }
+
+    void onEffectPhaseDone(Event event) {
+        boolean result = game.getPhase().getEffectPhase().allMandatoryStepsCompleted();
+        if (!result) {
+            this.game.getPhase().setActionMessage(
+                    new ValidationResult(false, "Not all mandatory steps of the phase are completed."));
+        } else {
+            this.game.getPhase().getEffectPhase().discardEffectResource();
+            this.game.getPhase().setActionMessage(new ValidationResult(true,
+                    game.getPhase().getEffectPhase().getEffectPhaseEnum() + " phase successfully completed."));
+            this.game.getPhase().setEffectPhase(null);
+        }
+        this.gameView.redraw();
+    }
+
+    void onScientistStep1(Event event) {
+        try {
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep1);
+            DrawAction drawAction = new DrawAction(game.getCurrentPlayer(),
+                    game.getPhase().getEffectPhase().getResource());
+            drawAction.validateExecute();
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
+    }
+
+    void onScientistStep2(Event event) {
+        try {
+            game.getPhase().getEffectPhase().completeStep(EventType.ScientistStep2);
+            RemoveAction action = new RemoveAction(this.game.getCurrentPlayer(), getCurrentlySelectedResource());
+            action.validateExecute();
+        } catch (IllegalArgumentException e) {
+            this.game.getPhase().setActionMessage(new ValidationResult(false, e.toString()));
+        } finally {
+            this.gameView.redraw();
+        }
     }
 
     void onDiscardCards(Event event) {
@@ -80,6 +123,11 @@ public class GameController {
     }
 
     void onBuyCardFromMarket(Event event) {
+        // we could buy cards from market after drawing cards in p3 before this.
+        if (this.game.getPhase().getCurrentPhase() != PhaseType.BUYING_AND_PLAYING_PHASE){
+            this.game.getPhase().setActionMessage(new ValidationResult(false, "Not in the right phase to buy cards."));
+            return;
+        }
         if (event instanceof BuyEvent data) {
             List<Resource> resources = game.getPhase().getSelectedResources();
             BuyAction action = new BuyAction(this.game.getCurrentPlayer(), resources, data.getCardType(),
@@ -114,10 +162,8 @@ public class GameController {
         gameView.redraw();
     }
 
-    Card getCurrentlySelectedCard() {
+    Resource getCurrentlySelectedResource() {
         return game.getPhase().getSelectedResources().stream()
-                .filter(resource -> resource instanceof Card)
-                .map(resource -> (Card) resource)
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("No selected card found"));
     }
@@ -129,19 +175,54 @@ public class GameController {
                 .toList();
     }
 
-    void onMakeMove(Event event) {
-        Card selectedCard = getCurrentlySelectedCard();
-        if (selectedCard == null) {
-            System.err.println("No selected card found");
-            return; //catch
+    boolean triggerSubPhase(Resource resource) {
+        if (resource instanceof Card card) {
+            switch (card.getCardType()) {
+                case CardType.Wissenschaftlerin:
+                    this.game.getPhase()
+                            .setEffectPhase(new ScientistEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+                case CardType.Kartograph:
+                    this.game.getPhase()
+                            .setEffectPhase(new CartographerEffectPhase(resource, this.game.getCurrentPlayer()));
+                    return true;
+                default:
+                    break;
+            }
         }
-        MoveAction action = new MoveAction(this.game.getCurrentPlayer(), selectedCard,
-                game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile(),
-                game.getPhase());
+        if (resource instanceof CaveCoin coin) {
+
+        }
+
+        return false;
+    }
+
+    void onCartographerEvent(Event event) {
+        game.getPhase().getEffectPhase().completeStep(EventType.CartographerEvent);
+        DrawAction action = new DrawAction(this.game.getCurrentPlayer(),
+                this.game.getPhase().getEffectPhase().getResource());
         ValidationResult result = action.validateExecute();
-        this.game.getPhase().setActionMessage(result);
+        this.gameView.redraw();
+    }
+
+    void onMakeMove(Event event) {
+        Resource usedResource = getCurrentlySelectedResource();
+        // add played resource to phase.
+        this.game.getPhase().addPlayedResource(usedResource);
+        // trigger sub phase if needed.
+        // if this is triggered it's not necessary to move.
+        boolean subphaseTriggered = this.triggerSubPhase(usedResource);
+        if (!subphaseTriggered) {
+            MoveAction action = new MoveAction(this.game.getCurrentPlayer(), usedResource,
+                    game.getBoard().getTileOfPlayer(game.getCurrentPlayer()), this.game.getPhase().getSelectedTile());
+            ValidationResult result = action.validateExecute();
+            this.game.getPhase().setActionMessage(result);
+        } else {
+            game.getPhase().getSelectedResources().clear();
+        }
         removeSemiUsedResources(event);
         removeUsedResources(event);
+
         this.gameView.redraw();
     }
 
@@ -166,63 +247,44 @@ public class GameController {
         }
     }
 
+    void checklistEndPhase() {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (game.getPhase().getEffectPhase() != null) {
+            //additionally check if the effect phase is completed
+            game.getPhase().setActionMessage(new ValidationResult(false, "Effect phase not completed."));
+            return;
+        }
+        if (game.getPhase().getCurrentPhase() == PhaseType.DISCARD_PHASE) {
+            currentPlayer.getDiscardPile().addAll(currentPlayer.getFaceUpDiscardPile());
+            currentPlayer.clearFaceUpDiscardPile();
+        }
+        if (game.getPhase().getCurrentPhase() == PhaseType.DRAW_PHASE) {
+            //force draw if we try to end the draw phase without drawing all cards
+            currentPlayer.drawPlayCards();
+            int cardsToDraw= Player.DECK_CARDS- currentPlayer.getPlayPile().getCards().size();
+            if (cardsToDraw>0){
+                currentPlayer.getPlayPile().addAll(currentPlayer.getDrawPile().draw(cardsToDraw));
+            }
+        }
+        game.getPhase().setActionMessage(new ValidationResult(true, "All requirements met."));
+    }
+
+
     void onNextPhase(Event event) {
 
-        //run final checks of each phase
-        this.endPhase();
+        if (Configuration.getInstance().xray){
+            game.getCurrentPlayer().xRayEyes();
+        }
+
+        checklistEndPhase();
         game.nextPhase();
         gameView.setCurrentPhase();
         gameView.redraw();
     }
 
-    public void endPhase() {
-        // function to end the current phase and run associated actions/validations
-        // Maybe remove entirely saw mark was working on flow control aswell
-
-        Player currentPlayer = game.getCurrentPlayer();
-        PhaseType currentPhase = game.getPhase().getCurrentPhase();
-
-        if (Configuration.getInstance().xray){
-            currentPlayer.xRayEyes();
-        }
-
-        if (currentPhase == PhaseType.BUYING_AND_PLAYING_PHASE) {
-            // Move all played resources of type Card to the FaceUpDiscardPile
-            //List<Card> playedCards = currentPlayer.getPlayPile().getCards().stream()
-            //        .filter(card -> !currentPlayer.getOutOfGamePile().getCards().contains(card))
-            //        .collect(Collectors.toList());
-            // currentPlayer.getFaceUpDiscardPile().addAll(new CardPile(playedCards, currentPlayer, PileType.FaceUpDiscard));
-            // currentPlayer.getPlayPile().getCards().removeAll(playedCards);
-
-        } else if (currentPhase == PhaseType.DISCARD_PHASE) {
-            // Move all items from the face up discard pile to the main discard pile
-            currentPlayer.getDiscardPile().addAll(currentPlayer.getFaceUpDiscardPile());
-            currentPlayer.clearFaceUpDiscardPile();
-
-        } else if (currentPhase == PhaseType.DRAW_PHASE) {
-            // Ensure the player has drawn the correct number of cards
-            int cardsToDraw = Player.DECK_CARDS - currentPlayer.getPlayPile().getCards().size();
-            if (cardsToDraw > 0) {
-                currentPlayer.getPlayPile().addAll(currentPlayer.getDrawPile().draw(cardsToDraw));
-            }
-            // Make the only available button be the <end turn/next player>
-            // dont use gameview but player.something boolean
-            // gameView.enableEndTurnButtonOnly();
-
-        } else {
-
-
-            // Print the phase string to console, for debugging
-            currentPlayer.xRayEyes();
-            System.out.println("[ DEBUG ] " + this.toString());
-        }
-    }
-
-
-
     void onNextTurn(Event event) {
         Player player = game.getCurrentPlayer();
-//        player.drawPlayCards(); this should be done at the end of previous turn
+        player.drawPlayCards();
         game.nextPlayer();
         gameView.redraw();
     }
@@ -256,29 +318,4 @@ public class GameController {
         }
     }
 
-    void gameSetup() {
-
-    }
-
-    @Override
-    public boolean equals(Object subscriber) {
-        if (!(subscriber instanceof GameController)) {
-            return false;
-        }
-
-        GameController subscriberController = (GameController) subscriber;
-
-        return false;
-    }
-
-    // @Override
-    // public void update(EventType event) {
-    // if (event == EventType.EndGame) {
-    // game.setFinish(true);
-    // } else if (event == EventType.StartGame) {
-    // gameView.showMessage("Welcome to the game el Dorado");
-    // }
-    // }
-
 }
-

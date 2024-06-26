@@ -12,11 +12,12 @@ import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 
+import java.util.Optional;
+
 public class MoveAction extends Action {
 
     private Tile tileFrom;
     private Tile tileTo;
-    private Phase phase;
 
     public Tile getTileFrom() {
         return this.tileFrom;
@@ -27,32 +28,13 @@ public class MoveAction extends Action {
     }
 
     public MoveAction(Player player, Resource resource, Tile from, Tile to) {
-        this(player, resource, from, to, new Phase());
-    }
-
-    public MoveAction(Player player, Resource resource, Tile from, Tile to, Phase phase) {
         super(player, resource);
         this.tileFrom = from;
         this.tileTo = to;
-        this.phase = phase;
     }
 
     @Override
     public void execute() {
-        phase.addPlayedResource(this.getResource());
-        if (checkIfScientistCard()) {
-            phase.setCurrentPhase(PhaseType.SCIENTIST_PHASE);
-            // TODO set game to ScientistPhase
-            // TODO instruct user through selecting the right things
-            // TODO go back to Move Phase
-            try {
-                resources.getFirst().removePower(CardType.Wissenschaftlerin.power);
-            } catch (CardPowerException e) {
-                throw new RuntimeException(e);
-            }
-            return;
-        }
-
         try {
             System.out.println("consumed power: " + resources.getFirst().getConsumedPower());
             System.out.println("card in use: " + resources.getFirst().toString());
@@ -63,6 +45,9 @@ public class MoveAction extends Action {
             throw new RuntimeException(e);
         }
 
+        // Add cavecoin to the CaveCoinPile of the player if eligible
+        checkForCaveCoin();
+
         if (moveIsThroughBlockade()) {
             Blockade blockade = tileFrom.earnBlockade();
             player.addBlockade(blockade);
@@ -70,6 +55,14 @@ public class MoveAction extends Action {
         }
 
         movePlayer();
+    }
+
+    private void checkForCaveCoin() {
+        if (tileTo.getCaveCoinNeighbour() != null && tileFrom.getCaveCoinNeighbour() == null) {
+            Tile caveCoinNeighbour = tileTo.getCaveCoinNeighbour();
+            Optional<CaveCoin> caveCoin = caveCoinNeighbour.retrieveCoin();
+            caveCoin.ifPresent(coin -> player.getCaveCoinPile().add(coin));
+        }
     }
 
     private int getMovePower() {
@@ -99,6 +92,9 @@ public class MoveAction extends Action {
 
     @Override
     public ValidationResult validate() {
+        if (checkIfScientistCard()) {
+            return new ValidationResult(true, "");
+        }
         return checkNormalMovement();
     }
 
@@ -150,12 +146,9 @@ public class MoveAction extends Action {
     @Override
     public void discard() {
         Resource resource = this.getResource();
-        if (resource instanceof Card) {
-            if (resource.remainingPower() <= 0) {
-                player.discardCard((Card) resource);
-            }
+        if (resource.remainingPower() <= 0) {
+            player.discardResource(resource);
         }
-        // TODO: coins
     }
 
     public boolean isTileToNeighbour() {

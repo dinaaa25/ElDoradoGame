@@ -1,5 +1,7 @@
 package org.utwente.player.model;
 
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 
@@ -8,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class PileBuilder {
   private CardPile pile;
+  private CoinPile coinPile;
   private Player player;
 
   public PileBuilder() {
@@ -62,6 +65,14 @@ public class PileBuilder {
     return this.pile;
   }
 
+  public CoinPile buildOutOfGameCoinPile() {
+    this.reset();
+    this.coinPile = new CoinPile();
+    this.setType(PileType.OutOfGame);
+    this.coinPile.setPlayer(this.player);
+    return this.coinPile;
+  }
+
   public CardPile buildDrawPile() {
     this.reset();
     this.setType(PileType.Draw);
@@ -74,6 +85,15 @@ public class PileBuilder {
     this.addStartingCards();
     this.pile.setPlayer(this.player);
     return this.pile;
+  }
+
+  public CoinPile buildCaveCoinPile() {
+    this.reset();
+    this.coinPile = new CoinPile();
+    this.setType(PileType.CaveCoin);
+    this.coinPile.setPlayer(this.player);
+    this.coinPile.add(new CaveCoin(1, CaveCoinType.Machete));
+    return this.coinPile;
   }
 
   public CardPile build() {
