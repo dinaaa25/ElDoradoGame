@@ -1,7 +1,7 @@
 package org.utwente.market.view.gui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+        import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -10,27 +10,37 @@ import java.awt.Dimension;
 import org.utwente.market.model.Card;
 
 public class CardComponent extends JButton {
-  public static final int HEIGHT = 230;
-  public static final int WIDTH = 150;
+  public static final int BASE_HEIGHT = 230;
+  public static final int BASE_WIDTH = 150;
   private final Card card;
   private boolean selected;
+  private double scaleFactor;
 
   public CardComponent(Card card) {
-    this(card, null, card.remainingPower());
+    this(card, null, card.remainingPower(), false, 1.0);
   }
 
   public CardComponent(Card card, boolean selected) {
-    this(card, null, card.remainingPower(), selected);
+    this(card, null, card.remainingPower(), selected, 1.0);
   }
 
   public CardComponent(Card card, Integer remainingAmount, Integer remainingPower) {
-    this(card, remainingAmount, remainingPower, false);
+    this(card, remainingAmount, remainingPower, false, 1.0);
   }
 
   public CardComponent(Card card, Integer remainingAmount, Integer remainingPower, boolean selected) {
+    this(card, remainingAmount, remainingPower, selected, 1.0);
+  }
+
+  public CardComponent(Card card, double scaleFactor) {
+    this(card, null, card.remainingPower(), false, scaleFactor);
+  }
+
+  public CardComponent(Card card, Integer remainingAmount, Integer remainingPower, boolean selected, double scaleFactor) {
     super();
     this.card = card;
     this.selected = selected;
+    this.scaleFactor = scaleFactor;
     setup();
     addBorder();
     addName();
@@ -50,10 +60,12 @@ public class CardComponent extends JButton {
     this.setForeground(MarketConfig.MARKET_TEXT_COLOR);
     this.setHorizontalTextPosition(JButton.CENTER);
     this.setVerticalTextPosition(JButton.BOTTOM);
+    this.setPreferredSize(new Dimension((int)(BASE_WIDTH * scaleFactor), (int)(BASE_HEIGHT * scaleFactor)));
   }
 
   public void addPicture() {
-    ImageIcon scaledIcon = CardHelper.getImageIcon(card.getCardType(), new Dimension(WIDTH, HEIGHT - 30));
+    ImageIcon scaledIcon = CardHelper.getImageIcon(card.getCardType(),
+            new Dimension((int)(BASE_WIDTH * scaleFactor), (int)(BASE_HEIGHT * scaleFactor - 30)));
     this.add(new JLabel(scaledIcon));
   }
 
@@ -80,7 +92,7 @@ public class CardComponent extends JButton {
 
   public void addRemaining(int remainingAmount, boolean remaining) {
     JLabel remainingLabel = new JLabel(
-        String.format(remaining ? "Remaining: %d" : "Remaining Power: %d", remainingAmount));
+            String.format(remaining ? "Remaining: %d" : "Remaining Power: %d", remainingAmount));
     remainingLabel.setFont(MarketConfig.MARKET_CARD_DESCRIPTION);
     remainingLabel.setForeground(MarketConfig.MARKET_TEXT_SECONDARY);
     this.add(remainingLabel);
@@ -88,7 +100,7 @@ public class CardComponent extends JButton {
 
   public void addBorder() {
     Border bevelBorder = BorderFactory.createMatteBorder(2, 2, 2, 2,
-        selected ? MarketConfig.SELECTED_MARKET_BORDER : MarketConfig.MARKET_BORDER);
+            selected ? MarketConfig.SELECTED_MARKET_BORDER : MarketConfig.MARKET_BORDER);
     EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10); // Adjust the gap values as needed
     CompoundBorder compoundBorder = BorderFactory.createCompoundBorder(emptyBorder, bevelBorder);
 

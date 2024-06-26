@@ -13,9 +13,12 @@ import org.utwente.market.model.Card;
 import org.utwente.market.model.CardPowerException;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
+import org.utwente.player.model.CardPile;
+import org.utwente.player.model.PileType;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.*;
+import org.utwente.game.model.Configuration;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -120,6 +123,11 @@ public class GameController {
     }
 
     void onBuyCardFromMarket(Event event) {
+        // we could buy cards from market after drawing cards in p3 before this.
+        if (this.game.getPhase().getCurrentPhase() != PhaseType.BUYING_AND_PLAYING_PHASE){
+            this.game.getPhase().setActionMessage(new ValidationResult(false, "Not in the right phase to buy cards."));
+            return;
+        }
         if (event instanceof BuyEvent data) {
             List<Resource> resources = game.getPhase().getSelectedResources();
             BuyAction action = new BuyAction(this.game.getCurrentPlayer(), resources, data.getCardType(),
@@ -239,7 +247,36 @@ public class GameController {
         }
     }
 
+    void checklistEndPhase() {
+        Player currentPlayer = game.getCurrentPlayer();
+        if (game.getPhase().getEffectPhase() != null) {
+            //additionally check if the effect phase is completed
+            game.getPhase().setActionMessage(new ValidationResult(false, "Effect phase not completed."));
+            return;
+        }
+        if (game.getPhase().getCurrentPhase() == PhaseType.DISCARD_PHASE) {
+            currentPlayer.getDiscardPile().addAll(currentPlayer.getFaceUpDiscardPile());
+            currentPlayer.clearFaceUpDiscardPile();
+        }
+        if (game.getPhase().getCurrentPhase() == PhaseType.DRAW_PHASE) {
+            //force draw if we try to end the draw phase without drawing all cards
+            currentPlayer.drawPlayCards();
+            int cardsToDraw= Player.DECK_CARDS- currentPlayer.getPlayPile().getCards().size();
+            if (cardsToDraw>0){
+                currentPlayer.getPlayPile().addAll(currentPlayer.getDrawPile().draw(cardsToDraw));
+            }
+        }
+        game.getPhase().setActionMessage(new ValidationResult(true, "All requirements met."));
+    }
+
+
     void onNextPhase(Event event) {
+
+        if (Configuration.getInstance().xray){
+            game.getCurrentPlayer().xRayEyes();
+        }
+
+        checklistEndPhase();
         game.nextPhase();
         gameView.setCurrentPhase();
         gameView.redraw();
