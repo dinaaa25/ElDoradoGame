@@ -41,7 +41,6 @@ test:
       - build/reports/tests/jacoco
     reports:
       junit: build/test-results/test/TEST-*.xml
-      jacoco: build/reports/jacoco/test/jacocoTestReport.xml
     expire_in: 1 week
   rules:
     - when: always
