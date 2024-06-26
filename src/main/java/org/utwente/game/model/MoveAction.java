@@ -12,6 +12,8 @@ import org.utwente.market.model.Resource;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 
+import java.util.Optional;
+
 public class MoveAction extends Action {
 
     private Tile tileFrom;
@@ -33,7 +35,6 @@ public class MoveAction extends Action {
 
     @Override
     public void execute() {
-
         try {
             System.out.println("consumed power: " + resources.getFirst().getConsumedPower());
             System.out.println("card in use: " + resources.getFirst().toString());
@@ -44,6 +45,9 @@ public class MoveAction extends Action {
             throw new RuntimeException(e);
         }
 
+        // Add cavecoin to the CaveCoinPile of the player if eligible
+        checkForCaveCoin();
+
         if (moveIsThroughBlockade()) {
             Blockade blockade = tileFrom.earnBlockade();
             player.addBlockade(blockade);
@@ -51,6 +55,14 @@ public class MoveAction extends Action {
         }
 
         movePlayer();
+    }
+
+    private void checkForCaveCoin() {
+        if (tileTo.getCaveCoinNeighbour() != null && tileFrom.getCaveCoinNeighbour() == null) {
+            Tile caveCoinNeighbour = tileTo.getCaveCoinNeighbour();
+            Optional<CaveCoin> caveCoin = caveCoinNeighbour.retrieveCoin();
+            caveCoin.ifPresent(coin -> player.getCaveCoinPile().add(coin));
+        }
     }
 
     private int getMovePower() {

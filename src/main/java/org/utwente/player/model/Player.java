@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinType;
 import org.utwente.player.PlayerColor;
 import org.utwente.market.model.Card;
 import org.utwente.util.ShuffleUtils;
@@ -37,7 +38,7 @@ public class Player {
         this.playPile = startPile.draw(DECK_CARDS);
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
-        this.caveCoinPile = new CoinPile();
+        this.caveCoinPile = builder.buildCaveCoinPile();
         this.outOfGameCoinsPile = builder.buildOutOfGamePile();
     }
 

@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.AxialTranslationCalculator;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Board;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.Section.Section;
 import org.utwente.player.model.Player;
 
 import java.awt.*;
@@ -34,6 +36,9 @@ public class Tile {
     private boolean isLastWaitingTile;
     @Getter
     private Blockade blockade;
+    @Getter
+    @Setter
+    private Board board;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
         this.q = q;
@@ -82,6 +87,25 @@ public class Tile {
         return !caveCoins.isEmpty();
     }
 
+    public boolean isCaveCoinTile() { return this.tileType == TileType.Cave; }
+
+    public Tile getCaveCoinNeighbour() {
+        for (DirectionType.Direction direction : DirectionType.POINTY_TOP.getDirections()) {
+            int neighborQ = this.q + direction.getDq();
+            int neighborR = this.r + direction.getDr();
+            for (Section section : board.getSections()) {
+                for (Tile tile : section.getTiles()) {
+                    if (tile.getQ() == neighborQ && tile.getR() == neighborR) {
+                        if (tile.isCaveCoinTile()) {
+                            return tile;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public Optional<CaveCoin> retrieveCoin() {
         if (!hasCaveCoins()) {
             return Optional.empty();
@@ -92,7 +116,7 @@ public class Tile {
     }
 
     public int getCaveCoinCount() {
-        return caveCoins.size();
+        return caveCoins.toArray().length;
     }
 
     public boolean isStartingTile() {
