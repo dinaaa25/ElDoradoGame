@@ -29,5 +29,15 @@ public class BoardForm extends JPanel {
       }
     });
     this.add(button);
+
+    JButton otherTeamButton = new JButton("Use board of Team04");
+    otherTeamButton.addActionListener(l -> {
+      String selectedPath = (String) pathComboBox.getSelectedItem();
+      if (selectedPath != null) {
+        Path path = Path.valueOf(selectedPath);
+        EventManager.getInstance().notifying(EventType.PickBoard, new PickBoardEvent(path, true));
+      }
+    });
+    this.add(otherTeamButton);
   }
 }

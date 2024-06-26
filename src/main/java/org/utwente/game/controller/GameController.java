@@ -311,7 +311,7 @@ public class GameController {
         if (event instanceof PickBoardEvent) {
             PickBoardEvent data = (PickBoardEvent) event;
             Board board;
-            if (data.isOtherBoard() || true) {
+            if (data.isOtherBoard()) {
                 SecondBoardLoader secondBoardLoader = new SecondBoardLoader();
                 board = secondBoardLoader.getConvertedBoard();
 
