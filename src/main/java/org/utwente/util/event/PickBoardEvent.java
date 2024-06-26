@@ -9,9 +9,15 @@ import lombok.Setter;
 @Setter
 public class PickBoardEvent extends Event {
   Path path;
+  boolean otherBoard;
 
   public PickBoardEvent(Path path) {
+    this(path, false);
+  }
+
+  public PickBoardEvent(Path path, boolean otherBoard) {
     this.path = path;
+    this.otherBoard = otherBoard;
   }
 
   @Override

@@ -427,4 +427,14 @@ public class Board {
             return tempBoard;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "sections=" + sections +
+                ", path=" + path +
+                ", blockades=" + blockades +
+                ", flatTop=" + flatTop +
+                '}';
+    }
 }

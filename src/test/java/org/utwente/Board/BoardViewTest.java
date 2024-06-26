@@ -1,6 +1,5 @@
 package org.utwente.Board;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -11,14 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.utwente.game.view.GameConfig.PADDING;
 
-import java.awt.Graphics2D;
-
 import org.utwente.Section.Section;
-import org.utwente.Section.SectionType;
 import org.utwente.Tile.TileImageLoader;
 import org.utwente.Tile.TileType;
 import org.utwente.game.view.GameConfig;
 import org.utwente.Tile.Tile;
+import org.utwente.secondboard.SecondBoardLoader;
 
 class BoardViewTest {
     /**
@@ -120,43 +117,52 @@ class BoardViewTest {
 
     /**
      * Method under test:
-     * {@link BoardView#drawBoard(Graphics2D, Board, int, int, boolean, TileImageLoader)}
+     * {@link BoardView#drawBoard(Board)}
      */
     @Test
     void testDrawBoard() {
-        // Arrange
+        SecondBoardLoader secondBoardLoader = new SecondBoardLoader();
+        List<Board> boards = new ArrayList<>();
         ArrayList<Section> sections = new ArrayList<>();
-        Board board = new Board(sections, Path.HillsOfGold, true, new ArrayList<>());
+        boards.add(new Board(sections, Path.HillsOfGold, true, new ArrayList<>()));
+        boards.add(secondBoardLoader.getConvertedBoard());
 
-        BoardView boardView = new BoardView(board);
-        TileImageLoader tileImageLoader = new TileImageLoader();
+        for (Board board : boards) {
+            // Arrange
+            BoardView boardView = new BoardView(board);
+            TileImageLoader tileImageLoader = new TileImageLoader();
 
-        // Act
-        boardView.drawBoard(board);
+            // Act
+            boardView.drawBoard(board);
 
-        // Assert that nothing has changed
-        assertNotNull(tileImageLoader.getImage(TileType.Machete, 1));
+            // Assert that nothing has changed
+            assertNotNull(tileImageLoader.getImage(TileType.Machete, 1));
+        }
     }
 
     /**
      * Method under test:
-     * {@link BoardView#drawBoard(Graphics2D, Board, int, int, boolean, TileImageLoader)}
+     * {@link BoardView#drawBoard(Board)}
      */
     @Test
     void testDrawBoard2() {
-        // Arrange
-
+        SecondBoardLoader secondBoardLoader = new SecondBoardLoader();
+        List<Board> boards = new ArrayList<>();
         ArrayList<Section> sections = new ArrayList<>();
-        sections.add(new Section(new ArrayList<>(), SectionType.A));
-        Board board = new Board(sections, Path.HillsOfGold, true, new ArrayList<>());
-        BoardView boardView = new BoardView(board);
+        boards.add(new Board(sections, Path.HillsOfGold, true, new ArrayList<>()));
+        boards.add(secondBoardLoader.getConvertedBoard());
 
-        TileImageLoader tileImageLoader = new TileImageLoader();
+        for (Board board : boards) {
+            // Arrange
+            BoardView boardView = new BoardView(board);
 
-        // Act
-        boardView.drawBoard(board);
+            TileImageLoader tileImageLoader = new TileImageLoader();
 
-        // Assert
-        assertNotNull(tileImageLoader.getImage(TileType.Machete, 1));
+            // Act
+            boardView.drawBoard(board);
+
+            // Assert
+            assertNotNull(tileImageLoader.getImage(TileType.Machete, 1));
+        }
     }
 }
