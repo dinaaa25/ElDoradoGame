@@ -87,7 +87,7 @@ public abstract class EffectPhase {
                 this.player.removeCardFromGame(card);
 
             } else {
-                this.player.discardCard(card);
+                this.player.discardResource(card);
             }
         } else if (resource instanceof CaveCoin caveCoin) {
 

@@ -30,7 +30,7 @@ public class DiscardAction extends Action {
 
     @Override
     public void discard() {
-        player.discardCard(cardToDiscard);
+        player.discardResource(cardToDiscard);
     }
 
 }

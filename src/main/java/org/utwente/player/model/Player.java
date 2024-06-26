@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.Blockade.Blockade;
 import org.utwente.CaveCoin.CaveCoin;
-import org.utwente.CaveCoin.CaveCoinType;
+import org.utwente.market.model.Resource;
 import org.utwente.player.PlayerColor;
 import org.utwente.market.model.Card;
 import org.utwente.util.ShuffleUtils;
@@ -25,7 +25,7 @@ public class Player {
     private CardPile outOfGamePile;
     private CardPile drawPile;
     private CoinPile caveCoinPile;
-    private CardPile outOfGameCoinsPile;
+    private CoinPile outOfGameCoinsPile;
 
     public Player(String name) {
         this.name = name;
@@ -39,16 +39,22 @@ public class Player {
         this.playPile.setPileType(PileType.Play);
         this.drawPile = startPile;
         this.caveCoinPile = builder.buildCaveCoinPile();
-        this.outOfGameCoinsPile = builder.buildOutOfGamePile();
+        this.outOfGameCoinsPile = builder.buildOutOfGameCoinPile();
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void discardCard(Card card) {
-        discardPile.add(card);
-        playPile.remove(card);
+    public void discardResource(Resource resource) {
+        if (resource instanceof Card) {
+            discardPile.add((Card) resource);
+            playPile.remove((Card) resource);
+        }
+        else if (resource instanceof CaveCoin) {
+            caveCoinPile.remove((CaveCoin) resource);
+        }
+
     }
 
     public void drawPlayCards() {
