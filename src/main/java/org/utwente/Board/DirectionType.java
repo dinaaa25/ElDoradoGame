@@ -22,18 +22,11 @@ public enum DirectionType {
         int getDr();
     }
 
-    public enum FlatTopDirection implements Direction {
-        NORTH(0, -1),
-        NORTHEAST(1, -1),
-        SOUTHEAST(1, 0),
-        SOUTH(0, 1),
-        SOUTHWEST(-1, 1),
-        NORTHWEST(-1, 0);
-
+    public static abstract class AbstractDirection implements Direction {
         private final int dq;
         private final int dr;
 
-        FlatTopDirection(int dq, int dr) {
+        protected AbstractDirection(int dq, int dr) {
             this.dq = dq;
             this.dr = dr;
         }
@@ -49,30 +42,37 @@ public enum DirectionType {
         }
     }
 
-    public enum PointyTopDirection implements Direction {
-        NORTHEAST(1, -1),
-        EAST(1, 0),
-        SOUTHEAST(0, 1),
-        SOUTHWEST(-1, 1),
-        WEST(-1, 0),
-        NORTHWEST(0, -1);
+    public static class FlatTopDirection extends AbstractDirection {
+        public static final FlatTopDirection NORTH = new FlatTopDirection(0, -1);
+        public static final FlatTopDirection NORTHEAST = new FlatTopDirection(1, -1);
+        public static final FlatTopDirection SOUTHEAST = new FlatTopDirection(1, 0);
+        public static final FlatTopDirection SOUTH = new FlatTopDirection(0, 1);
+        public static final FlatTopDirection SOUTHWEST = new FlatTopDirection(-1, 1);
+        public static final FlatTopDirection NORTHWEST = new FlatTopDirection(-1, 0);
 
-        private final int dq;
-        private final int dr;
-
-        PointyTopDirection(int dq, int dr) {
-            this.dq = dq;
-            this.dr = dr;
+        private FlatTopDirection(int dq, int dr) {
+            super(dq, dr);
         }
 
-        @Override
-        public int getDq() {
-            return dq;
+        public static FlatTopDirection[] values() {
+            return new FlatTopDirection[] { NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST, NORTHWEST };
+        }
+    }
+
+    public static class PointyTopDirection extends AbstractDirection {
+        public static final PointyTopDirection NORTHEAST = new PointyTopDirection(1, -1);
+        public static final PointyTopDirection EAST = new PointyTopDirection(1, 0);
+        public static final PointyTopDirection SOUTHEAST = new PointyTopDirection(0, 1);
+        public static final PointyTopDirection SOUTHWEST = new PointyTopDirection(-1, 1);
+        public static final PointyTopDirection WEST = new PointyTopDirection(-1, 0);
+        public static final PointyTopDirection NORTHWEST = new PointyTopDirection(0, -1);
+
+        private PointyTopDirection(int dq, int dr) {
+            super(dq, dr);
         }
 
-        @Override
-        public int getDr() {
-            return dr;
+        public static PointyTopDirection[] values() {
+            return new PointyTopDirection[] { NORTHEAST, EAST, SOUTHEAST, SOUTHWEST, WEST, NORTHWEST };
         }
     }
 }

@@ -1,32 +1,20 @@
 package org.utwente.Tile;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.*;
-import javax.imageio.ImageIO;
+import org.utwente.util.images.ImageLoader;
 
-public class TileImageLoader {
+public class TileImageLoader extends ImageLoader<TileType> {
 
-    private final Map<TileType, Map<Integer, BufferedImage>> tileImages = new EnumMap<>(TileType.class);
-
-    public void loadTileImages() {
-        for (TileType tileType : TileType.values()) {
-            Map<Integer, BufferedImage> imagesForTileType = new HashMap<>();
-            for (int power : tileType.getPowerRange().getRange()) {
-                String imagePath = String.format("/images/tiles/%s-%d.png", tileType.name(), power);
-                System.out.println(imagePath);
-                try {
-                    BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResource(imagePath)));
-                    imagesForTileType.put(power, image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            tileImages.put(tileType, imagesForTileType);
-        }
+    public TileImageLoader() {
+        super();
     }
 
-    public BufferedImage getTileImage(TileType tileType, int power) {
-        return tileImages.getOrDefault(tileType, new HashMap<>()).get(power);
+    @Override
+    protected Class<TileType> getEnumType() {
+        return TileType.class;
+    }
+
+    @Override
+    protected String getImagePath(TileType type, int power) {
+        return String.format("/images/tiles/%s-%d.png", type.name(), power);
     }
 }

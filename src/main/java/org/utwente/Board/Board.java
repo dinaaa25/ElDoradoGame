@@ -2,19 +2,27 @@ package org.utwente.Board;
 
 import lombok.Getter;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.CaveCoin.CaveCoin;
+import org.utwente.CaveCoin.CaveCoinLoader;
 import org.utwente.Section.Section;
 import org.utwente.Section.SectionLoader;
 import org.utwente.Section.SectionType;
 import org.utwente.Section.SectionWithRotationPositionSectionDirection;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
+import org.utwente.util.ShuffleUtils;
+
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 import static org.utwente.Board.SectionDirectionType.FlatTopSectionDirection.*;
 import static org.utwente.Board.SectionDirectionType.PointyTopSectionDirection.*;
+import static org.utwente.game.view.GameConfig.CAVE_COIN_CHUNK_SIZE;
+import static org.utwente.game.view.GameConfig.SEED;
+import static org.utwente.util.ListUtils.splitListIntoChunks;
 
 public class Board {
     private final List<Section> sections;
@@ -43,6 +51,17 @@ public class Board {
         return allBoardTiles;
     }
 
+    public Tile getTileOfPlayer(Player player) {
+        for (Section section : sections) {
+            for (Tile tile : section.getTiles()) {
+                if (tile.getPlayers().contains(player)) {
+                    return tile;
+                }
+            }
+        }
+        return new Tile(0, 0, TileType.Machete, 0, new ArrayList<>(), false);
+    }
+
     public List<Section> getSections() {
         return sections;
     }
@@ -69,6 +88,8 @@ public class Board {
         private Path path;
         private boolean flatTop;
         private final List<Blockade> blockades;
+        private final List<Section> availableSections;
+        private final Random random = new Random(SEED);
 
         public BoardBuilder() {
             this.sections = new ArrayList<>();
@@ -76,7 +97,6 @@ public class Board {
             this.blockades = new ArrayList<>();
         }
 
-        private List<Section> availableSections;
 
         private static Section getSectionBySectionType(SectionType sectionType) {
             List<Section> sectionList = SectionLoader.loadSections();
@@ -253,6 +273,16 @@ public class Board {
             return this;
         }
 
+        private List<Tile> getTilesByTileType(TileType tileType) {
+            if (sections.isEmpty()) {
+                throw new IllegalStateException("First build the selected path");
+            }
+            return sections.stream()
+                    .flatMap(section -> section.getTiles().stream())
+                    .filter(tile -> tile.getTileType() == tileType)
+                    .collect(Collectors.toList());
+        }
+
         public BoardBuilder selectPath(Path path) {
             if (path == null) {
                 throw new IllegalArgumentException("Path is null");
@@ -275,7 +305,7 @@ public class Board {
                 throw new IllegalStateException("Not at least 2 sections in BoardBuilder");
             }
             List<Blockade> blockades = getBlockadesList();
-            Collections.shuffle(blockades);
+            ShuffleUtils.shuffle(blockades);
             List<Section> nonElDoradoSections = getNonElDoradoSections();
             int numberOfBlockades = nonElDoradoSections.size() - 1;
 
@@ -332,7 +362,6 @@ public class Board {
         }
 
         private void attachBoardSection(SectionWithRotationPositionSectionDirection sectionWithData) {
-            List<Section> availableSections = SectionLoader.loadSections();
             Optional<Section> optionalSection = availableSections.stream()
                     .filter(s -> s.getSectionType() == sectionWithData.getSectionType())
                     .findFirst();
@@ -347,12 +376,8 @@ public class Board {
                 sections.add(section);
             } else {
                 Section lastSection = sections.get(sections.size() - 1);
-                int minQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).min().orElse(0);
-                int maxQ = lastSection.getTiles().stream().mapToInt(Tile::getQ).max().orElse(0);
-                int minR = lastSection.getTiles().stream().mapToInt(Tile::getR).min().orElse(0);
-                int maxR = lastSection.getTiles().stream().mapToInt(Tile::getR).max().orElse(0);
-
-                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionWithData, maxQ, minR, minQ, maxR);
+                CoordinateBounds coordinateBounds = lastSection.getCoordinateBounds();
+                AxialTranslationCalculator.AxialTranslation axialTranslation = new AxialTranslationCalculator().getTranslation(sectionWithData, coordinateBounds);
 
                 for (Tile tile : section.getTiles()) {
                     tile.translate(axialTranslation);
@@ -367,11 +392,39 @@ public class Board {
             }
         }
 
+        public BoardBuilder addCaveCoinTiles() {
+            List<CaveCoin> caveCoins = CaveCoinLoader.loadCoins();
+
+            ShuffleUtils.shuffle(caveCoins);
+
+            List<List<CaveCoin>> caveCoinChunks = splitListIntoChunks(caveCoins, CAVE_COIN_CHUNK_SIZE);
+            List<Tile> caveTiles = getTilesByTileType(TileType.Cave);
+
+            ShuffleUtils.shuffle(caveTiles);
+
+            int numTiles = caveTiles.size();
+            int numChunks = caveCoinChunks.size();
+            int minSize = Math.min(numTiles, numChunks);
+
+            for (int i = 0; i < minSize; i++) {
+                Tile tile = caveTiles.get(i);
+                List<CaveCoin> chunk = caveCoinChunks.get(i);
+                tile.setCaveCoins(chunk);
+            }
+            return this;
+        }
+
         public Board build() {
             assert path != null : "Path is null";
             assert !sections.isEmpty() : "No sections found";
             assert !getNonElDoradoSections().isEmpty() || !blockades.isEmpty() : "No blockades found in setups without ElDorado";
-            return new Board(sections, path, flatTop, blockades);
+            Board tempBoard = new Board(sections, path, flatTop, blockades);
+            for (Section section : tempBoard.getSections()) {
+                for (Tile tile : section.getTiles()) {
+                    tile.setBoard(tempBoard);
+                }
+            }
+            return tempBoard;
         }
     }
 }

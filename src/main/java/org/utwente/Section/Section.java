@@ -2,6 +2,7 @@ package org.utwente.Section;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.utwente.Board.CoordinateBounds;
 import org.utwente.Board.SectionDirectionType;
 import org.utwente.Tile.Tile;
 
@@ -33,6 +34,14 @@ public class Section {
 
     public List<Tile> getTiles() {
         return tiles;
+    }
+
+    public CoordinateBounds getCoordinateBounds() {
+        int minQ = tiles.stream().mapToInt(Tile::getQ).min().orElse(0);
+        int maxQ = tiles.stream().mapToInt(Tile::getQ).max().orElse(0);
+        int minR = tiles.stream().mapToInt(Tile::getR).min().orElse(0);
+        int maxR = tiles.stream().mapToInt(Tile::getR).max().orElse(0);
+        return new CoordinateBounds(minQ, maxQ, minR, maxR);
     }
 
     public boolean isStartingSection() {

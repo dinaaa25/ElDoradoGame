@@ -6,36 +6,61 @@ import lombok.*;
 @Setter
 public class Card implements Resource {
     private CardType cardType;
+    private int power;
     private int consumedPower;
-
 
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
+        this.power = cardType.power;
     }
 
+    @Override
     public PowerType getType() {
         return this.cardType.powerType;
     }
 
     /**
      * computes power without already utilized power from card.
-     * 
+     *
      * @return power of the card as a number.
      */
+    @Override
     public int remainingPower() {
         return cardType.power - consumedPower;
     }
 
-    public void removePower(int power) {
-        this.consumedPower += power;
+    public void removePower(int toBeRemoved) throws CardPowerException {
+        if (toBeRemoved < 0) {
+            throw new IllegalArgumentException("Power to remove cannot be negative.");
+        }
+        if (toBeRemoved > remainingPower()) {
+            throw new CardPowerException("Not enough power to remove.");
+        }
+        this.consumedPower += toBeRemoved;
     }
 
+    @Override
+    public double getValue() {
+        if (remainingPower() != getPower()) {
+            return 0;
+        }
+        if (this.cardType.powerType == PowerType.Coin) {
+            return this.getPower();
+        }
+        return 0.5;
+    }
+
+    @Override
     public int getPower() {
-        return remainingPower();
+        return this.power;
     }
 
-    public CardType getCardType() {
-        return this.cardType;
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardType=" + cardType +
+                ", consumedPower=" + consumedPower +
+                '}';
     }
 }

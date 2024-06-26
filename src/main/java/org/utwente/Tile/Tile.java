@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.utwente.Board.AxialTranslationCalculator;
 import org.utwente.Board.Blockade.Blockade;
+import org.utwente.Board.Board;
 import org.utwente.Board.DirectionType;
 import org.utwente.CaveCoin.CaveCoin;
-import org.utwente.player.Player;
+import org.utwente.Section.Section;
+import org.utwente.player.model.Player;
 
 import java.awt.*;
 import java.util.*;
@@ -27,35 +29,43 @@ public class Tile {
     private final TileType tileType;
     @Getter
     private final int power;
-    private final List<CaveCoin> caveCoins;
+    @Getter
+    @Setter
+    private List<CaveCoin> caveCoins;
     private Set<Player> players;
     private boolean isLastWaitingTile;
     @Getter
-    private boolean isBlockadeTile;
-    @Getter
     private Blockade blockade;
+    @Getter
+    @Setter
+    private Board board;
 
     public Tile(int q, int r, TileType tileType, int power, ArrayList<CaveCoin> caveCoins, boolean isLastWaitingTile) {
         this.q = q;
         this.r = r;
         this.tileType = tileType;
         this.power = power;
-        this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a new one
+        this.caveCoins = (caveCoins == null) ? Collections.emptyList() : caveCoins; // Use provided list or initialize a
+                                                                                    // new one
         this.players = new HashSet<>();
         this.isLastWaitingTile = isLastWaitingTile;
-        this.isBlockadeTile = false;
+        this.blockade = null;
     }
 
     @JsonCreator
-    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType, @JsonProperty("power") int power,
-                @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
+    public Tile(@JsonProperty("q") int q, @JsonProperty("r") int r, @JsonProperty("tileType") TileType tileType,
+            @JsonProperty("power") int power,
+            @JsonProperty("isLastWaitingTile") boolean isLastWaitingTile) {
 
         this(q, r, tileType, power, new ArrayList<>(), isLastWaitingTile);
     }
 
     public void setBlockade(Blockade blockade) {
         this.blockade = blockade;
-        this.isBlockadeTile = true;
+    }
+
+    public boolean isBlockadeTile() {
+        return this.blockade != null && !this.blockade.isRemoved();
     }
 
     public void rotate(int turns) {
@@ -77,6 +87,25 @@ public class Tile {
         return !caveCoins.isEmpty();
     }
 
+    public boolean isCaveCoinTile() { return this.tileType == TileType.Cave; }
+
+    public Tile getCaveCoinNeighbour() {
+        for (DirectionType.Direction direction : DirectionType.POINTY_TOP.getDirections()) {
+            int neighborQ = this.q + direction.getDq();
+            int neighborR = this.r + direction.getDr();
+            for (Section section : board.getSections()) {
+                for (Tile tile : section.getTiles()) {
+                    if (tile.getQ() == neighborQ && tile.getR() == neighborR) {
+                        if (tile.isCaveCoinTile()) {
+                            return tile;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public Optional<CaveCoin> retrieveCoin() {
         if (!hasCaveCoins()) {
             return Optional.empty();
@@ -87,7 +116,7 @@ public class Tile {
     }
 
     public int getCaveCoinCount() {
-        return caveCoins.size();
+        return caveCoins.toArray().length;
     }
 
     public boolean isStartingTile() {
@@ -129,7 +158,6 @@ public class Tile {
         this.players.remove(player);
     }
 
-
     public boolean isNeighbor(Tile tile) {
         if (tile == null) {
             return false;
@@ -150,4 +178,8 @@ public class Tile {
         r += translationParameters.r();
     }
 
+    public Blockade earnBlockade() {
+        this.blockade.remove();
+        return this.blockade;
+    }
 }

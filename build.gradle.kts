@@ -2,6 +2,8 @@ plugins {
     id("java")
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("jacoco")
+
 }
 
 group = "org.utwente"
@@ -28,16 +30,71 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok:1.18.32")
 	testCompileOnly("org.projectlombok:lombok:1.18.32")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+   // dotenv
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
     // mockito
     testImplementation("org.mockito:mockito-core:5.12.0")
     // team4 board
     implementation("org.json:json:20240303")
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
+    implementation("org.mockito:mockito-junit-jupiter:5.11.0")
+    // logging
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
 }
+
+
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED", "-Djava.awt.headless=true")
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:unchecked")
+}
+
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) 
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+
+tasks {
+    val javadoc by getting(Javadoc::class) {
+        source = sourceSets["main"].allJava
+
+        classpath = sourceSets["main"].compileClasspath
+
+
+        destinationDir = layout.buildDirectory.dir("docs/javadoc").get().asFile
+
+        options {
+             val opts = this as StandardJavadocDocletOptions
+            opts.encoding = "UTF-8"
+            opts.charSet = "UTF-8"
+            opts.links("https://docs.oracle.com/javase/21/docs/api/")        }
+    }
+}
+
+
+
 
 application {
     mainClass.set("org.utwente.Main")

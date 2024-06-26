@@ -63,7 +63,7 @@ public class BoardBuilderTest {
 
         List<SectionType> expectedSectionTypes = Board.BoardBuilder.paths.get(selectedPath).stream()
                 .map(SectionWithRotationPositionSectionDirection::getSectionType)
-                .toList();;
+                .toList();
 
         List<Section> sections = board.getSections();
         assertEquals(expectedSectionTypes.size(), sections.size(), "Number of sections should match");

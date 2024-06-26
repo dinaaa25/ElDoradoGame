@@ -8,7 +8,7 @@ import org.utwente.Board.Path;
 import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.game.model.Game;
-import org.utwente.player.Player;
+import org.utwente.player.model.Player;
 
 import java.util.List;
 
