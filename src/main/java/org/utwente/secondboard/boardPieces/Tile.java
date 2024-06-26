@@ -191,4 +191,21 @@ public class Tile {
 
         return neighbors;
     }
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "x=" + x +
+                ", y=" + y +
+                ", row=" + row +
+                ", col=" + col +
+                ", color=" + color +
+                ", points=" + points +
+                ", parent='" + parent + '\'' +
+                ", q=" + q +
+                ", r=" + r +
+                '}';
+    }
+
+
 }

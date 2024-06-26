@@ -174,4 +174,13 @@ public class Terrain extends BoardPiece {
       return clonedTerrain;
     }
 
+    @Override
+    public String toString() {
+        return "Terrain{" +
+                "axisTile=" + axisTile +
+                ", name='" + name + '\'' +
+                ", tiles=" + tiles +
+                ", pieceCount=" + pieceCount +
+                '}';
+    }
 }
