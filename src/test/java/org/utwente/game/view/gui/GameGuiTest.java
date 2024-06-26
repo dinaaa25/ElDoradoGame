@@ -17,6 +17,8 @@ import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.utwente.Board.Board;
 import org.utwente.game.model.Game;
@@ -49,6 +51,15 @@ import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventType;
 
 class GameGuiTest {
+
+
+
+  @BeforeAll
+  public static void setUpHeadlessMode() {
+    System.setProperty("java.awt.headless", "true");
+  }
+  
+
   /**
    * Method under test: {@link GameGui#calculatePreferredSize(Board)}
    */
