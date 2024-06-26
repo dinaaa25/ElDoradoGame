@@ -8,11 +8,13 @@ public class Card implements Resource {
     private CardType cardType;
     private int power;
     private int consumedPower;
+    private boolean oneTimeUse;
 
     public Card(CardType cardType) {
         this.cardType = cardType;
         this.consumedPower = 0;
         this.power = cardType.power;
+        this.oneTimeUse = cardType.oneTimeUse;
     }
 
     @Override

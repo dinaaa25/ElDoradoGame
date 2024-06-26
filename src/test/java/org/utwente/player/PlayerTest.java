@@ -213,7 +213,7 @@ public class PlayerTest {
   }
 
   /**
-   * Method under test: {@link Player#removeCardFromGame(Card)}
+   * Method under test: {@link Player#removeResourceFromGame(Resource)}
    */
   @Test
   void testRemoveCardFromGame() {
@@ -221,7 +221,7 @@ public class PlayerTest {
     Player player = new Player("Name");
 
     // Act
-    player.removeCardFromGame(new Card(CardType.Kundeschafter));
+    player.removeResourceFromGame(new Card(CardType.Kundeschafter));
 
     // Assert
     assertFalse(player.getOutOfGamePile().isEmpty());
@@ -494,7 +494,7 @@ public class PlayerTest {
     Card getResult8 = resources2.get(3);
     assertEquals(0, getResult8.getConsumedPower());
     assertEquals(0, player2.getBlockadeCount());
-    assertEquals(1, caveCoinPile.getResources().size());
+    assertEquals(2, caveCoinPile.getResources().size());
     assertEquals(1, getResult.getPower());
     assertEquals(1, getResult2.getPower());
     assertEquals(1, getResult3.getPower());

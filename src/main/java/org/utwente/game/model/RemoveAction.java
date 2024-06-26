@@ -13,7 +13,7 @@ public class RemoveAction extends Action {
 
   @Override
   public void execute() {
-    this.player.removeCardFromGame((Card) this.getResource());
+    this.player.removeResourceFromGame(this.getResource());
   }
 
   @Override

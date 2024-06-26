@@ -3,13 +3,17 @@ package org.utwente.player.view.gui;
 import javax.swing.*;
 import  java.util.ArrayList;
 import org.utwente.CaveCoin.PlayCaveCoins;
+import org.utwente.game.model.CaveCoinSymbolEffectPhase;
 import org.utwente.game.model.EffectStep;
 import org.utwente.game.model.Phase;
 import org.utwente.game.model.PhaseType;
+import org.utwente.market.model.PowerType;
 import org.utwente.player.model.Player;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.EventManager;
 import org.utwente.util.event.EventType;
+import org.utwente.util.event.SelectSymbolTypeEvent;
+
 import java.util.Map.Entry;
 
 import java.awt.*;
@@ -95,12 +99,34 @@ public class PlayerDeck extends JPanel {
     panel.add(effectPhase);
   }
 
+  public void addSelectSymbolType(JPanel panel) {
+    JPanel rowPanel = new JPanel();
+    rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+    JButton macheteButton = new JButton(String.valueOf(PowerType.Machete));
+    macheteButton.addActionListener(l -> {EventManager.getInstance().notifying(EventType.CaveCoinSymbolSelectType, new SelectSymbolTypeEvent(PowerType.Machete));});
+    macheteButton.setSelected(((CaveCoinSymbolEffectPhase) this.phase.getEffectPhase()).getPowerTypeToChangeTo() == PowerType.Machete);
+    JButton paddleButton = new JButton(String.valueOf(PowerType.Paddle));
+    paddleButton.addActionListener(l -> {EventManager.getInstance().notifying(EventType.CaveCoinSymbolSelectType, new SelectSymbolTypeEvent(PowerType.Paddle));});
+    paddleButton.setSelected(((CaveCoinSymbolEffectPhase) this.phase.getEffectPhase()).getPowerTypeToChangeTo() == PowerType.Paddle);
+    JButton coinButton = new JButton(String.valueOf(PowerType.Coin));
+    coinButton.addActionListener(l -> {EventManager.getInstance().notifying(EventType.CaveCoinSymbolSelectType, new SelectSymbolTypeEvent(PowerType.Coin));});
+    coinButton.setSelected(((CaveCoinSymbolEffectPhase) this.phase.getEffectPhase()).getPowerTypeToChangeTo() == PowerType.Coin);
+    rowPanel.add(macheteButton);
+    rowPanel.add(paddleButton);
+    rowPanel.add(coinButton);
+    panel.add(rowPanel);
+  }
+
   public void addEffectCardPhase(JPanel playerRow) {
     JPanel specialCardPanel = new JPanel();
     specialCardPanel.setLayout(new BoxLayout(specialCardPanel, BoxLayout.Y_AXIS));
 
     for (var entry : this.phase.getEffectPhase().getSteps().entrySet()) {
-      addEffectRow(specialCardPanel, entry);
+      if (entry.getKey() != null && entry.getKey() == EventType.CaveCoinSymbolSelectType) {
+        addSelectSymbolType(specialCardPanel);
+      } else {
+        addEffectRow(specialCardPanel, entry);
+      }
     }
 
     addEffectPhaseDoneButton(specialCardPanel);

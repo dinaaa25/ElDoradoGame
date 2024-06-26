@@ -92,7 +92,8 @@ public class PileBuilder {
     this.coinPile = new CoinPile();
     this.setType(PileType.CaveCoin);
     this.coinPile.setPlayer(this.player);
-    this.coinPile.add(new CaveCoin(1, CaveCoinType.Machete));
+    this.coinPile.add(new CaveCoin(1, CaveCoinType.Draw));
+    this.coinPile.add(new CaveCoin(1, CaveCoinType.Symbol));
     return this.coinPile;
   }
 

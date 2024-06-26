@@ -325,7 +325,7 @@ class GameControllerTest {
     }
 
     /**
-     * Method under test: {@link Player#removeCardFromGame(Card)}
+     * Method under test: {@link Player#removeResourceFromGame(Resource)}
      */
     @Test
     void testRemoveCardFromGame() {
@@ -333,7 +333,7 @@ class GameControllerTest {
         Player player = new Player("Name");
 
         // Act
-        player.removeCardFromGame(new Card(CardType.Kundeschafter));
+        player.removeResourceFromGame(new Card(CardType.Kundeschafter));
 
         // Assert
         assertFalse(player.getOutOfGamePile().isEmpty());
