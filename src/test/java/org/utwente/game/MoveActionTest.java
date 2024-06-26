@@ -10,7 +10,6 @@ import org.utwente.Tile.Tile;
 import org.utwente.Tile.TileType;
 import org.utwente.game.model.Action;
 import org.utwente.game.model.MoveAction;
-import org.utwente.game.model.Phase;
 import org.utwente.market.model.Card;
 import org.utwente.market.model.CardType;
 import org.utwente.market.model.Resource;
@@ -61,7 +60,7 @@ public class MoveActionTest {
     public void testIsTileToNeighbour() {
         Resource card = new Card(CardType.Entdecker);
         MoveAction move = new MoveAction(dina, card, tileFrom, tileTo);
-        assertEquals(move.isTileToNeighbour(), true);
+        assertTrue(move.isTileToNeighbour());
     }
 
     @Test
@@ -76,7 +75,7 @@ public class MoveActionTest {
         move.execute();
 
         assertNotNull(tileTo.getPlayers());
-        assertTrue(tileTo.getPlayers().stream().map(player -> player.getName()).toList().contains("Dina"));
+        assertTrue(tileTo.getPlayers().stream().map(Player::getName).toList().contains("Dina"));
     }
 
     @Test
@@ -119,5 +118,4 @@ public class MoveActionTest {
             assertFalse(move.isCardMatchingTile());
         }
     }
-
 }

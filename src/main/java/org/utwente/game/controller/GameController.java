@@ -122,7 +122,7 @@ public class GameController {
         }
     }
 
-    void onBuyCardFromMarket(Event event) {
+    public void onBuyCardFromMarket(Event event) {
         // we could buy cards from market after drawing cards in p3 before this.
         if (this.game.getPhase().getCurrentPhase() != PhaseType.BUYING_AND_PLAYING_PHASE){
             this.game.getPhase().setActionMessage(new ValidationResult(false, "Not in the right phase to buy cards."));
@@ -205,7 +205,7 @@ public class GameController {
         this.gameView.redraw();
     }
 
-    void onMakeMove(Event event) {
+    public void onMakeMove(Event event) {
         Resource usedResource = getCurrentlySelectedResource();
         // add played resource to phase.
         this.game.getPhase().addPlayedResource(usedResource);
@@ -291,7 +291,7 @@ public class GameController {
 
     /**
      * handle click on the start game button.
-     * 
+     *
      * @param event
      */
     void onGameStart(Event event) {
