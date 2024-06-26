@@ -12,6 +12,7 @@ import org.utwente.game.view.GameView;
 import org.utwente.market.controller.BuyEvent;
 import org.utwente.market.model.*;
 import org.utwente.player.model.Player;
+import org.utwente.secondboard.SecondBoardLoader;
 import org.utwente.util.ValidationResult;
 import org.utwente.util.event.*;
 import org.utwente.game.model.Configuration;
@@ -124,7 +125,7 @@ public class GameController {
         }
     }
 
-    void onBuyCardFromMarket(Event event) {
+    public void onBuyCardFromMarket(Event event) {
         // we could buy cards from market after drawing cards in p3 before this.
         if (this.game.getPhase().getCurrentPhase() != PhaseType.BUYING_AND_PLAYING_PHASE){
             this.game.getPhase().setActionMessage(new ValidationResult(false, "Not in the right phase to buy cards."));
@@ -254,7 +255,7 @@ public class GameController {
         this.gameView.redraw();
     }
 
-    void onMakeMove(Event event) {
+    public void onMakeMove(Event event) {
         Resource usedResource = getCurrentlySelectedResource();
         // add played resource to phase.
         this.game.getPhase().addPlayedResource(usedResource);
@@ -340,7 +341,7 @@ public class GameController {
 
     /**
      * handle click on the start game button.
-     * 
+     *
      * @param event
      */
     void onGameStart(Event event) {
@@ -358,9 +359,17 @@ public class GameController {
     void onPickBoard(Event event) {
         if (event instanceof PickBoardEvent) {
             PickBoardEvent data = (PickBoardEvent) event;
-            Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
-            Board board = boardBuilder.selectPath(data.getPath()).buildPath().addCaveCoinTiles().addBlockades()
-                    .build();
+            Board board;
+            if (data.isOtherBoard()) {
+                SecondBoardLoader secondBoardLoader = new SecondBoardLoader();
+                board = secondBoardLoader.getConvertedBoard();
+
+            } else {
+                Board.BoardBuilder boardBuilder = new Board.BoardBuilder();
+                board = boardBuilder.selectPath(data.getPath()).buildPath().addCaveCoinTiles().addBlockades()
+                        .build();
+
+            }
             this.game.setBoard(board);
             this.game.placePlayersStart();
             this.gameView.setGameStage();

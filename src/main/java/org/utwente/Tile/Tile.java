@@ -26,7 +26,8 @@ public class Tile {
     @Setter
     private int r;
     @Getter
-    private final TileType tileType;
+    @Setter
+    private TileType tileType;
     @Getter
     private final int power;
     @Getter

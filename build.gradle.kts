@@ -34,7 +34,9 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-java:3.0.0")
     // mockito
     testImplementation("org.mockito:mockito-core:5.11.0")
-    implementation("org.mockito:mockito-junit-jupiter:5.11.0")
+    // team4 board
+    implementation("org.json:json:20240303")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
     // logging
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("ch.qos.logback:logback-classic:1.5.6")
@@ -56,6 +58,8 @@ java {
 
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-Xlint:unchecked")
+    options.compilerArgs.add("-Xlint:deprecation")
+    options.isWarnings = false
 }
 
 

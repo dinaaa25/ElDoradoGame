@@ -31,9 +31,15 @@ public class GameGui extends JPanel implements GameView {
     JScrollPane boardViewScrollPane;
     JScrollPane marketViewScrollPane;
     Boolean endTurnButtonEnabled = false;
+    boolean otherBoard;
 
     public GameGui() {
+        this(false);
+    }
+
+    public GameGui(boolean otherBoard) {
         super();
+        this.otherBoard = otherBoard;
     }
 
     public void setGame(Game game) {
