@@ -9,7 +9,7 @@ variables:
 build:
   stage: build
   before_script:
-    - apk add --no-cache openjdk17 gradle curl # Install JDK 17
+    - apk add --no-cache openjdk21 gradle curl # Install JDK 21
     - chmod +x ./gradlew
   script:
     - ./gradlew clean assemble
